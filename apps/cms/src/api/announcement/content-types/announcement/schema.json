@@ -1,0 +1,22 @@
+{
+  "kind": "singleType",
+  "collectionName": "announcements",
+  "info": {
+    "singularName": "announcement",
+    "pluralName": "announcements",
+    "displayName": "Announcement",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Announcement": {
+      "type": "component",
+      "repeatable": false,
+      "component": "announcement.announcement-fields",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,63 @@
+name: 'CMS: Pull Request'
+env:
+  NEST_PORT: ${{ secrets.NEST_PORT }}
+  API_URL: ${{ secrets.API_URL }}
+  APP_URL: ${{ secrets.APP_URL }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER }}
+  EMAIL_SOURCE: ${{ secrets.EMAIL_SOURCE }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+  AUTH_PROVIDER: local
+  MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+  MINIO_PORT: ${{ secrets.MINIO_PORT }}
+  MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+  MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+  MINIO_USE_SSL: ${{ secrets.MINIO_USE_SSL }}
+  BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+  RATE_LIMIT_TTL: ${{ secrets.RATE_LIMIT_TTL }}
+  RATE_LIMIT_REQUESTS: ${{ secrets.RATE_LIMIT_REQUESTS }}
+  STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  GIT_OAUTH_CLIENT_ID: ${{ secrets.GIT_OAUTH_CLIENT_ID }}
+  GIT_OAUTH_CLIENT_SECRET: ${{ secrets.GIT_OAUTH_CLIENT_SECRET }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID}}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID}}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET}}
+  LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID}}
+  LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET}}
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'apps/cms/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install CMS dependencies
+        run: |
+          pnpm install
+
+      - name: Build CMS repository
+        run: pnpm nx build cms

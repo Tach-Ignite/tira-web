@@ -1,0 +1,12 @@
+{
+  "app": "pnpm ts-node  ./infra/cdk-app.ts",
+  "context": {
+    "aws-cdk:enableDiffNoFail": "true",
+    "@aws-cdk/core:stackRelativeExports": "true"
+  },
+  "watch": {
+    "include": ["./infra/**"]
+  },
+  "config": {},
+  "versionReporting": false
+}

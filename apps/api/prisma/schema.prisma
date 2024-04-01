@@ -1,0 +1,364 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  userId           String                 @id @default(uuid())
+  email            String                 @unique
+  name             String?
+  firstName        String?
+  lastName         String?
+  hash             String?
+  sub              String?
+  userType         String                 @default("local")
+  phoneNumber      String?
+  profileImage     String?
+  emailVerifiedAt  DateTime?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  carts            Carts[]
+  roleId           String
+  role             UserRoles              @relation(fields: [roleId], references: [id])
+  favoriteProducts FavoriteUserProducts[]
+  adminProfile     AdminProfile[]
+  orders           Orders[]
+  addresses        CustomerAddress[]
+  Bookings         Bookings[]
+
+  UserProfiles UserProfiles[]
+}
+
+model Products {
+  productId       String                 @id @default(uuid())
+  productImageUrl String[]
+  title           String                 @unique
+  description     String?
+  shippingDetails String?
+  saleStartDate   DateTime?
+  saleEndDate     DateTime?
+  brand           String
+  friendlyId      String                 @unique
+  quantity        Int
+  msrpPrice       Float
+  salePrice       Float
+  categories      Category[]             @relation("ProductCategories")
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  cartItems       CartItems[]
+  favoriteUsers   FavoriteUserProducts[]
+  orderItems      OrderItems[]
+}
+
+model FavoriteUserProducts {
+  user      Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId    String
+  product   Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  productId String
+
+  @@id([userId, productId])
+}
+
+model Carts {
+  id        String      @id @default(uuid())
+  user      Users       @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId    String      @unique
+  cartItems CartItems[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model CartItems {
+  id        String   @id @default(uuid())
+  product   Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  productId String
+  cart      Carts    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId    String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  categoryId  String     @id @default(uuid())
+  name        String     @unique
+  parentId    String?    @default(uuid())
+  parent      Category?  @relation("ParentCategory", fields: [parentId], references: [categoryId], onDelete: Cascade)
+  subCategory Category[] @relation("ParentCategory")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  products    Products[] @relation("ProductCategories")
+  services    Services[] @relation("ServiceCategories")
+}
+
+model UserRoles {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  users     Users[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Inquiries {
+  inquiryId String         @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  reason    String
+  status    InquiryStatus?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model AdminProfile {
+  adminProfileId            String                    @id @default(uuid())
+  userId                    String                    @unique
+  user                      Users                     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  email                     String?
+  phone                     String?
+  orderCancelEmail          Boolean?                  @default(false)
+  orderCancelEmailSchedule  NotificationScheduleEnum?
+  orderCancelSmsSchedule    NotificationScheduleEnum?
+  orderCancelSms            Boolean?                  @default(false)
+  lowInventoryEmail         Boolean?                  @default(false)
+  lowInventoryEmailSchedule NotificationScheduleEnum?
+  lowInventorySmsSchedule   NotificationScheduleEnum?
+  lowInventorySms           Boolean?                  @default(false)
+  createdAt                 DateTime                  @default(now())
+  updatedAt                 DateTime                  @updatedAt
+}
+
+model AdminNotifications {
+  notificationId String                @id @default(uuid())
+  message        String
+  type           AdminNotificationEnum
+  data           Json?
+  read           Boolean               @default(false)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+}
+
+model Orders {
+  orderId       String            @id @default(uuid())
+  user          Users             @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId        String
+  orderStatus   OrderStatus       @default(Pending)
+  firstName     String?
+  lastName      String?
+  address       String?
+  city          String?
+  state         String?
+  zipCode       String?
+  shippingType  ShippingTypeEnum
+  email         String?
+  phone         String?
+  shippingNotes String?
+  shippingCost  Float?
+  discount      Float?
+  total         Float
+  subTotal      Float
+  createdAt     DateTime          @default(now())
+  paymentStatus PaymentStatusEnum @default(Pending)
+  payments      Payments[]
+  updatedAt     DateTime          @updatedAt
+  orderItems    OrderItems[]
+}
+
+model OrderItems {
+  orderItemId String   @id @default(uuid())
+  order       Orders   @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  orderId     String
+  product     Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  productId   String
+  price       Float
+  quantity    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Payments {
+  paymentId          String            @id @default(uuid())
+  paymentSessionId   String            @unique
+  order              Orders?           @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  orderId            String?
+  amount             Float
+  transactionId      String?
+  transactionDetails Json?
+  status             PaymentStatusEnum
+  Bookings           Bookings?         @relation(fields: [bookingsBookingId], references: [bookingId], onDelete: Cascade)
+  bookingsBookingId  String?
+}
+
+model Services {
+  serviceId                String     @id @default(uuid())
+  companyName              String
+  friendlyId               String     @unique
+  serviceName              String
+  description              String?
+  imageUrls                String[]
+  categories               Category[] @relation("ServiceCategories")
+  price                    Float
+  msrp                     Float
+  saleStartDate            DateTime?
+  saleEndDate              DateTime?
+  duration                 Int?
+  limitOfBookingsPerDay    Int?
+  weeklyHours              Json?
+  additionalDetails        String?
+  adminNotes               String?
+  dateSpecificAvailability Json?
+  createdAt                DateTime   @default(now())
+  updatedAt                DateTime   @updatedAt
+  bookings                 Bookings[]
+}
+
+model Bookings {
+  bookingId        String            @id @default(uuid())
+  user             Users             @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId           String
+  service          Services          @relation(fields: [serviceId], references: [serviceId], onDelete: Cascade)
+  serviceId        String
+  bookingDate      DateTime
+  startTime        DateTime
+  endTime          DateTime
+  duration         Int?
+  firstName        String
+  lastName         String
+  email            String
+  phone            String
+  address          String?
+  city             String?
+  state            String?
+  zipCode          String?
+  contactFirstName String?
+  contactLastName  String?
+  contactEmail     String?
+  contactPhone     String?
+  contactAddress   String?
+  contactCity      String?
+  contactState     String?
+  contactZipCode   String?
+  bookingNotes     String?
+  adminNotes       String?
+  status           BookingStatusEnum
+  paymentStatus    PaymentStatusEnum @default(Pending)
+  payments         Payments[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+enum BookingStatusEnum {
+  Pending
+  Confirmed
+  Cancelled
+  Completed
+}
+
+enum ShippingTypeEnum {
+  Standard
+  OverNight
+}
+
+enum PaymentStatusEnum {
+  Succeeded
+  Failed
+  Pending
+  Refunded
+  Cancelled
+}
+
+enum OrderStatus {
+  Pending
+  Processing
+  Shipped
+  InTransit
+  Completed
+  Cancelled
+  Confirmed
+}
+
+enum InquiryStatus {
+  Pending
+  Addressed
+  Closed
+}
+
+enum NotificationScheduleEnum {
+  Daily
+  Instantly
+}
+
+enum AdminNotificationEnum {
+  UserSignUp
+  Inquiry
+  OrderStatusChanged
+  PasswordChanged
+  PasswordReset
+  Inventory
+  Return
+}
+
+model CustomerAddress {
+  addressId String   @id @default(uuid())
+  userId    String
+  user      Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  firstName String?
+  lastName  String?
+  apartment String?
+  state     String
+  city      String
+  zipCode   String
+  primary   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, primary], name: "UniqueUserPrimaryAddress")
+}
+
+// Enums
+enum GenderIdentity {
+  Male
+  Female
+  Other
+  NotToSay
+}
+
+enum CompletionStatusEnum {
+  Pending
+  Completed
+  InProgress
+}
+
+// UserProfiles model
+model UserProfiles {
+  id               String               @id @default(uuid())
+  fullName         String?
+  phoneNumber      String?
+  emailAddress     String?
+  city             String?
+  state            String?
+  genderIdentity   GenderIdentity?
+  race             String[]
+  militaryVeteran  String?
+  linkedInURL      String?
+  websiteURL       String?
+  githubURL        String?
+  mediumURL        String?
+  stackOverflowURL String?
+  calendarLink     String?
+  completedSteps   String?
+  status           CompletionStatusEnum @default(Pending)
+  user             Users                @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId           String               @unique
+}

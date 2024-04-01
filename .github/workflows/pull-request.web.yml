@@ -1,0 +1,39 @@
+name: 'Web: Pull Request'
+env:
+  API_URL: ${{ secrets.API_URL }}
+  BUCKET_PREFIX: ${{ secrets.BUCKET_NAME }}
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'apps/web/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Web App dependencies
+        run: |
+          pnpm install
+
+      - name: Build Web App
+        run: |
+          pnpm nx build web
+
+      - name: Run tests on Web
+        run: |
+          pnpm nx test web

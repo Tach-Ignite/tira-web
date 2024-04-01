@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_announcement_announcement_fields",
+  "info": {
+    "displayName": "AnnouncementFields",
+    "icon": "discuss",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Title": {
+      "type": "text",
+      "required": true
+    },
+    "Subtitle": {
+      "type": "text",
+      "required": true
+    },
+    "ProductFriendlyIds": {
+      "displayName": "ProductFriendlyIds",
+      "type": "component",
+      "repeatable": true,
+      "component": "announcement.product-friendly-ids",
+      "required": true
+    }
+  }
+}

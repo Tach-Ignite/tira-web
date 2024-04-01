@@ -1,0 +1,83 @@
+name: TIRA Nest CMS Dev Deploy
+env:
+  API_URL: ${{ secrets.API_URL }}
+  APP_URL: ${{ secrets.APP_URL }}
+  AUTH_PROVIDER: ${{ secrets.AUTH_PROVIDER }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_COGNITO_CLIENT_ID: ${{ secrets.AWS_COGNITO_CLIENT_ID }}
+  AWS_COGNITO_USER_POOL_ID: ${{ secrets.AWS_COGNITO_USER_POOL_ID }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER }}
+  EMAIL_SOURCE: ${{ secrets.EMAIL_SOURCE }}
+  BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+  BUCKET_PREFIX: ${{ secrets.BUCKET_NAME }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+  MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+  MINIO_PORT: ${{ secrets.MINIO_PORT }}
+  MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+  MINIO_USE_SSL: ${{ secrets.MINIO_USE_SSL }}
+  NEST_PORT: ${{ secrets.NEST_PORT }}
+  RATE_LIMIT_TTL: ${{ secrets.RATE_LIMIT_TTL }}
+  RATE_LIMIT_REQUESTS: ${{ secrets.RATE_LIMIT_REQUESTS }}
+  STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+  STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+  STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  GIT_OAUTH_CLIENT_ID: ${{ secrets.GIT_OAUTH_CLIENT_ID }}
+  GIT_OAUTH_CLIENT_SECRET: ${{ secrets.GIT_OAUTH_CLIENT_SECRET }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID}}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID}}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET}}
+  LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID}}
+  LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET}}
+  STRAPI_CMS_APP_KEYS: ${{ secrets.STRAPI_CMS_APP_KEYS }}
+  STRAPI_CMS_API_TOKEN_SALT: ${{ secrets.STRAPI_CMS_API_TOKEN_SALT }}
+  STRAPI_CMS_ADMIN_JWT_SECRET: ${{ secrets.STRAPI_CMS_ADMIN_JWT_SECRET }}
+  STRAPI_CMS_TRANSFER_TOKEN_SALT: ${{ secrets.STRAPI_CMS_TRANSFER_TOKEN_SALT }}
+  CMS_DATABASE_URL: ${{ secrets.CMS_DATABASE_URL }}
+  STRAPI_CMS_HOST: ${{ secrets.STRAPI_CMS_HOST }}
+  STRAPI_CMS_PORT: ${{ secrets.STRAPI_CMS_PORT }}
+  STRAPI_CMS_API_URL: ${{ secrets.STRAPI_CMS_API_URL }}
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'apps/cms/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: [linux, self-hosted, tach-nest-bwe]
+    environment: dev
+    concurrency:
+      group: self-hosted-group
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: logging
+        run: echo "Code successfully pulled"
+
+      - name: Pull the recent changes
+        run: git pull origin dev
+
+      - name: Install dependencies
+        run: npm i -g pnpm && pnpm i
+
+      - name: Run Build CMS
+        run: pnpm nx build cms
+
+      - name: Run Start CMS on pm2
+        run: pm2 startOrRestart cms.config.js

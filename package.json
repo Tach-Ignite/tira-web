@@ -1,0 +1,44 @@
+{
+  "name": "tach-ignite-v2",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "seed-sample": "dotenv -e .env.local -e .env.secrets.local -- pnpm ts-node apps/api/prisma/seed.ts",
+    "config:env": "pnpm ts-node configs/environment_config.ts",
+    "prisma-generate": "dotenv -e .env.local -e .env.secrets.local -- prisma generate --schema=./apps/api/prisma/schema.prisma",
+    "prisma-migrate": "dotenv -e .env.local -e .env.secrets.local -- prisma migrate deploy --schema=./apps/api/prisma/schema.prisma",
+    "prisma-gen-migration": "dotenv -e .env.local -e .env.secrets.local -- prisma migrate dev --schema=./apps/api/prisma/schema.prisma",
+    "bootstrap-cdk": "dotenv -e .env.local -e .env.secrets.local -- pnpm cdk bootstrap",
+    "deploy-aws": "dotenv -e .env.local -e .env.secrets.local --  pnpm cdk deploy --require-approval never --all",
+    "cleanup-aws": "dotenv -e .env.local -e .env.secrets.local --  pnpm cdk destroy --force --all"
+  },
+  "lint-staged": {
+    "apps/**/*.{ts,tsx}": "eslint --fix",
+    "packages/**/*.{ts,tsx}": "eslint --fix",
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-cdk/aws-amplify-alpha": "2.143.0-alpha.0",
+    "@types/inquirer": "^9.0.7",
+    "aws-cdk": "^2.143.0",
+    "aws-cdk-lib": "^2.143.0",
+    "dotenv": "16.4.5",
+    "dotenv-cli": "^7.4.2",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-unused-imports": "^3.1.0",
+    "husky": "^8.0.0",
+    "inquirer": "8.0.0",
+    "lint-staged": "^15.2.2",
+    "nx": "18.2.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-packagejson": "2.4.14",
+    "prettier-plugin-tailwindcss": "0.5.13"
+  }
+}

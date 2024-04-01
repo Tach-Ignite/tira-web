@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_announcement_product_friendly_ids",
+  "info": {
+    "displayName": "ProductFriendlyIds",
+    "icon": "priceTag",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "ProductFriendlyId": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Tach Ignite v2",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "runArgs": ["--env-file", ".env"], // TODO(RJ) - Env based on environment
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bradgashler.htmltagwrap",
+        "bradlc.vscode-tailwindcss",
+        "christian-kohler.npm-intellisense",
+        "cweijan.vscode-postgresql-client2",
+        "christian-kohler.path-intellisense",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "Gruntfuggly.todo-tree",
+        "GitHub.vscode-github-actions",
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker",
+        "Orta.vscode-jest",
+        "Prisma.prisma",
+        "rangav.vscode-thunder-client",
+        "redhat.vscode-yaml",
+        "streetsidesoftware.code-spell-checker",
+        "usernamehw.errorlens"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/nx-npm:1": {},
+    "ghcr.io/devcontainers-contrib/features/typescript:2": {}
+  },
+  "postStartCommand": "pnpm config set store-dir ~/.local/share/pnpm/store" // TODO(RJ) - Fix pnpm store issue
+}

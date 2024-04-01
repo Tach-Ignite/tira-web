@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@font-face {
+  font-family: 'YourFont';
+  src: url('/path-to-font.woff2') format('woff2');
+  font-display: swap;
+}
+
+@layer components {
+  #auth-form input:-webkit-autofill + label {
+    @apply -translate-y-4; /* Adjust the label position and size */
+  }
+}
+
+.multiline-ellipsis {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  /* start showing ellipsis when 3rd line is reached */
+  white-space: pre-wrap;
+  /* let the text wrap preserving spaces */
+}
+
+.oneLine-ellipsis {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  /* start showing ellipsis when 3rd line is reached */
+  white-space: pre-wrap;
+  /* let the text wrap preserving spaces */
+}
+
+body.menu-open {
+  overflow-y: hidden;
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #f0f5ff inset !important;
+}
+
+.floating-input div:first-child {
+  width: 100%;
+}
+
+.text-area p {
+  align-self: self-end;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  display: none;
+  /* Color of the track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #6b7280;
+  /* Color of the handle */
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  display: none;
+  /* Color of the handle on hover */
+}
+
+.stepper-gradient::before {
+  border-radius: 8px;
+}
+
+.border-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 8px;
+  background: var(--white, rgb(188, 188, 188));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.card-border-gradient::before {
+  border-radius: 8px;
+}
+
+.role-card .border-gradient::before {
+  border-radius: 8px !important;
+}
+
+.role-card .border-gradient::before &.selected {
+  padding: 0px !important;
+  background: none;
+}
+
+.wizard-side-bar::before {
+  padding-right: 0px;
+  border-radius: 8px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+@media (max-width: 767px) {
+  .wizard-side-bar::before {
+    padding: 1px;
+    padding-bottom: 0px;
+    width: 100%;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  .wizard-page::before {
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 8px;
+  }
+}
+
+.wizard-page::before {
+  border-radius: 8px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
