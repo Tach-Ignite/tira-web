@@ -4,7 +4,7 @@ This guide will help you set up your local development environment for the TIRA-
 
 ## TL;DR
 
-- Clone the [TIRA-WEB](https://github.com/Tach-Internal/Tach-RA-Web-V2) repository.
+- Clone or download the TIRA-WEB repository.
 - Run local initializer in the root folder: `$ bash initLocal.sh`
 - Open root folder in VS Code and open folder in Dev Container.
 - Install dependencies: `$ pnpm i --frozen-lockfile`
@@ -32,10 +32,10 @@ The TIRA-WEB project is ready to be run in a containerized development environme
 
 ## Initialization Steps
 
-- Clone [TIRA-WEB](https://github.com/Tach-Internal/Tach-RA-Web-V2).
-- Run the `bash initLocal.sh` script to initialize the local environment. This will create self-signed certs and `.env` files.
+- Clone or download TIRA-WEB repo.
+- Run the `$ bash initLocal.sh` script to initialize the local environment. This will create self-signed certs and `.env` files.
 
-## Dev Container Start
+## Start Dev Container
 
 - Open root folder in VS Code.
 - Open Command Pallette. `ctrl + shift + P` or `cmd + shift + P`
@@ -45,7 +45,6 @@ The TIRA-WEB project is ready to be run in a containerized development environme
 ## Install Dependencies
 
 - Install dependencies: `$ pnpm install --frozen-lockfile`. This will install all the dependencies required for the project.
-  TODO link to the list of main packages readme file.
 
 ## Setup Local Environment Variables
 
