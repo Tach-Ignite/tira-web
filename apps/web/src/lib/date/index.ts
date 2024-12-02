@@ -1,4 +1,5 @@
 /* eslint-disable radix */
+/* eslint-disable no-plusplus */
 
 export const months = [
   'Jan',
@@ -197,3 +198,89 @@ export function generateTimeOptions() {
 
   return times;
 }
+
+export function formatMessageDate(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  // Less than 1 hour
+  if (diffMins < 60) {
+    return `${diffMins} min`;
+  }
+  // Less than 12 hours
+  if (diffHours < 12) {
+    return `${diffHours} hr${diffHours > 1 ? 's' : ''}`;
+  }
+  // Today
+  if (diffDays === 0) {
+    // return 'Today';
+    const hours = date.getHours() % 12 || 12;
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    return `${hours}:${minutes} ${ampm}`;
+  }
+  // Yesterday
+  if (diffDays === 1) {
+    return 'Yesterday';
+  }
+  // Days of the week (up to 6 days ago)
+  if (diffDays <= 6) {
+    const dayNames = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    return dayNames[date.getDay()];
+  }
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+export const formatChatDate = (date: Date) =>
+  date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+
+export const getMessageDateLabel = (date: Date): string => {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  const daysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
+  const dayDifference = Math.floor(
+    (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  if (dayDifference < 1 && today.getDate() === date.getDate()) {
+    return 'Today';
+  }
+  if (
+    today.getDate() - date.getDate() === 1 &&
+    today.getMonth() === date.getMonth() &&
+    today.getFullYear() === date.getFullYear()
+  ) {
+    return 'Yesterday';
+  }
+  if (dayDifference <= 6) {
+    return daysOfWeek[date.getDay()];
+  }
+
+  return date.toLocaleDateString('en-GB');
+};

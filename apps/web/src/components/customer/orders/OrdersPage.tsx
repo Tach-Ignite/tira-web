@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { OrdersEntity, ShippingTypeEnum } from '@services';
 import { useCreateOrders } from '@queries/useOrderQuery';
 import { loadStripe } from '@stripe/stripe-js';
+import { DeleteModal } from '@src/modals';
 import DeliveryInformationCard from './DeliveryInformationCard';
 import ContactInformationCard from './ContactInformationCard';
 import {
@@ -24,11 +25,15 @@ import {
   deliveryInformationFields,
   steps,
 } from './types';
+import BillingInformation from './BillingInformation';
 
 function OrdersPage() {
   const [completedSteps, setCompletedSteps] = useState<OrderSteps[]>([]);
   const [inCompletedSteps, setInCompletedSteps] = useState<OrderSteps[]>([]);
   const [orderDetails, setOrderDetails] = useState<OrderDetailsProps>({});
+
+  const [showPurchaseConfirmationModal, setShowPurchaseConfirmationModal] =
+    useState<boolean>(false);
 
   const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY!);
   const { data: { cartItems = [] } = {}, refetch } = useFetchCartDetails();
@@ -163,6 +168,8 @@ function OrdersPage() {
       shippingType: data?.shippingType,
       state: data?.state,
       zipCode: data?.zipCode,
+      billingAddress: data?.billingAddress,
+      isSameAsShippingInformation: data?.isSameAsShippingInformation,
     };
     const res =
       (await asyncCreateOrders({
@@ -179,10 +186,15 @@ function OrdersPage() {
         sessionId: res?.payment_session_id,
       });
     }
+    setShowPurchaseConfirmationModal(false);
   };
 
   const shippingAmount =
     shippingType === ShippingTypeEnum.OverNight ? 9.99 : 9.99;
+
+  const onShowPurchaseConfirmationModal = () => {
+    setShowPurchaseConfirmationModal(!showPurchaseConfirmationModal);
+  };
 
   return (
     <div className="w-full flex gap-10 max-[800px]:flex-col">
@@ -203,7 +215,7 @@ function OrdersPage() {
           </div>
           <DeliveryInformationCard ordersForm={ordersForm} />
           <ContactInformationCard ordersForm={ordersForm} />
-          {/* <BillingInformation ordersForm={ordersForm} /> */}
+          <BillingInformation ordersForm={ordersForm} />
         </div>
       ) : (
         <div className="w-full">
@@ -211,6 +223,15 @@ function OrdersPage() {
         </div>
       )}
       <div className="min-[1450px]:w-[20%] max-[1450px]:w-[30%] max-[800px]:w-[100%]">
+        {showPurchaseConfirmationModal ? (
+          <DeleteModal
+            showModal={showPurchaseConfirmationModal}
+            onCloseModal={onShowPurchaseConfirmationModal}
+            onHandleConfirm={handleSubmit(onPurchaseProducts)}
+            buttonNames={['proceed', 'cancel']}
+            description="Are you sure you want to proceed with the purchase?"
+          />
+        ) : null}
         <OrderDetails
           buttonName="Purchase"
           shouldDisableButton={!cartItems?.length}
@@ -218,7 +239,7 @@ function OrdersPage() {
           subTotalPrice={orderDetails.subTotalPrice}
           totalPrice={orderDetails.totalPrice}
           shippingAmount={shippingType ? shippingAmount : undefined}
-          onClick={handleSubmit(onPurchaseProducts)}
+          onClick={handleSubmit(onShowPurchaseConfirmationModal)}
           className="sticky top-16 z-20"
         />
       </div>

@@ -60,8 +60,8 @@ function CookieModal() {
         </div>
         <div className="px-6 pb-6">
           <div className="flex gap-2 items-center mx-auto justify-center ">
-            <CookieIcon className="h-10 w-10 text-purple-600 dark:text-yellow-400" />
-            <span className="bold text-[24px] leading-[36px] bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-500 dark:from-yellow-400 dark:to-red-400">
+            <CookieIcon className="h-10 w-10 text-purple-700 dark:text-yellow-400" />
+            <span className="bold text-[24px] leading-[36px] bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-blue-400 dark:from-yellow-400 dark:to-red-400">
               We use Cookies
             </span>
           </div>

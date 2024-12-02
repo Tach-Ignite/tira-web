@@ -20,7 +20,7 @@ function Toast() {
   }, [removeToast, toasts]);
 
   return (
-    <div className="flex flex-col gap-3 fixed w-max top-32 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[50]">
+    <div className="flex flex-col gap-3 fixed w-max top-32 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[500]">
       {toasts?.map(({ type, id, message }) => {
         let toastIconClass =
           'bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200';
@@ -28,12 +28,12 @@ function Toast() {
 
         if (type === ErrorVariant.Error) {
           toastIconClass =
-            'bg-red-200 text-red-500 dark:bg-red-800 dark:text-red-200';
+            'bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-100';
           toastClass =
-            'border-red-500 dark:border-red-700 bg-red-50 dark:bg-red-400';
+            'border-red-500 dark:border-red-600 bg-red-50 dark:bg-red-400';
         } else if (type === ErrorVariant.Warning) {
           toastClass =
-            'border-yellow-500 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-400';
+            'border-yellow-400 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-400';
         }
 
         const onRemoveToast = () => {

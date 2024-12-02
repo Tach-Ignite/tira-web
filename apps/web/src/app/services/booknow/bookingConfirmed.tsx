@@ -27,7 +27,7 @@ function BookingConfirmed() {
               role="button"
               tabIndex={0}
               onClick={() => {
-                router.push('/marketplace');
+                router.push('/marketplace/services');
               }}
               className="cursor-pointer justify-center self-center px-5 py-3 mt-12 text-base font-medium text-white bg-indigo-600 rounded-lg max-md:mt-12"
             >

@@ -9,7 +9,7 @@ import { AdminProfileEntity } from './entities/admin-profile.entity';
 import { CreateUpdateAdminProfileDto } from './dto/create-update-admin-profile.dto';
 
 @ApiTags('Admin Profiles')
-@RoleAccess([Roles.ADMIN])
+@RoleAccess([Roles.SUPER_ADMIN])
 @Controller('admin-profiles')
 export class AdminProfilesController {
   constructor(private readonly adminProfilesService: AdminProfilesService) {}

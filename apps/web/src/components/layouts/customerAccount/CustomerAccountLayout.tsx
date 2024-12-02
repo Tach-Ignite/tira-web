@@ -1,26 +1,28 @@
 'use client';
 
 import { useAuthContext } from '@context/AuthContext';
-import { SideNavBar, TopNavBar } from '../common';
+import Footer from '@src/components/tira-landing/components/Footer';
+import { TopNavBar } from '../common';
 import UnAuthenticateTopNavBar from '../unAuthenticated/UnAuthenticatedTopNavBar';
-import { customerAccountSideBarNavLinks } from '../navLinks';
 import CustomerAccountSideBar from './CustomerAccountSideBar';
 
 function CustomerAccountLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthContext();
 
   return (
-    <div>
-      {isAuthenticated ? <TopNavBar /> : <UnAuthenticateTopNavBar />}
-      <SideNavBar navLinks={customerAccountSideBarNavLinks} />
-      <div className="bg-gray-50 dark:bg-gray-900 w-full mt-10 tab:!mt-0">
-        <div className="flex pt-10 gap-8 mx-3 sm:mx-10 flex-row tab:flex-col pb-64">
-          <div className="max-[655px]:hidden">
-            <CustomerAccountSideBar />
-          </div>
-          <div className="w-full overflow-auto">{children}</div>
+    <div className="h-full">
+      {isAuthenticated ? (
+        <TopNavBar showCustomerSideNav />
+      ) : (
+        <UnAuthenticateTopNavBar />
+      )}
+      <div className="bg-gray-50 dark:bg-gray-900 w-full tab:!mt-0 min-h-comp-calc-content">
+        <div className="flex mx-3 sm:mx-10 pt-10 pb-64 gap-8">
+          <CustomerAccountSideBar />
+          <div className="w-full overflow-x-auto">{children}</div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

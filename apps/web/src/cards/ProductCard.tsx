@@ -18,6 +18,7 @@ function ProductCard(props: ProductCardProps) {
     quantity = 0,
     withFavoriteIcon = true,
     categories = [],
+    isAuthenticated = false,
   } = props || {};
 
   const firstImageUrl = getImageUrl(productImageUrl?.[0]);
@@ -44,8 +45,10 @@ function ProductCard(props: ProductCardProps) {
       onButtonClick: onAddToCart,
       withFavoriteIcon,
       categories: categories as Category[],
+      isAuthenticated,
     }),
     [
+      isAuthenticated,
       brand,
       description,
       firstImageUrl,

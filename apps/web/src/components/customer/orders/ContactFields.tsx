@@ -35,31 +35,36 @@ function ContactInformationFields(props: ContactFieldsProps) {
     <div className="flex flex-col gap-6">
       <div className="flex max-[600px]:flex-col justify-between gap-6">
         <LabelInput
-          name={isBillingAddress ? 'billingFirstName' : 'firstName'}
+          name={isBillingAddress ? 'billingAddress.FirstName' : 'firstName'}
           label="First name"
           placeholder="Input text"
           control={control}
-          isRequired={!isBillingAddress} // will handle in future
+          isRequired
+          isArrayInput
         />
         <LabelInput
-          name={isBillingAddress ? 'billingLastName' : 'lastName'}
+          name={isBillingAddress ? 'billingAddress.LastName' : 'lastName'}
           label="Last name"
           placeholder="Input text"
           control={control}
-          isRequired={!isBillingAddress} // will handle in future
+          isRequired
+          isArrayInput
         />
       </div>
       <LabelInput
-        name={isBillingAddress ? 'billingAddress' : 'address'}
+        name={isBillingAddress ? 'billingAddress.address' : 'address'}
         label="Address"
         placeholder="Input text"
         control={control}
-        isRequired={!isBillingAddress} // will handle in future
+        isRequired
+        isArrayInput
       />
       {addApartmentField ? (
         <LabelInput
           name={
-            isBillingAddress ? 'billingApartmentAddress' : 'apartmentAddress'
+            isBillingAddress
+              ? 'billingAddress.ApartmentAddress'
+              : 'apartmentAddress'
           }
           label="Apartment, Suite, Etc"
           placeholder="Input text"
@@ -79,37 +84,40 @@ function ContactInformationFields(props: ContactFieldsProps) {
       <div className="flex justify-between gap-6 max-[600px]:flex-col">
         <div className="w-[40%] max-[600px]:w-[100%]">
           <LabelInput
-            name={isBillingAddress ? 'billingCity' : 'city'}
+            name={isBillingAddress ? 'billingAddress.city' : 'city'}
             label="City"
             placeholder="Input text"
             control={control}
-            isRequired={!isBillingAddress} // will handle in future
+            isRequired
+            isArrayInput
           />
         </div>
         <div className="flex justify-between gap-6 min-[600px]:w-[60%] max-[600px]:w-[100%] max-[500px]:flex-col">
           <div className="!-mt-[3px] w-[60%] max-[600px]:w-[50%] max-[500px]:w-[100%]">
             <Select
               control={control}
-              name={isBillingAddress ? 'billingState' : 'state'}
-              isRequired={!isBillingAddress} // will handle in future
+              name={isBillingAddress ? 'billingAddress.state' : 'state'}
+              isRequired
               className="w-full"
               label="State"
               isBlueTheme
               optionTitle="Select State"
               options={states}
+              isArrayInput
             />
           </div>
           <div className="w-[40%] max-[600px]:w-[50%] max-[500px]:w-[100%]">
             <LabelInput
-              name={isBillingAddress ? 'billingZipCode' : 'zipCode'}
+              name={isBillingAddress ? 'billingAddress.zipCode' : 'zipCode'}
               label="ZIP Code"
               placeholder="Input text"
               control={control}
               maxLength={5}
+              isArrayInput
               rules={{
                 pattern: zipCodePattern,
               }}
-              isRequired={!isBillingAddress} // will handle in future
+              isRequired
               errorMessage="ZIP Code Not Valid"
             />
           </div>

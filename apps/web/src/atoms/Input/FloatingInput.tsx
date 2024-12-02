@@ -54,18 +54,18 @@ function Input(props: InputProps) {
                     default: {
                       outlined: {
                         sm: 'peer block w-full appearance-none rounded-lg border-0 border-none bg-indigo-50 pb-2.5 pl-3 pr-3 pt-3 text-xs text-gray-900 outline-none outline-none focus:outline-none focus:ring-0 dark:bg-gray-700 dark:text-white',
-                        md: 'peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500',
+                        md: 'peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-700 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-400',
                       },
                     },
                   },
                   label: {
                     default: {
                       filled: {
-                        sm: 'absolute left-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 text-xs text-gray-500 transition-transform  duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500',
+                        sm: 'absolute left-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 text-xs text-gray-500 transition-transform  duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-700 dark:text-gray-400 peer-focus:dark:text-blue-400',
                       },
                       outlined: {
-                        sm: 'absolute left-0 top-2 origin-[0] -translate-y-4 scale-75 rounded-lg bg-indigo-50 px-2 text-sm text-gray-900 transition-transform duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 dark:bg-gray-700 dark:text-white peer-focus:dark:text-yellow-500',
-                        md: 'absolute left-0 top-2 z-10 origin-[0] -translate-y-4 scale-75 bg-white px-2 text-sm text-gray-500 transition-transform duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500',
+                        sm: 'absolute left-0 top-2 origin-[0] -translate-y-4 scale-75 rounded-lg bg-indigo-50 px-2 text-sm text-gray-900 transition-transform duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-700 dark:bg-gray-700 dark:text-white peer-focus:dark:text-yellow-400',
+                        md: 'absolute left-0 top-2 z-10 origin-[0] -translate-y-4 scale-75 bg-white px-2 text-sm text-gray-500 transition-transform duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-700 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-400',
                       },
                     },
                     error: {

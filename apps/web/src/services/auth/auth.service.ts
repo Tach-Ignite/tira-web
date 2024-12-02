@@ -7,10 +7,12 @@ import { LoginType } from '@src/types/modules';
 import {
   AUTHENTICATION_COOKIE,
   CURRENT_USER_COOKIE,
+  CURRENT_USER_ROLE_COOKIE,
 } from '@services/auth-cookie';
 import { API_URL } from '@src/app/common/constants/api';
 import { getErrorMessage } from '@services/errors';
-import { UserType } from '../users/users.type';
+import { get } from '@services/fetch';
+import { UserRole, UserType } from '../users/users.type';
 
 export const setAuthCookie = (response: Response) => {
   const setCookieHeader = response.headers.get('Set-Cookie');
@@ -23,6 +25,13 @@ export const setAuthCookie = (response: Response) => {
       httpOnly: true,
     });
   }
+};
+
+export const setUserRoleCookie = (role: UserRole) => {
+  cookies().set({
+    name: CURRENT_USER_ROLE_COOKIE,
+    value: JSON.stringify(role),
+  });
 };
 
 export const setUserCookie = (user: UserType) => {
@@ -47,9 +56,13 @@ export async function login(formData: LoginType) {
       return getErrorMessage(parsedRes);
     }
     setAuthCookie(res as Response);
+    setUserRoleCookie(parsedRes?.data?.role || {});
     setUserCookie(parsedRes?.data);
     return parsedRes;
   } catch (error) {
     return getErrorMessage(error);
   }
 }
+
+export const getAllUsersByRole = async (role: string) =>
+  get(`all-users-role/${role}`);

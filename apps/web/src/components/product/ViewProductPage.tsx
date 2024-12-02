@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 'use client';
 
 import React, { useState } from 'react';
@@ -10,6 +12,7 @@ import DetailedImageView from '@components/common/DetailedImageView';
 import ItemDetails from '@components/common/ItemDetails/ItemDetails';
 import QuantityButton from '@components/cart/QuantityButton';
 import { Button } from '@src/atoms';
+import { Badge } from '@src/flowbite';
 import { CartPlusIcon, PencilLight } from '@src/icons';
 import { PageView, ViewProductProps } from './types';
 import ProductFavorite from './ProductFavorite';
@@ -91,13 +94,15 @@ function ViewProductPage(props: ViewProductProps) {
             categories={categories as Category[]}
           >
             {isCustomerView ? (
-              <div className="mt-10 mb-4">
-                <QuantityButton
-                  addClick={handleAddQuantity}
-                  removeClick={handleRemoveQuantity}
-                  quantity={cartQuantity}
-                />
-              </div>
+              quantity && quantity > 0 ? (
+                <div className="mt-10 mb-4">
+                  <QuantityButton
+                    addClick={handleAddQuantity}
+                    removeClick={handleRemoveQuantity}
+                    quantity={cartQuantity}
+                  />
+                </div>
+              ) : null
             ) : (
               <div className="mt-10 mb-4 border border-indigo-300 px-4 py-3 dark:border-gray-600 bg-white text-center dark:bg-gray-700 text-gray-900 dark:text-gray-400 rounded-lg w-[20%]">
                 {quantity}
@@ -105,14 +110,30 @@ function ViewProductPage(props: ViewProductProps) {
             )}
             {isCustomerView ? (
               <>
-                <Button
-                  onClick={authNavigationHandler(onAddToCart)}
-                  fullSized
-                  className="mb-2"
-                >
-                  <CartPlusIcon size={20} className="mr-3" />
-                  <div className="mt-0.5">Add to cart</div>
-                </Button>
+                {quantity && quantity > 0 ? (
+                  <Button
+                    onClick={authNavigationHandler(onAddToCart)}
+                    fullSized
+                    className="mb-2"
+                  >
+                    <CartPlusIcon size={20} className="mr-3" />
+                    <div className="mt-0.5">Add to cart</div>
+                  </Button>
+                ) : (
+                  <Badge
+                    size="sm"
+                    color="gray"
+                    className="min-w-max capitalize "
+                    theme={{
+                      icon: { off: 'rounded-md px-2.5 py-0.5' },
+                      root: {
+                        base: 'flex h-fit items-center gap-1 font-medium max-w-fit my-4',
+                      },
+                    }}
+                  >
+                    Out of Stock
+                  </Badge>
+                )}
                 <ProductFavorite
                   productId={productId as string}
                   isFavorite={isFavorite}

@@ -2,10 +2,15 @@
 
 import { LabelInput as Input } from '@src/atoms';
 import { urlPattern } from '@src/lib/constants/validation';
+import { usePathname } from 'next/navigation';
 import { UseFormReturn } from 'react-hook-form';
 
 function Links({ form }: { form: UseFormReturn }) {
   const { control } = form;
+
+  const pathName = usePathname();
+
+  const isAdminConsolePage = pathName?.includes('admin-console');
 
   return (
     <div className="flex flex-col gap-10 xl:!w-[75%] w-[100%]">
@@ -18,7 +23,7 @@ function Links({ form }: { form: UseFormReturn }) {
           pattern: urlPattern,
         }}
         errorMessage="Please enter a valid URL."
-        isRequired
+        isRequired={!isAdminConsolePage}
       />
       <Input
         control={control}

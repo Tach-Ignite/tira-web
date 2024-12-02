@@ -19,8 +19,8 @@ function WizardPage(props: WizardPageProps) {
   const pageAdditionalInfo = steps[currentStepIndex]?.additionalInfo;
 
   return (
-    <div className="flex w-full md:!flex-row flex-col">
-      <div className="border-gradient rounded-y-lg rounded-l-lg wizard-side-bar px-3 py-10 pt-7 dark:bg-dark10 dark:bg-opacity-70 bg-red100 relative md:!w-fit w-auto">
+    <div className="flex w-full lg:!flex-row flex-col">
+      <div className="border-gradient rounded-y-lg rounded-l-lg wizard-side-bar px-3 py-10 pt-7 dark:bg-dark10 dark:bg-opacity-70 bg-red100 relative lg:!w-fit w-auto">
         {steps?.map(({ name }, index) => {
           const isActiveStep = currentStepIndex === index;
           const isLinkDetails =

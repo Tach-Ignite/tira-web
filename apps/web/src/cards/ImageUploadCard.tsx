@@ -5,7 +5,6 @@ import { ImageUploadCardType } from './types';
 
 function ImageUploadCard(props: ImageUploadCardType) {
   const {
-    fileName,
     file,
     fileUrl = '',
     onHandleDelete,

@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+
 'use client';
 
 import { BreadcrumbWithActions } from '@components/breadcrumbWithActions';
@@ -39,7 +41,7 @@ function ServiceForm(props: ServiceFormProps) {
   const {
     handleSubmit,
     watch,
-    formState: { isDirty },
+    formState: { isDirty, errors },
   } = form || {};
 
   const { description, serviceDetails, notes } = watch();
@@ -96,8 +98,25 @@ function ServiceForm(props: ServiceFormProps) {
     notes ? () => setShowNotesField(true) : () => setShowNotesField(false);
   }, [description, serviceDetails, notes]);
 
+  const checkValidations = (data: ServiceType) => {
+    let check = true;
+    if (!data.imageUrls || data.imageUrls.length === 0) {
+      form.setError('imageUrls', {
+        type: 'manual',
+        message: 'At least one image is required',
+      });
+      check = false;
+    }
+    return check;
+  };
+
   const onSaveService = useCallback(
     async (data: ServiceType) => {
+      const isValidated = checkValidations(data);
+      if (!isValidated) {
+        return;
+      }
+
       const filteredData: ServiceType = {
         serviceId: data.serviceId,
         imageUrls: data.imageUrls,
@@ -107,8 +126,8 @@ function ServiceForm(props: ServiceFormProps) {
         description: data.description,
         price: Number(data.price),
         msrp: Number(data.msrp),
-        saleStartDate: new Date(data.saleStartDate).toISOString(),
-        saleEndDate: new Date(data.saleEndDate).toISOString(),
+        saleStartDate: new Date(data.saleStartDate)?.toISOString(),
+        saleEndDate: new Date(data.saleEndDate)?.toISOString(),
         duration: Number(data.duration),
         limitOfBookingsPerDay: Number(data.limitOfBookingsPerDay),
         categoryIds: data.categoryIds,
@@ -152,6 +171,17 @@ function ServiceForm(props: ServiceFormProps) {
             form={form}
             onUpdateImage={onSaveService}
             imageField="imageUrls"
+            isError={
+              !!(
+                errors?.imageUrls?.message &&
+                typeof errors.imageUrls.message === 'string'
+              )
+            }
+            errorMessage={
+              typeof errors?.imageUrls?.message === 'string'
+                ? errors?.imageUrls?.message
+                : ''
+            }
           />
           <CategoryGrid productForm={form} isEditing={isEditing} />
         </div>

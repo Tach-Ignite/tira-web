@@ -15,6 +15,7 @@ const TableActionButtons = dynamic(
 
 export const getProductColumns = (props: GetColumnsType) => {
   const { onDeleteButton, onEditButton, onViewButton } = props || {};
+  const fallbackSrc = '/assets/product-image.svg';
   return [
     {
       header: 'Image',
@@ -31,6 +32,10 @@ export const getProductColumns = (props: GetColumnsType) => {
             src={imageUrl}
             fetchPriority="high"
             alt="product-image"
+            onError={(event) => {
+              const imgElement = event.target as HTMLImageElement;
+              imgElement.src = fallbackSrc;
+            }}
           />
         ) : (
           <OptimizedImage
@@ -39,6 +44,10 @@ export const getProductColumns = (props: GetColumnsType) => {
             width="0"
             priority
             height="0"
+            onError={(event) => {
+              const imgElement = event.target as HTMLImageElement;
+              imgElement.src = fallbackSrc;
+            }}
           />
         );
       },

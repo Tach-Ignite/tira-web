@@ -1,7 +1,9 @@
 'use client';
 
-import { AuthService, UsersService } from '@services';
+import { AuthService, UserEntity, UsersService } from '@services';
 import useBaseMutation, { UseBaseMutationConfig } from './useBaseMutation';
+import useBaseQuery from './useBaseQuery';
+import { ApiKeysEnum } from './apiKeys';
 
 export const useSignup = (request: UseBaseMutationConfig) => {
   const mutationFn = async (data: any) => {
@@ -65,4 +67,13 @@ export const useSignIn = (request: UseBaseMutationConfig) => {
   return useBaseMutation(mutationFn, {
     ...request,
   });
+};
+
+export const useGetAllUsersByRole = (request: { role: string }) => {
+  const keys = [ApiKeysEnum.GetAllUsersByRole, request?.role];
+  const fetchFn = async () => {
+    const data = await AuthService.getAllUsersByRole(request?.role);
+    return data;
+  };
+  return useBaseQuery<UserEntity[]>(keys, fetchFn);
 };

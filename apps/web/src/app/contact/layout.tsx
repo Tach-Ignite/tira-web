@@ -1,3 +1,5 @@
+'use client';
+
 import { CustomerLayout } from '@components/layouts/customer';
 import React from 'react';
 

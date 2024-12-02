@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { convertPluralToSingular } from '@src/lib/string';
 import { Button } from '@src/atoms';
 import { Breadcrumb, BreadcrumbItem } from '@src/flowbite';
-import { BreadcrumbWithActionsProps } from './types';
+import { BreadcrumbDataType, BreadcrumbWithActionsProps } from './types';
 
 function BreadcrumbWithActions(props: BreadcrumbWithActionsProps) {
   const {
@@ -20,6 +20,7 @@ function BreadcrumbWithActions(props: BreadcrumbWithActionsProps) {
     additionalActions,
     shouldDisabledDiscardButton = false,
     isCustomer,
+    breadcrumbs: breadcrumbFromProps,
   } = props || {};
 
   const pathname = usePathname();
@@ -51,33 +52,42 @@ function BreadcrumbWithActions(props: BreadcrumbWithActionsProps) {
     [currentUrl, editId, isEditing],
   );
 
+  const filteredBreadcrumb: BreadcrumbDataType[] =
+    breadcrumbFromProps || breadcrumbs;
+
   return (
     <div
       className={`flex justify-between items-center max-[950px]:w-full max-[950px]:flex-col max-[950px]:gap-5 ${!showBreadcrumb && 'self-end'}`}
     >
       {showBreadcrumb ? (
         <Breadcrumb className="max-[950px]:w-full">
-          {breadcrumbs?.map(({ name, url }) => (
-            <BreadcrumbItem
-              theme={{
-                href: {
-                  off: 'flex items-center text-sm font-semibold text-gray-500 dark:text-gray-400',
-                  on: 'flex items-center text-sm font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white',
-                },
-                chevron: 'mx-4 h-4 w-4 text-gray-400 group-first:hidden',
-              }}
-              key={name}
-              // href={url ? `/admin/${url}` : undefined}
-              href={
-                url ? `/${isCustomer ? 'account' : 'admin'}/${url}` : undefined
-              }
-            >
-              {name}
-            </BreadcrumbItem>
-          ))}
+          {filteredBreadcrumb?.map(({ name, url, content, onClick }) => {
+            const oldformatHref = url
+              ? `/${isCustomer ? 'account' : 'admin'}/${url}`
+              : undefined;
+
+            const href = breadcrumbFromProps?.length ? url : oldformatHref;
+
+            return (
+              <BreadcrumbItem
+                theme={{
+                  href: {
+                    off: `flex items-center ${breadcrumbFromProps?.length ? 'text-[16px] leading-[24px]' : 'text-sm'} font-semibold ${typeof onClick === 'function' ? 'text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white cursor-pointer' : 'text-gray-500 dark:text-gray-400'}`,
+                    on: `flex items-center ${breadcrumbFromProps?.length ? 'text-[16px] leading-[24px]' : 'text-sm'} font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white`,
+                  },
+                  chevron: 'mx-4 h-4 w-4 text-gray-400 group-first:hidden',
+                }}
+                key={name}
+                onClick={onClick}
+                href={href}
+              >
+                {content || name}
+              </BreadcrumbItem>
+            );
+          })}
         </Breadcrumb>
       ) : null}
-      {isCustomer ? null : (
+      {isCustomer || breadcrumbFromProps?.length ? null : (
         <div className="flex gap-2 items-center max-[950px]:w-full max-[950px]:justify-between">
           {additionalActions}
           <Button

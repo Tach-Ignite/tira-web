@@ -20,6 +20,9 @@ function Select(props: SelectProps) {
     className = '',
     errorMessage,
     isBlueTheme,
+    isArrayInput,
+    selectClassName = '',
+    disabled = false,
   } = props;
 
   return (
@@ -31,7 +34,11 @@ function Select(props: SelectProps) {
         required: isRequired,
         ...rules,
       }}
-      render={({ field: { onChange, name, value }, formState: { errors } }) => {
+      render={({
+        field: { onChange, name, value },
+        formState: { errors },
+        fieldState: { error },
+      }) => {
         const handleCustomOnchange = (
           event: React.ChangeEvent<HTMLSelectElement>,
         ) => {
@@ -41,7 +48,7 @@ function Select(props: SelectProps) {
 
         const errorInputName = errors[name];
         const message = getErrorMessage({
-          errorInputName,
+          errorInputName: isArrayInput ? error : errorInputName,
           errorMessage,
           label,
         });
@@ -59,8 +66,9 @@ function Select(props: SelectProps) {
                 sizing="sm"
                 name={name}
                 value={propValue || value}
-                className="w-full"
+                className={`w-full ${selectClassName}`}
                 color={textColor}
+                disabled={disabled}
                 theme={{
                   field: {
                     select: {

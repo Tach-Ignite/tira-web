@@ -118,7 +118,7 @@ function ViewServicePage() {
             {categories?.map((element) => (
               <span
                 key={element.categoryId}
-                className="p-2.5 bg-indigo-100 rounded-lg text-indigo-800 dark:text-indigo-400 dark:border-[0.5px] dark:border-indigo-400 dark:bg-gray-700 m-2"
+                className="p-2.5 bg-primary-100 rounded-lg text-indigo-700 dark:text-indigo-300 dark:border-[0.5px] dark:border-indigo-300 dark:bg-gray-700 m-2"
               >
                 {element.name}
               </span>

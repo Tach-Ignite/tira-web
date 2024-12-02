@@ -5,7 +5,7 @@ import ItemDetails from '@components/common/ItemDetails/ItemDetails';
 import { useGetUniqueService } from '@queries/useServicesQuery';
 import AppSpinner from '@components/appSpinner/AppSpinner';
 import { useParams } from 'next/navigation';
-import { HeartSolidIcon, CalendarDark } from '@src/icons';
+import { CalendarDark } from '@src/icons';
 import { Button } from '@src/atoms';
 
 function Page() {

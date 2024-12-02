@@ -6,6 +6,7 @@ export interface EditOrderProps {
   form: UseFormReturn<OrdersEntity>;
   onDeleteNotes?: () => Promise<void>;
   showPaymentErrorStatus?: boolean;
+  isCustomer?: boolean;
 }
 
 export interface SelectOptions {

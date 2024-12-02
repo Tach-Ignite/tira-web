@@ -20,7 +20,7 @@ import { AdminUnreadNotificationCount } from './entities/admin-unread-notificati
 import { AdminNotificationUpdateResponseEntity } from './entities/admin-notification-update.entity';
 
 @ApiTags('Admin Notifications')
-@RoleAccess([Roles.ADMIN])
+@RoleAccess([Roles.SUPER_ADMIN])
 @Controller('admin-notifications')
 export class AdminNotificationsController {
   constructor(

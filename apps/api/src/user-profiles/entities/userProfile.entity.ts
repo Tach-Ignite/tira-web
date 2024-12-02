@@ -1,6 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CompletionStatusEnum, GenderIdentity } from '@prisma/client';
-import { IsOptional, IsString } from 'class-validator';
+import {
+  CompletionStatusEnum,
+  GenderIdentity,
+  ThemeModeEnum,
+  UseCaseTypes,
+  BusinessTypes,
+} from '@prisma/client';
+import { IsOptional, IsString, IsBoolean, IsNumber } from 'class-validator';
 
 export class UserProfileEntity {
   @ApiPropertyOptional()
@@ -11,6 +17,16 @@ export class UserProfileEntity {
   @IsString()
   @IsOptional()
   fullName?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  useCaseType?: UseCaseTypes;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  profileImageUrl?: string;
 
   @ApiProperty({ required: false })
   @IsString()
@@ -31,6 +47,16 @@ export class UserProfileEntity {
   @IsString()
   @IsOptional()
   state?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  postalCode?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  countryRegion?: string;
 
   @ApiProperty({ required: false })
   @IsString()
@@ -79,4 +105,69 @@ export class UserProfileEntity {
   @IsString()
   @IsOptional()
   completedSteps?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  themeMode?: ThemeModeEnum;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessType?: BusinessTypes;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  companyName?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessCity?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessState?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessCountryRegion?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessPostalCode?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  addressLine1?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  addressLine2?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessLinkedInURL?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessUrl?: string;
+
+  @ApiProperty({ required: false })
+  @IsBoolean()
+  @IsOptional()
+  onboardingCompleted?: boolean;
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  onboardingStep?: number;
 }

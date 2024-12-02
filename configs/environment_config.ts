@@ -46,7 +46,7 @@ function storageSecrets(provider: string) {
         type: 'input',
         message: `Enter ${provider} Endpoint (eg: minio.io || s3.amazonaws.com))`,
         name: 'MINIO_ENDPOINT',
-        validate: (input: string) => (input ? true : 'required field'),
+        default: 'minio',
       },
     },
     {
@@ -56,7 +56,6 @@ function storageSecrets(provider: string) {
         message: `Enter ${provider} port`,
         name: 'MINIO_PORT',
         default: provider === 's3' ? 443 : 9000,
-        validate: (input: string) => (input ? true : 'required field'),
       },
     },
     {
@@ -65,7 +64,7 @@ function storageSecrets(provider: string) {
         type: 'input',
         message: `Enter ${provider} access key`,
         name: 'MINIO_ACCESS_KEY',
-        validate: (input: string) => (input ? true : 'required field'),
+        default: 'tachignite',
       },
     },
     {
@@ -74,7 +73,7 @@ function storageSecrets(provider: string) {
         type: 'input',
         message: `Enter ${provider} secret key`,
         name: 'MINIO_SECRET_KEY',
-        validate: (input: string) => (input ? true : 'required field'),
+        default: 'dNvRMDEgbHQKSVQDnz',
       },
     },
     {
@@ -84,7 +83,7 @@ function storageSecrets(provider: string) {
         message: `is ${provider} using SSL`,
         name: 'MINIO_USE_SSL',
         choices: ['true', 'false'],
-        validate: (input: string) => (input ? true : 'required field'),
+        default: 'false',
       },
     },
     {
@@ -93,8 +92,7 @@ function storageSecrets(provider: string) {
         type: 'input',
         message: `Enter ${provider} bucket name (ie on which bucket should use for storing data)`,
         name: 'BUCKET_NAME',
-
-        validate: (input: string) => (input ? true : 'required field'),
+        default: 'test',
       },
     },
     {
@@ -103,7 +101,7 @@ function storageSecrets(provider: string) {
         type: 'input',
         message: `Enter ${provider} bucket prefix URL (It is prefix URL that used before the file name)`,
         name: 'BUCKET_PREFIX',
-        validate: (input: string) => (input ? true : 'required field'),
+        default: 'http://localhost:9000/test/',
       },
     },
   ];
@@ -117,7 +115,6 @@ const promptQuestions = [
       message: 'Enter Nest PORT',
       name: 'NEST_PORT',
       default: 3001,
-      validate: (input: string) => (input ? true : 'required field'),
     },
   },
   {
@@ -126,7 +123,8 @@ const promptQuestions = [
       type: 'input',
       message: 'Enter DATABASE Endpoint connection string',
       name: 'DATABASE_URL',
-      validate: (input: string) => (input ? true : 'required field'),
+      default:
+        'postgresql://root:tachLocalPass1@postgres:5432/tachLocal?schema=public',
     },
   },
   {
@@ -135,7 +133,7 @@ const promptQuestions = [
       type: 'input',
       message: 'Enter Backend Endpoint URL',
       name: 'API_URL',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'http://localhost:3001/api',
     },
   },
   {
@@ -144,7 +142,7 @@ const promptQuestions = [
       type: 'input',
       message: 'Enter FrontEnd URL(eg:https://example.com, https://localhost)',
       name: 'APP_URL',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'http://localhost:3000',
     },
   },
   {
@@ -154,7 +152,7 @@ const promptQuestions = [
       message: 'Select Your Email Provider for Notifications',
       name: 'EMAIL_PROVIDER',
       choices: ['console', 'ses'],
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'console',
     },
   },
   {
@@ -164,7 +162,7 @@ const promptQuestions = [
       message: 'Select Your AUTH Provider',
       name: 'AUTH_PROVIDER',
       choices: ['local', 'cognito'],
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'local',
     },
   },
   {
@@ -174,7 +172,7 @@ const promptQuestions = [
       message: 'Select Your Storage Provider',
       name: 'STORAGE_PROVIDER',
       choices: ['minio', 's3'],
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'minio',
     },
   },
   {
@@ -184,7 +182,7 @@ const promptQuestions = [
       message: 'Select Your Captcha Provider',
       name: 'CAPTCHA_PROVIDER',
       choices: ['google', 'fake'],
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'fake',
     },
   },
   {
@@ -195,7 +193,6 @@ const promptQuestions = [
         'API Throttle Time to live(TTL) in milliseconds (eg: 60000, 80000)',
       name: 'RATE_LIMIT_TTL',
       default: 60000,
-      validate: (input: string) => (input ? true : 'required field'),
     },
   },
   {
@@ -205,7 +202,6 @@ const promptQuestions = [
       message: 'Maximum number of requests within TTL ',
       name: 'RATE_LIMIT_REQUESTS',
       default: 10,
-      validate: (input: string) => (input ? true : 'required field'),
     },
   },
 ];
@@ -217,7 +213,7 @@ const JWTSecrets = [
       type: 'input',
       message: 'Enter JWT Secret key to jwt encoding',
       name: 'JWT_SECRET',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'X5eZLck7+9bhJGY',
     },
   },
   {
@@ -226,7 +222,7 @@ const JWTSecrets = [
       type: 'input',
       message: 'Expiry time for JWT token, (eg: 30m, 1h, 5h, 10h, 1d)',
       name: 'JWT_EXPIRATION',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: '1d',
     },
   },
 ];
@@ -267,8 +263,7 @@ const configureGoogleAnalyticsTool = async () => {
       type: 'confirm',
       name: 'configureAnalytics',
       message: 'Do you want to configure the Google Analytics?',
-      choices: ['yes', 'no'],
-      default: 'yes',
+      default: false,
     },
   ]);
   if (answer.configureAnalytics === 'yes') {
@@ -290,75 +285,59 @@ const configureStrapiCms = async () => {
   const answer = await inquirer.prompt([
     {
       type: 'input',
-      name: 'STRAPI_CMS_DATABASE_URL',
-      message: 'Enter Strapi cms Database URL:',
-      validate: (input: string) => (input ? true : 'required field'),
-    },
-    {
-      type: 'input',
-      name: 'STRAPI_CMS_DATABASE_SCHEMA',
-      message:
-        'Enter Strapi cms Database Schema. (default schema is cms, if this schema is not available make sure it exists)',
-      default: 'cms',
-      validate: (input: string) => (input ? true : 'required field'),
-    },
-    {
-      type: 'input',
       name: 'STRAPI_CMS_HOST',
       message: 'Enter Strapi cms Host:',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'localhost',
     },
     {
       type: 'input',
       name: 'STRAPI_CMS_PORT',
       message: 'Enter Strapi cms Port:',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: '1337',
     },
     {
       type: 'input',
       name: 'STRAPI_CMS_API_URL',
       message: 'Enter Strapi cms Endpoint url:',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'http://localhost:1337/cms/api',
     },
     {
       type: 'input',
       name: 'STRAPI_CMS_APP_KEYS',
       message: 'Enter Strapi cms Keys:',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'LKIJHYTFRG',
     },
     {
       type: 'input',
       name: 'STRAPI_CMS_API_TOKEN_SALT',
       message: 'Enter Strapi cms API TOKEN SALT:',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'JHYGFTRCVFDER',
     },
     {
       type: 'input',
       name: 'STRAPI_CMS_TRANSFER_TOKEN_SALT',
       message: 'Enter Strapi cms TRANSFER TOKEN SALT:',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'c5KXf6Ejwx7^vhT',
     },
     {
       type: 'input',
       name: 'STRAPI_CMS_ADMIN_JWT_SECRET',
       message: 'Enter Strapi cms ADMIN JWT SECRET:',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'wEZ-QXUIVTRE',
     },
   ]);
 
-  EnvSecrets.push(`CMS_DATABASE_URL=${answer?.STRAPI_CMS_DATABASE_URL}`);
-  EnvSecrets.push(`CMS_DATABASE_SCHEMA=${answer?.STRAPI_CMS_DATABASE_SCHEMA}`);
   EnvVariables.push(`STRAPI_CMS_HOST=${answer?.STRAPI_CMS_HOST}`);
   EnvVariables.push(`STRAPI_CMS_PORT=${answer?.STRAPI_CMS_PORT}`);
   EnvVariables.push(`STRAPI_CMS_API_URL=${answer?.STRAPI_CMS_API_URL}`);
-  EnvVariables.push(`STRAPI_CMS_APP_KEYS=${answer?.STRAPI_CMS_APP_KEYS}`);
-  EnvVariables.push(
+  EnvSecrets.push(`STRAPI_CMS_APP_KEYS=${answer?.STRAPI_CMS_APP_KEYS}`);
+  EnvSecrets.push(
     `STRAPI_CMS_API_TOKEN_SALT=${answer?.STRAPI_CMS_API_TOKEN_SALT}`,
   );
-  EnvVariables.push(
+  EnvSecrets.push(
     `STRAPI_CMS_ADMIN_JWT_SECRET=${answer?.STRAPI_CMS_ADMIN_JWT_SECRET}`,
   );
-  EnvVariables.push(
+  EnvSecrets.push(
     `STRAPI_CMS_TRANSFER_TOKEN_SALT=${answer?.STRAPI_CMS_TRANSFER_TOKEN_SALT}`,
   );
 };
@@ -369,19 +348,19 @@ const configureStripePaymentProvider = async () => {
       type: 'input',
       name: 'STRIPE_PUBLIC_KEY',
       message: 'Enter Stripe Public key for Stripe Payment',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'xxxxxxx',
     },
     {
       type: 'input',
       name: 'STRIPE_SECRET_KEY',
       message: 'Enter Stripe Secret key for Stripe Payment',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'xxxxxxx',
     },
     {
       type: 'input',
       name: 'STRIPE_WEBHOOK_SECRET',
       message: 'Enter Stripe Webhook Secret key for Stripe Payment',
-      validate: (input: string) => (input ? true : 'required field'),
+      default: 'xxxxxxx',
     },
   ]);
 
@@ -403,8 +382,7 @@ const configureOAuthProviders = async () => {
       type: 'confirm',
       name: 'configureAuthProviders',
       message: 'Do you want to configure the OAuth Providers ?',
-      choices: ['yes', 'no'],
-      default: 'yes',
+      default: false,
     },
   ]);
 
@@ -563,7 +541,7 @@ const configureAWSQuickStart = async () => {
         'Do you want configure AWS deploy variables for AWS quickstart deployment?',
       name: 'AWS_QUICKSTART_DEPLOY',
       choices: ['yes', 'no'],
-      default: 'yes',
+      default: 'no',
     },
   ]);
   if (answer.AWS_QUICKSTART_DEPLOY === 'yes') {

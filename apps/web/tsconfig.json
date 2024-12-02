@@ -31,7 +31,9 @@
       "@context": ["./src/context"],
       "@context/*": ["./src/context/*"],
       "@src": ["./src"],
-      "@src/*": ["./src/*"]
+      "@src/*": ["./src/*"],
+      "@public": ["./public"],
+      "@public/*": ["./public/*"]
     },
     "types": ["jest", "node"]
   },

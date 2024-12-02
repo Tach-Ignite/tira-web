@@ -34,7 +34,7 @@ export class ProductsController {
   ) {}
 
   @Post('products')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   async create(@Body() createProductDto: CreateProductDto) {
     return await this.productsService.create(createProductDto);
   }
@@ -92,7 +92,7 @@ export class ProductsController {
   }
 
   @Patch('products/:productId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   update(
     @Param('productId') productId: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -101,7 +101,7 @@ export class ProductsController {
   }
 
   @Delete('products/:productId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiOkResponse({ type: ProductEntity })
   remove(@Param('productId') productId: string) {
     return this.productsService.remove(productId);

@@ -40,7 +40,7 @@ function SecurityPage() {
     !currentPassword || !newPassword || !confirmNewPassword;
 
   return (
-    <div className="flex flex-col gap-5 w-full mt-2">
+    <div className="flex flex-col gap-5 w-full px-4 pt-4">
       <BreadcrumbWithActions
         onDiscard={resetForm}
         shouldDisabledDiscardButton={shouldDisableSaveButton}

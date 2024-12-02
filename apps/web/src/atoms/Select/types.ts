@@ -9,14 +9,17 @@ export interface SelectOptions {
 
 export interface SelectProps {
   control: Control<any>;
+  isArrayInput?: boolean;
   name: string;
   rules?: Object;
   isRequired?: boolean;
+  selectClassName?: string;
   errorMessage?: string;
   value?: string;
   optionTitle?: string;
   className?: string;
   label?: string;
+  disabled?: boolean;
   options: SelectOptions[];
   isBlueTheme?: boolean;
   onChange?: (value: React.ChangeEvent<HTMLSelectElement>) => void;

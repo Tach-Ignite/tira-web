@@ -4,13 +4,17 @@
 
 import { ReactElement, useMemo, useState, useEffect } from 'react';
 import { getCookie, setCookie } from 'cookies-next';
-import { UserType } from '@services';
+import { OrganizationsEntity, UserRole, UserType } from '@services';
 import { AuthContext } from '@context/AuthContext';
 import { useThemeMode } from '@src/flowbite';
 import { ToastProvider } from '../context/ToastContext';
 import ReactQueryProvider from './QueryProvider';
 import { Toast } from './common/components';
-import { CURRENT_USER_COOKIE } from '../services/auth-cookie';
+import {
+  CURRENT_ORG_COOKIE,
+  CURRENT_USER_COOKIE,
+  CURRENT_USER_ROLE_COOKIE,
+} from '../services/auth-cookie';
 
 interface ProviderProps {
   children: ReactElement[];
@@ -28,18 +32,40 @@ export default function Providers({ children, authenticated }: ProviderProps) {
     JSON.parse(getCookie(CURRENT_USER_COOKIE) || '{}'),
   );
 
+  const [currentOrg, setCurrentOrg] = useState<OrganizationsEntity>(
+    JSON.parse(getCookie(CURRENT_ORG_COOKIE) || '{}'),
+  );
+
+  const [currentUserRole, setCurrentUserRole] = useState<UserRole>(
+    JSON.parse(getCookie(CURRENT_USER_ROLE_COOKIE) || '{}'),
+  );
+
   const onSetAuthenticatedUser = (user: UserType) => {
     setCookie(CURRENT_USER_COOKIE, JSON.stringify(user));
     setAuthenticatedUser(JSON.parse(getCookie(CURRENT_USER_COOKIE) || '{}'));
+  };
+
+  const onSetAuthenticatedUserRole = (userRole: UserRole) => {
+    setCookie(CURRENT_USER_ROLE_COOKIE, JSON.stringify(userRole));
+    setCurrentUserRole(JSON.parse(getCookie(CURRENT_USER_ROLE_COOKIE) || '{}'));
+  };
+
+  const onSetCurrentOrg = (org: OrganizationsEntity) => {
+    setCookie(CURRENT_ORG_COOKIE, JSON.stringify(org));
+    setCurrentOrg(JSON.parse(getCookie(CURRENT_ORG_COOKIE) || '{}'));
   };
 
   const CurrentUserContext = useMemo(
     () => ({
       authenticatedUser,
       setAuthenticatedUser: onSetAuthenticatedUser,
+      currentUserRole,
+      currentOrg,
+      setCurrentOrg: onSetCurrentOrg,
+      setAuthenticatedUserRole: onSetAuthenticatedUserRole,
       isAuthenticated: authenticated,
     }),
-    [authenticated, authenticatedUser],
+    [authenticatedUser, currentUserRole, currentOrg, authenticated],
   );
 
   const { setMode } = useThemeMode();
@@ -52,8 +78,6 @@ export default function Providers({ children, authenticated }: ProviderProps) {
       setMode(themeModes.AUTO);
     }
   };
-
-  // console.log('provider mode :: ', mode);
 
   // update the theme dynamically
   useEffect(() => {

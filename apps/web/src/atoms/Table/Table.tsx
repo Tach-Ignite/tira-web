@@ -25,6 +25,7 @@ function Table(props: TableProps) {
     childrenClassName,
     baseClassName,
     withBorder = true,
+    noDataMessage,
     ...paginationProps
   } = props || {};
 
@@ -33,6 +34,8 @@ function Table(props: TableProps) {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const headerLength = getHeaderGroups()?.[0]?.headers?.length || 0;
 
   return (
     <Card
@@ -52,9 +55,13 @@ function Table(props: TableProps) {
           <TableBody
             rowModels={getRowModel()}
             tableBodyClassName={tableBodyClassName}
+            noDataMessage={noDataMessage}
+            headerLength={headerLength}
           />
         </FlowBiteTable>
-        {withPagination ? <Pagination {...paginationProps} /> : null}
+        {withPagination && data?.length ? (
+          <Pagination {...paginationProps} />
+        ) : null}
       </div>
       {showDeleteModal ? (
         <DeleteModal

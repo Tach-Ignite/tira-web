@@ -10,7 +10,7 @@ import { UserProfileEntity } from './entities/userProfile.entity';
 @ApiCookieAuth()
 @Controller('user-profiles')
 export class UserProfilesController {
-  constructor(private readonly userProfilesService: UserProfilesService) { }
+  constructor(private readonly userProfilesService: UserProfilesService) {}
 
   @ApiResponse({
     status: 200,
@@ -35,7 +35,6 @@ export class UserProfilesController {
   @Get()
   @ApiAbstractResponse({ model: UserProfileEntity })
   async getUserProfile(@GetCurrentUserId() userId: string) {
-    // console.log('getUserProfile userId', userId);
     const userProfile = await this.userProfilesService.getUserProfile(userId);
     return AbstractApiResponse.success(
       userProfile,

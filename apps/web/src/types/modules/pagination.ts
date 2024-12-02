@@ -5,6 +5,7 @@ export interface PaginationMetaType {
   perPage: number;
   prev: number;
   next: number;
+  pageSize?: number;
 }
 export interface Pagination<T> {
   data: T[];

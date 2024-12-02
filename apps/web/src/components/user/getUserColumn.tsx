@@ -28,7 +28,7 @@ function getUserColumns(props: GetColumnsType) {
         return (
           <Badge
             size="sm"
-            color={role?.name === UserRoles.ADMIN ? 'blue' : 'warning'}
+            color={role?.name === UserRoles.SuperAdmin ? 'blue' : 'warning'}
             className="min-w-max capitalize"
             theme={{
               icon: { off: 'rounded-md px-2.5 py-0.5' },

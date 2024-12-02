@@ -42,7 +42,7 @@ export class InquiriesController {
   }
 
   @Get()
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.SUPER_ADMIN])
   @ApiAbstractPaginationResponse(InquiryEntity)
   async findAll(@Query() query: SearchPaginationDto) {
     const { data, meta } = await this.inquiriesService.findAll(query);
@@ -51,7 +51,7 @@ export class InquiriesController {
   }
 
   @Get(':inquiryId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.SUPER_ADMIN])
   @ApiAbstractResponse({ model: InquiryEntity })
   async findOne(
     @Param('inquiryId') inquiryId: string,
@@ -61,7 +61,7 @@ export class InquiriesController {
   }
 
   @Patch(':inquiryId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.SUPER_ADMIN])
   @ApiAbstractResponse({ model: InquiryEntity })
   async update(
     @Param('inquiryId') inquiryId: string,

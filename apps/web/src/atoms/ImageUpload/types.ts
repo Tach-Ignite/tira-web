@@ -12,4 +12,8 @@ export interface EditPicturesGridProps {
   fileUrl?: string;
   gridTitle?: string;
   imageField?: string;
+  isError?: boolean;
+  errorMessage?: string;
+  isProfilePhoto?: boolean;
+  acceptedFiles?: string;
 }

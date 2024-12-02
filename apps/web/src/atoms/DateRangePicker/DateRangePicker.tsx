@@ -73,10 +73,15 @@ function DateRangePicker(props: DateRangePickerProps) {
                       colors: {
                         gray: 'placeholder-text-gray-500 border-none	bg-indigo-50 text-gray-900 focus:border-none focus:ring-0 dark:border-solid dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400 dark:focus:border-gray-600 dark:focus:ring-0',
                         failure:
-                          'border-none bg-red-50 text-gray-900 placeholder-gray-400 focus:border-none focus:ring-0 dark:border-solid dark:border-red-400  dark:bg-gray-700 dark:text-gray-400 dark:focus:border-red-500 dark:focus:ring-red-500',
+                          'border-none bg-red-100 text-gray-900 placeholder-gray-400 focus:border-none focus:ring-0 dark:border-solid dark:border-red-400  dark:bg-gray-700 dark:text-gray-400 dark:focus:border-red-500 dark:focus:ring-red-500',
                       },
                     },
                   },
+                },
+              },
+              popup: {
+                root: {
+                  base: 'contents',
                 },
               },
               views: {

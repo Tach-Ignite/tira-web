@@ -7,7 +7,6 @@ import './globals.css';
 import { CookieModal } from '@src/modals';
 import { ThemeModeScript } from '@src/flowbite';
 import Script from 'next/script';
-import { Footer } from '../components/layouts';
 import authenticated from '../services/authenticated';
 import Providers from './Providers';
 import GoogleAnalytics from './GoogleAnalytics';
@@ -177,7 +176,6 @@ export default async function RootLayout({
       <body className={`${className} flex flex-col min-h-screen`}>
         <Providers authenticated={isAuthenticated}>
           <main className="flex-1"> {children}</main>
-          <Footer />
           <CookieModal />
         </Providers>
       </body>

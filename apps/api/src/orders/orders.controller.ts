@@ -37,7 +37,7 @@ export class OrdersController {
   }
 
   @Patch(':orderId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: OrderEntity })
   async updateOrder(
     @Param('orderId') orderId: string,
@@ -48,7 +48,6 @@ export class OrdersController {
   }
 
   @Patch(':orderId/cancel')
-  @RoleAccess([Roles.ADMIN])
   @ApiAbstractResponse({ model: OrderEntity })
   async cancelOrder(
     @Param('orderId') orderId: string,

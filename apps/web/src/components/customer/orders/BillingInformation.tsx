@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Radio } from '@src/atoms';
+import { useState } from 'react';
+import { Checkbox } from '@src/atoms';
 import { OrdersForm, steps } from './types';
 import ContactFields from './ContactFields';
 
@@ -10,7 +10,34 @@ function BillingInformation(props: OrdersForm) {
 
   const [addApartmentField, setAddApartmentField] = useState<boolean>(false);
 
-  const { control } = ordersForm;
+  const { control, watch, setValue } = ordersForm;
+
+  const {
+    isSameAsShippingInformation,
+    billingAddress,
+    address,
+    city,
+    state,
+    zipCode,
+    firstName,
+    lastName,
+  } = watch();
+
+  const onHandleSameAsShippingInformation = () => {
+    setValue('isSameAsShippingInformation', !isSameAsShippingInformation);
+    if (!isSameAsShippingInformation) {
+      setValue('billingAddress', {
+        address,
+        city,
+        firstName,
+        lastName,
+        state,
+        zipCode,
+      });
+    } else {
+      setValue('billingAddress', { ...billingAddress });
+    }
+  };
 
   return (
     <div
@@ -20,19 +47,22 @@ function BillingInformation(props: OrdersForm) {
       <div className="w-[70%] max-[1100px]:w-[90%] flex flex-col gap-y-6 max-[700px]:w-[100%]">
         {/* <PaymentInformation ordersForm={ordersForm} /> */}
         <div className="font-bold text-xl leading-[30px] text-black dark:text-white">
-          Delivery Information
+          Billing Information
         </div>
-        <Radio
+        <Checkbox
           control={control}
-          name="isSameAddressAsShipping"
+          name="isSameAsShippingInformation"
+          onChange={onHandleSameAsShippingInformation}
           label="Same as shipping information"
         />
-        <ContactFields
-          ordersForm={ordersForm}
-          isBillingAddress
-          addApartmentField={addApartmentField}
-          setAddApartmentField={setAddApartmentField}
-        />
+        {isSameAsShippingInformation ? null : (
+          <ContactFields
+            ordersForm={ordersForm}
+            isBillingAddress
+            addApartmentField={addApartmentField}
+            setAddApartmentField={setAddApartmentField}
+          />
+        )}
       </div>
     </div>
   );
