@@ -87,6 +87,7 @@ function TopNavBar({
 
   const userInitial = isAdmin ? adminInitial : customerInitial;
   const isSignInPage = pathname === TachColorAuthPages.Login;
+  const isSignUpPage = pathname === TachColorAuthPages.SignUp;
 
   const profileNavLinks = useMemo(
     () =>
@@ -172,7 +173,7 @@ function TopNavBar({
               className={isAuthPage || isAdmin ? '' : 'sm:!block !hidden'}
             >
               <div className="flex">
-                About Tira
+                About TIRA
                 <ChevronUpRight />
               </div>
             </Link>
@@ -183,13 +184,22 @@ function TopNavBar({
             >
               <GithubIcon size="24px" />
             </Link>
-            {isAuthenticated || isSignInPage ? null : (
+            {isSignInPage ? (
               <Link
-                href={TachColorAuthPages.Login}
+                href={TachColorAuthPages.SignUp}
                 className="text-secondary dark:text-warning"
               >
-                Sign in
+                Sign Up
               </Link>
+            ) : (
+              !isAuthenticated && (
+                <Link
+                  href={TachColorAuthPages.Login}
+                  className="text-secondary dark:text-warning"
+                >
+                  Sign In
+                </Link>
+              )
             )}
             {isAuthenticated && !isAuthPage ? (
               <>

@@ -148,7 +148,7 @@ function TopNavbar({
                 target="_blank"
               >
                 <div className="flex">
-                  About Tira
+                  About TIRA
                   <ChevronUpRight />
                 </div>
               </Link>

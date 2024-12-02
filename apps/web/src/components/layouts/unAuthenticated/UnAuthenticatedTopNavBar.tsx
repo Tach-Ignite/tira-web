@@ -71,7 +71,7 @@ function UnAuthenticateTopNavBar() {
           <div className="ml-6 flex gap-6 font-medium text-sm items-center max-[655px]:!hidden">
             <Link className="flex" href="/" target="_blank">
               <div className="flex">
-                About Tira
+                About TIRA
                 <ChevronUpRight />
               </div>
             </Link>
