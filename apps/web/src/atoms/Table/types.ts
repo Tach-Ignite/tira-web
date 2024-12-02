@@ -3,9 +3,12 @@ import { HeaderGroup, RowModel } from '@tanstack/react-table';
 import React from 'react';
 import { PaginationProps } from '../Pagination/types';
 
+export type { Row } from '@tanstack/react-table';
+
 export interface TableProps extends PaginationProps {
   withPagination?: boolean;
   columns: any;
+  noDataMessage?: string;
   modalDescription?: string;
   tableBodyClassName?: string;
   modalButtonNames?: string[];
@@ -23,6 +26,8 @@ export interface TableProps extends PaginationProps {
 export interface TableBodyProps {
   rowModels?: RowModel<unknown>;
   tableBodyClassName?: string;
+  noDataMessage?: string;
+  headerLength?: number;
 }
 
 export interface TableHeadProps {

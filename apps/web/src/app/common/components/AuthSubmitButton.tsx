@@ -19,7 +19,7 @@ function AuthSubmitButton({
     <Button
       fullSized
       disabled={isPending}
-      className="dark:bg-yellow-400 hover:!bg-indigo-700 dark:hover:!bg-yellow-400"
+      className="dark:bg-yellow-400 hover:!bg-indigo-700 dark:hover:!bg-yellow-400 bg-secondary"
       theme={{
         base: 'p-4',
         inner: {

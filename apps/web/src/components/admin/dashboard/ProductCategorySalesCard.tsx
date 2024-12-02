@@ -115,7 +115,7 @@ function ProductCategorySalesCard(props: ProductCategorySalesCardProps) {
   return (
     <div className="pt-5 pb-10 px-5 shadow-xl h-full rounded-2xl bg-white dark:bg-gray-800">
       <div className="flex justify-between gap-5 items-center flex-wrap">
-        <div className="font-medium text-base !leading-[20px] text-black dark:text-primary-500">
+        <div className="font-medium text-base !leading-[20px] text-black dark:text-primary-700">
           Product Category Sales For {selectedMonth}-{selectedYear}
         </div>
         <div className="flex gap-1">

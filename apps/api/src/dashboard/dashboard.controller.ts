@@ -12,7 +12,7 @@ export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
   @Get('admin-overview')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiOkResponse({ type: AdminDashboardOverviewEntity })
   async getAdminOverview(
     @Query() adminDashboardOverviewDto: GetAdminDashboardOverviewDto,

@@ -65,8 +65,22 @@ export class AuthService {
     });
     const baseUrl = this.config.getOrThrow('APP_URL');
 
+    const userProfile = await this.prisma.userProfiles.findFirst({
+      where: { userId: user?.userId },
+      include: { user: true },
+    });
+
+    const redirectUrl = userProfile?.onboardingCompleted
+      ? '/announcement'
+      : '/onboarding';
+
+    const redirecturl =
+      user?.role?.name === Roles.SUPER_ADMIN
+        ? '/tach-color-shop/admin-console'
+        : redirectUrl;
+
     res.redirect(
-      `${baseUrl}/auth/oauth/callback?token=${token}&user=${JSON.stringify(user)}&redirect=${user.role.name === Roles.ADMIN ? '/admin/dashboard' : '/marketplace'}`,
+      `${baseUrl}/tach-color-shop/auth/oauth/callback?token=${token}&user=${JSON.stringify(user)}&redirect=${redirecturl}`,
     );
   }
 
@@ -130,7 +144,7 @@ export class AuthService {
     if (!user) {
       return {};
     }
-    if (user?.userType !== UserType.LOCAL) {
+    if (user?.userType !== this.config.getOrThrow('AUTH_PROVIDER')) {
       throw new NotFoundException(
         'Password update is not allowed with an external provider (e.g., Google, GitHub). Please use your external provider to manage your password.',
       );
@@ -155,13 +169,12 @@ export class AuthService {
       const resetEvent = new CreateAdminNotificationEvent();
       resetEvent.message = `Password Reset: ${user?.email}`;
       resetEvent.type = AdminNotificationEnum.PasswordReset;
-      resetEvent.data =
-        {
-          ...user,
-          createdAt: user?.createdAt?.toString(),
-          updatedAt: user?.updatedAt?.toString(),
-          emailVerifiedAt: user?.emailVerifiedAt?.toString(),
-        } || {};
+      resetEvent.data = {
+        ...user,
+        createdAt: user?.createdAt?.toString(),
+        updatedAt: user?.updatedAt?.toString(),
+        emailVerifiedAt: user?.emailVerifiedAt?.toString(),
+      };
       this.eventEmitter.emit('adminNotification.create', resetEvent);
       return res;
     } catch (error) {
@@ -198,13 +211,12 @@ export class AuthService {
       const passwordChangeEvent = new CreateAdminNotificationEvent();
       passwordChangeEvent.message = `Password Changed: ${user?.email}`;
       passwordChangeEvent.type = AdminNotificationEnum.PasswordChanged;
-      passwordChangeEvent.data =
-        {
-          ...user,
-          createdAt: user?.createdAt?.toString(),
-          updatedAt: user?.updatedAt?.toString(),
-          emailVerifiedAt: user?.emailVerifiedAt?.toString(),
-        } || {};
+      passwordChangeEvent.data = {
+        ...user,
+        createdAt: user?.createdAt?.toString(),
+        updatedAt: user?.updatedAt?.toString(),
+        emailVerifiedAt: user?.emailVerifiedAt?.toString(),
+      };
       this.eventEmitter.emit('adminNotification.create', passwordChangeEvent);
     }
     return response;
@@ -225,13 +237,19 @@ export class AuthService {
       },
       include: {
         role: true,
+        userProfile: true,
       },
     });
     const baseUrl = this.config.getOrThrow('APP_URL');
 
     if (localUser) {
+      if (localUser.userStatus === 'DeActive') {
+        if (!user) {
+          throw new ForbiddenException('User is not in  active status');
+        }
+      }
       if (localUser.userType !== user.provider) {
-        res.redirect(`${baseUrl}/auth/login?error=forbidden`);
+        res.redirect(`${baseUrl}/tach-color-shop/auth/login?error=forbidden`);
         throw new ForbiddenException(
           'User Already Logged In Using different Auth method ',
         );
@@ -239,9 +257,9 @@ export class AuthService {
       return await this.createOAuthSession(new UserEntity(localUser), res);
     } else {
       const role = await this.prisma.userRoles.upsert({
-        where: { name: 'customer' },
-        create: { name: 'customer' },
-        update: { name: 'customer' },
+        where: { name: 'user' },
+        create: { name: 'user' },
+        update: { name: 'user' },
         select: { name: true, id: true },
       });
       const newUser = await this.userService.createUser({
@@ -255,5 +273,15 @@ export class AuthService {
       });
       return await this.createOAuthSession(new UserEntity(newUser), res);
     }
+  }
+
+  async getAllUsersByRole(role: string) {
+    const users = await this.prisma.users.findMany({
+      where: { role: { name: role } },
+    });
+    if (!users?.length) {
+      throw new NotFoundException('Cannot found any admins');
+    }
+    return users;
   }
 }

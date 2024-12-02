@@ -28,7 +28,7 @@ import { Public } from '@common/decorators/public.decorators';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @Post()
   @ApiAbstractResponse({ model: CategoryEntity, statusCode: 'CREATED' })
   @HttpCode(HttpStatus.CREATED)
@@ -48,7 +48,7 @@ export class CategoriesController {
     return AbstractApiResponse.success({ data: categories, meta });
   }
 
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @Patch(':categoryId')
   @ApiAbstractResponse({ model: CategoryEntity })
   async update(
@@ -59,7 +59,7 @@ export class CategoriesController {
     return AbstractApiResponse.success(category, 'Category has been updated!');
   }
 
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @Delete(':categoryId')
   @ApiAbstractResponse({ model: CategoryEntity })
   async remove(
@@ -69,7 +69,7 @@ export class CategoriesController {
     return AbstractApiResponse.success(category, 'Category has been deleted!');
   }
 
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @Get(':categoryId')
   @ApiAbstractResponse({ model: CategoryEntity })
   async findOne(

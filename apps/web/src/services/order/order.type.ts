@@ -51,28 +51,33 @@ export interface PaymentType {
   status: PaymentStatusEnum;
 }
 
-export interface OrdersEntity {
-  firstName: string;
+export interface OrdersAddressType {
+  firstName?: string;
+  lastName?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  address?: string;
+}
+
+export interface OrdersEntity extends OrdersAddressType {
   orderId?: string;
   orderItems?: OrderItemsType[];
-  lastName: string;
-  address: string;
+  isSameAsShippingInformation?: boolean;
   orderStatus?: OrderStatusEnum;
   payments?: PaymentType[];
-  city: string;
   paymentOptions?: PaymentOptionEnum;
   cardNumber?: string;
   cardName?: string;
   securityCode?: string;
   total?: number;
   shippingNotes?: string;
-  state: string;
   phone: string;
   email: string;
-  zipCode: string;
   shippingType: ShippingTypeEnum;
   createdAt?: Date;
   updatedAt?: Date;
+  billingAddress?: OrdersAddressType;
   products: { productId: string; quantity: Number }[];
 }
 

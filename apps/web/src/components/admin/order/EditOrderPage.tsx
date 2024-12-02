@@ -88,8 +88,16 @@ function EditOrderPage({ isCustomer }: { isCustomer?: boolean }) {
     orderStatus,
     createdAt,
     orderId,
+    billingAddress,
     payments,
   } = orderDetails || {};
+
+  const {
+    address: billAddress,
+    city: billingCity,
+    state: billingState,
+    zipCode: billingZipCode,
+  } = billingAddress || {};
 
   const { transactionDetails = '', status: paymentStatus } =
     payments?.[0] || {};
@@ -227,10 +235,17 @@ function EditOrderPage({ isCustomer }: { isCustomer?: boolean }) {
       { label: 'Card Holder', value: name || '--' },
       {
         label: 'Address',
-        value: `${address},${city},${state},${zipCode}`,
+        value: `${billAddress},${billingCity},${billingState},${billingZipCode}`,
       },
     ],
-    [address, city, name, paymentMethod, state, zipCode],
+    [
+      billAddress,
+      billingCity,
+      name,
+      paymentMethod,
+      billingState,
+      billingZipCode,
+    ],
   );
 
   const onDiscard = () => {
@@ -315,6 +330,7 @@ function EditOrderPage({ isCustomer }: { isCustomer?: boolean }) {
         <EditOrderInfoCard
           orderDetails={orderDetails}
           form={orderForm}
+          isCustomer={isCustomer}
           showPaymentErrorStatus={showPaymentErrorStatus}
         />
         <div className="grid grid-cols-5 gap-5 mb-24">

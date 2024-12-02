@@ -124,7 +124,7 @@ export class AuthController {
 
   @ApiTags('Users')
   @ApiCookieAuth()
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.SUPER_ADMIN])
   @ApiResponse({ type: UserEntity })
   @ApiBody({ type: CreateUserDto })
   @Patch('users/:userId')
@@ -135,13 +135,22 @@ export class AuthController {
     return await this.authService.updateUser(userId, updateDto);
   }
 
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.SUPER_ADMIN])
   @ApiTags('Users')
+  @ApiCookieAuth()
   @Delete('users/:userId')
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse()
   async deleteUser(@Param('userId') userId: string) {
     return await this.authService.removeUser(userId);
+  }
+
+  @ApiTags('Users')
+  @Get('all-users-role/:role')
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse()
+  async getAllUsersByRole(@Param('role') role: string) {
+    return await this.authService.getAllUsersByRole(role);
   }
 
   @Public()

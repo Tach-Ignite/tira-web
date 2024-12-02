@@ -7,7 +7,7 @@ import { Roles } from '../utils/roles.enums';
 
 @ApiTags('User Roles')
 @Controller('user-roles')
-@RoleAccess([Roles.ADMIN])
+@RoleAccess([Roles.SUPER_ADMIN])
 @ApiCookieAuth()
 export class UserRoleController {
   constructor(private readonly userRoleService: UserRoleService) {}

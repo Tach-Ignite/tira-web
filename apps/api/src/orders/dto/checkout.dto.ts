@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ShippingTypeEnum } from '@prisma/client';
+import { JsonObject } from '@prisma/client/runtime/library';
 import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
@@ -7,6 +8,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
@@ -67,4 +69,12 @@ export class CheckOutDto {
   @IsNotEmpty()
   @IsEnum(ShippingTypeEnum)
   shippingType: ShippingTypeEnum;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  billingAddress: JsonObject;
+
+  @ApiProperty()
+  @IsOptional()
+  isSameAsShippingInformation: boolean;
 }

@@ -2,6 +2,7 @@
 
 import { Card } from '@src/flowbite';
 import { DatePicker, LabelInput } from '@src/atoms';
+import { positiveNumberPattern } from '@src/lib/constants/validation';
 import { ServiceDetailsGridProps } from './types';
 
 function PriceDetailsGrid(props: ServiceDetailsGridProps) {
@@ -38,16 +39,24 @@ function PriceDetailsGrid(props: ServiceDetailsGridProps) {
         <LabelInput
           name="price"
           label="Service Price"
-          placeholder="Input text"
+          placeholder="Service Price"
           control={control}
           isRequired
+          rules={{
+            pattern: positiveNumberPattern,
+          }}
+          errorMessage="Entered value does not match Service Price format, it should be a number"
         />
         <LabelInput
           name="msrp"
           label="MSRP Price"
-          placeholder="Input text"
+          placeholder="MSRP Price"
           control={control}
           isRequired
+          rules={{
+            pattern: positiveNumberPattern,
+          }}
+          errorMessage="Entered value does not match MSRP Price format, it should be a number"
         />
       </div>
       <div className="flex max-[1500px]:gap-8 min-[1500px]:gap-36 mt-6">
@@ -56,6 +65,7 @@ function PriceDetailsGrid(props: ServiceDetailsGridProps) {
           isEditing={isEditing}
           label="Sale Start"
           name="saleStartDate"
+          isRequired
           onChange={validateEndDateField}
         />
         <DatePicker
@@ -63,6 +73,7 @@ function PriceDetailsGrid(props: ServiceDetailsGridProps) {
           isEditing={isEditing}
           label="Sale End"
           name="saleEndDate"
+          isRequired
           rules={{
             validate: (value: Date, formValues: any) => {
               const { saleStartDate } = formValues || {};

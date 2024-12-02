@@ -14,8 +14,10 @@ const TableActionButtons = dynamic(
   },
 );
 
-export const getServiceListColumns = (props: GetColumnsType) => {
+const getServiceListColumns = (props: GetColumnsType) => {
   const { onDeleteButton, onEditButton, onViewButton } = props || {};
+  const fallbackSrc = '/assets/product-image.svg';
+
   return [
     {
       header: 'Image',
@@ -29,17 +31,26 @@ export const getServiceListColumns = (props: GetColumnsType) => {
           // eslint-disable-next-line jsx-a11y/img-redundant-alt
           <img
             className="h-[111px] w-[111px] max-[1500px]:w-[72px] max-[1500px]:h-[72px] max-[1400px]:w-[60px] max-[1400px]:h-[60px] max-[1300px]:w-[42px] max-[1300px]:h-[42px] rounded-[50%]"
-            src={imageUrl}
+            src={imageUrl || fallbackSrc}
             fetchPriority="high"
             alt="service-image"
+            onError={(event) => {
+              const imgElement = event.target as HTMLImageElement;
+              imgElement.src = fallbackSrc;
+            }}
           />
         ) : (
           <Image
+            className="h-[111px] w-[111px] max-[1500px]:w-[72px] max-[1500px]:h-[72px] max-[1400px]:w-[60px] max-[1400px]:h-[60px] max-[1300px]:w-[42px] max-[1300px]:h-[42px] rounded-[50%]"
             src={ProductImage}
             alt="service-image"
             width="0"
             priority
             height="0"
+            onError={(event) => {
+              const imgElement = event.target as HTMLImageElement;
+              imgElement.src = fallbackSrc;
+            }}
           />
         );
       },

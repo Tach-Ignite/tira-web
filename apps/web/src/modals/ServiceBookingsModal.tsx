@@ -336,7 +336,7 @@ function ServiceBookingsModal(props: ServiceBookingModalProps) {
                 })}
               </Card>
             </div>
-            <div className="bg-indigo-100 py-10 my-8 px-4 dark:bg-gray-700 rounded-b-lg m-auto">
+            <div className="bg-primary-100 py-10 my-8 px-4 dark:bg-gray-700 rounded-b-lg m-auto">
               <div className="flex gap-10 items-center place-content-center">
                 <div className="font-medium text-sm !leading-[21px]">
                   <div className="text-black dark:text-gray-50">

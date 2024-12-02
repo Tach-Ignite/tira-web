@@ -27,6 +27,7 @@ function PersonalBackground({ form }: { form: UseFormReturn }) {
       <Select
         control={control}
         name="genderIdentity"
+        optionTitle="Select genderIdentity"
         options={genderIdentityOptions}
         label="What gender do you identify with? (Select all that apply)"
       />
@@ -35,6 +36,7 @@ function PersonalBackground({ form }: { form: UseFormReturn }) {
         control={control}
         name="militaryVeteran"
         options={militaryVeteranOptions}
+        optionTitle="Select option"
         label="Are you a military veteran or active-duty service member?"
       />
     </div>

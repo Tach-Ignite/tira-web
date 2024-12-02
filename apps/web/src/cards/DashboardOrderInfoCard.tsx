@@ -18,10 +18,10 @@ function DashboardOrderInfoCard(props: DashboardOrderInfoCardProps) {
 
   const truckColor = useMemo(() => {
     if (cardName === 'Shipped') {
-      return 'text-purple-50 bg-purple-900 dark:text-orange-600 dark:bg-orange-700/16 dark:border dark:border-orange-700';
+      return 'text-purple-100 bg-purple-900 dark:text-orange-600 dark:bg-orange-600/16 dark:border dark:border-orange-600';
     }
     if (cardName === 'Open') {
-      return 'text-purple-50 bg-purple-500 dark:text-orange-400 dark:bg-orange-400/16 dark:border dark:border-orange-400';
+      return 'text-purple-100 <bg-purple-4></bg-purple-4>00 dark:text-orange-600 dark:bg-orange-600/16 dark:border dark:border-orange-600';
     }
     return 'text-purple-900 bg-purple-200 dark:text-orange-200 dark:bg-orange-200/16 dark:border dark:border-orange-200';
   }, [cardName]);

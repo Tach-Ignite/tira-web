@@ -1,6 +1,10 @@
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import {
+  ValidationPipe,
+  HttpStatus,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import dotenv from 'dotenv';
@@ -27,7 +31,14 @@ async function bootstrap() {
   });
   const globalPrefix = 'api';
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true, // Automatically transform payloads into DTO instances
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY, // Returns 422 for validation errors
+      disableErrorMessages: false,
+    }),
+  );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.use(cookieParser());
   const config = new DocumentBuilder()

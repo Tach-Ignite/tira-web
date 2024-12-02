@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Label, FileInput, Card } from '@src/flowbite';
 import { CloseCircleIcon } from '@src/icons';
 import { FileService } from '@services';
@@ -26,14 +26,28 @@ function ImageUpload(props: EditPicturesGridProps) {
     gridTitle = 'Edit Pictures',
     fileUrl,
     imageField = '',
+    isError = false,
+    errorMessage = '',
+    isProfilePhoto = false,
+    acceptedFiles,
   } = props;
   const [showModal, setShowModal] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pathName = usePathname();
 
   const { setValue, watch } = form || {};
 
   const { files = [], [imageField]: imageUrls = [] } = watch();
+
+  useEffect(() => {
+    if (isError && errorMessage?.length && !imageUrls?.length) {
+      setShowErrors(true);
+    } else {
+      setShowErrors(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError, errorMessage, watch]);
 
   const onCancelModel = () => {
     setShowModal(!showModal);
@@ -56,6 +70,7 @@ function ImageUpload(props: EditPicturesGridProps) {
       shouldDirty: true,
     });
     setValue('files', []);
+    form.clearErrors('imageUrls');
     setShowModal(false);
   };
 
@@ -119,6 +134,8 @@ function ImageUpload(props: EditPicturesGridProps) {
         <Image
           className="h-80 max-w-[405px] w-full bg-gray-200 dark:bg-gray-700"
           alt={fileName}
+          width={10}
+          height={10}
           src={
             files?.[0]
               ? URL.createObjectURL(files?.[0] as unknown as MediaSource)
@@ -186,14 +203,21 @@ function ImageUpload(props: EditPicturesGridProps) {
             id="dropzone-file"
             className="hidden"
             multiple
-            accept=".svg, .png, .jpg, .jpeg, .gif"
+            // accept=".svg, .png, .jpg, .jpeg, .gif"
+            accept={acceptedFiles || '.svg, .png, .jpg, .jpeg, .gif'}
             onChange={handleFileChange}
             ref={fileInputRef}
           />
         ) : null}
         <div className="text-gray-500 dark:text-gray-300 text-xs leading-[18px]">
-          Supported types: svg, png, jpeg., Maximum size: 1MB
+          Supported types: {acceptedFiles || 'svg, png, jpeg'}., Maximum size:
+          1MB
         </div>
+        {showErrors ? (
+          <div className="text-red-500 dark:text-red-400 text-xs leading-[18px]">
+            {errorMessage}
+          </div>
+        ) : null}
       </Card>
       {!isSingleImage && showModal ? (
         <ImageUploadModal

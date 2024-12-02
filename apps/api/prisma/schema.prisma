@@ -14,29 +14,59 @@ datasource db {
 }
 
 model Users {
-  userId           String                 @id @default(uuid())
-  email            String                 @unique
-  name             String?
-  firstName        String?
-  lastName         String?
-  hash             String?
-  sub              String?
-  userType         String                 @default("local")
-  phoneNumber      String?
-  profileImage     String?
-  emailVerifiedAt  DateTime?
-  createdAt        DateTime               @default(now())
-  updatedAt        DateTime               @updatedAt
-  carts            Carts[]
-  roleId           String
-  role             UserRoles              @relation(fields: [roleId], references: [id])
-  favoriteProducts FavoriteUserProducts[]
-  adminProfile     AdminProfile[]
-  orders           Orders[]
-  addresses        CustomerAddress[]
-  Bookings         Bookings[]
+  userId                 String                  @id @default(uuid())
+  email                  String                  @unique
+  name                   String?
+  firstName              String?
+  lastName               String?
+  hash                   String?
+  sub                    String?
+  userType               String                  @default("local")
+  profileRoles           ProfileRoles[]          @default([])
+  phoneNumber            String?
+  profileImage           String?
+  emailVerifiedAt        DateTime?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  userStatus             ActiveStatus?           @default(Active)
+  carts                  Carts[]
+  roleId                 String
+  role                   UserRoles               @relation(fields: [roleId], references: [id])
+  favoriteProducts       FavoriteUserProducts[]
+  adminProfile           AdminProfile[]
+  orders                 Orders[]
+  addresses              CustomerAddress[]
+  Bookings               Bookings[]
+  userProfile            UserProfiles?
+  onBoardingUserProfiles OnBoardingUserProfiles?
+  senderConversations    Conversations[]         @relation("Sender")
+  receiverConversations  Conversations[]         @relation("Receiver")
+  orgUsers               OrgUsers[]
+  teamUsers              TeamUsers[]
+  invitedUsers           Invites[]
+}
 
-  UserProfiles UserProfiles[]
+model Conversations {
+  conversationId String     @id @default(uuid())
+  messages       Messages[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  senderId       String
+  receiverId     String
+  sender         Users      @relation("Sender", fields: [senderId], references: [userId])
+  receiver       Users      @relation("Receiver", fields: [receiverId], references: [userId])
+}
+
+model Messages {
+  messageId      String        @id @default(uuid())
+  senderId       String
+  receiverId     String
+  content        String
+  isRead         Boolean       @default(false)
+  conversation   Conversations @relation(fields: [conversationId], references: [conversationId], onDelete: Cascade)
+  conversationId String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Products {
@@ -102,11 +132,88 @@ model Category {
 }
 
 model UserRoles {
-  id        String   @id @default(uuid())
-  name      String   @unique
+  id        String      @id @default(uuid())
+  name      String      @unique
   users     Users[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  teamUsers TeamUsers[]
+  orgUsers  OrgUsers[]
+  invites   Invites[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Organizations {
+  id            String     @id @default(uuid())
+  name          String
+  website       String
+  orgFriendlyId String     @unique
+  teams         Teams[]
+  orgUsers      OrgUsers[]
+  invites       Invites[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@unique([name, website])
+}
+
+model OrgUsers {
+  id            String        @id @default(uuid())
+  orgId         String
+  organizations Organizations @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  userId        String
+  users         Users         @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  roleId        String
+  role          UserRoles     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  joinedAt      DateTime      @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@unique([orgId, userId])
+}
+
+model Invites {
+  id            String         @id @default(uuid())
+  email         String
+  invitedUserId String
+  user          Users          @relation(fields: [invitedUserId], references: [userId], onDelete: Cascade)
+  inviteType    InviteType
+  inviteCode    String
+  status        InviteStatus
+  roleId        String
+  role          UserRoles      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  orgId         String?
+  organization  Organizations? @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  teamId        String?
+  team          Teams?         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([inviteCode])
+}
+
+model Teams {
+  id           String        @id @default(uuid())
+  name         String
+  orgId        String
+  organization Organizations @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  teamUsers    TeamUsers[]
+  invites      Invites[]
+
+  @@unique([orgId, name])
+}
+
+model TeamUsers {
+  id     String    @id @default(uuid())
+  teamId String
+  team   Teams     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId String
+  users  Users     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  roleId String
+  role   UserRoles @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
 }
 
 model Inquiries {
@@ -150,29 +257,31 @@ model AdminNotifications {
 }
 
 model Orders {
-  orderId       String            @id @default(uuid())
-  user          Users             @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId        String
-  orderStatus   OrderStatus       @default(Pending)
-  firstName     String?
-  lastName      String?
-  address       String?
-  city          String?
-  state         String?
-  zipCode       String?
-  shippingType  ShippingTypeEnum
-  email         String?
-  phone         String?
-  shippingNotes String?
-  shippingCost  Float?
-  discount      Float?
-  total         Float
-  subTotal      Float
-  createdAt     DateTime          @default(now())
-  paymentStatus PaymentStatusEnum @default(Pending)
-  payments      Payments[]
-  updatedAt     DateTime          @updatedAt
-  orderItems    OrderItems[]
+  orderId                     String            @id @default(uuid())
+  user                        Users             @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId                      String
+  orderStatus                 OrderStatus       @default(Pending)
+  firstName                   String?
+  lastName                    String?
+  address                     String?
+  city                        String?
+  state                       String?
+  zipCode                     String?
+  shippingType                ShippingTypeEnum
+  email                       String?
+  phone                       String?
+  shippingNotes               String?
+  shippingCost                Float?
+  discount                    Float?
+  total                       Float
+  subTotal                    Float
+  isSameAsShippingInformation Boolean           @default(false)
+  createdAt                   DateTime          @default(now())
+  paymentStatus               PaymentStatusEnum @default(Pending)
+  payments                    Payments[]
+  updatedAt                   DateTime          @updatedAt
+  orderItems                  OrderItems[]
+  billingAddress              Json?
 }
 
 model OrderItems {
@@ -334,31 +443,146 @@ enum GenderIdentity {
   NotToSay
 }
 
+enum ActiveStatus {
+  Active
+  DeActive
+}
+
 enum CompletionStatusEnum {
   Pending
   Completed
   InProgress
 }
 
+enum ThemeModeEnum {
+  dark
+  light
+  auto
+}
+
+enum InviteType {
+  Organization
+  Team
+}
+
+enum InviteStatus {
+  Pending
+  Expired
+}
+
+enum UseCaseTypes {
+  Individual
+  Business
+  Both
+  None
+}
+
+enum BusinessTypes {
+  PaintSupplier
+  BusinessPartner
+  ColorConsultant
+  Other
+}
+
+enum ProfileRoles {
+  MasterOfHues
+  PigmentWizard
+  ShadeGuru
+  ContentCreator
+  ThreeDDesigner
+  SpectrumExplorer
+}
+
 // UserProfiles model
 model UserProfiles {
-  id               String               @id @default(uuid())
-  fullName         String?
-  phoneNumber      String?
-  emailAddress     String?
-  city             String?
-  state            String?
-  genderIdentity   GenderIdentity?
-  race             String[]
-  militaryVeteran  String?
-  linkedInURL      String?
-  websiteURL       String?
-  githubURL        String?
-  mediumURL        String?
-  stackOverflowURL String?
-  calendarLink     String?
-  completedSteps   String?
-  status           CompletionStatusEnum @default(Pending)
-  user             Users                @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId           String               @unique
+  id                    String               @id @default(uuid())
+  useCaseType           UseCaseTypes?        @default(None)
+  businessType          BusinessTypes?
+  profileImageUrl       String?
+  fullName              String?
+  firstName             String?
+  lastName              String?
+  companyName           String?
+  phoneNumber           String?
+  emailAddress          String?
+  city                  String?
+  state                 String?
+  countryRegion         String?
+  postalCode            String?
+  genderIdentity        GenderIdentity?
+  race                  String[]
+  militaryVeteran       String?
+  linkedInURL           String?
+  websiteURL            String?
+  githubURL             String?
+  mediumURL             String?
+  stackOverflowURL      String?
+  calendarLink          String?
+  tiraUsedFor           String?
+  businessName          String?
+  businessCity          String?
+  businessState         String?
+  businessCountryRegion String?
+  businessPostalCode    String?
+  addressLine1          String?
+  addressLine2          String?
+  businessLinkedInURL   String?
+  businessUrl           String?
+  businessEmail         String?
+  businessIndustry      String?
+  personalizedContent   String[]
+  personalizedServices  String[]
+  onboardingPlan        String?
+  onboardingCompleted   Boolean?             @default(false)
+  onboardingStep        Int?
+  completedSteps        String?
+  themeMode             ThemeModeEnum?
+  status                CompletionStatusEnum @default(Pending)
+  user                  Users                @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId                String               @unique
+}
+
+model OnBoardingUserProfiles {
+  id                    String               @id @default(uuid())
+  useCaseType           UseCaseTypes?        @default(None)
+  businessType          BusinessTypes?
+  profileImageUrl       String?
+  fullName              String?
+  firstName             String?
+  lastName              String?
+  companyName           String?
+  phoneNumber           String?
+  emailAddress          String?
+  city                  String?
+  state                 String?
+  countryRegion         String?
+  postalCode            String?
+  genderIdentity        GenderIdentity?
+  race                  String[]
+  militaryVeteran       String?
+  linkedInURL           String?
+  websiteURL            String?
+  githubURL             String?
+  mediumURL             String?
+  stackOverflowURL      String?
+  calendarLink          String?
+  businessName          String?
+  businessCity          String?
+  businessState         String?
+  businessCountryRegion String?
+  businessPostalCode    String?
+  addressLine1          String?
+  addressLine2          String?
+  businessLinkedInURL   String?
+  businessUrl           String?
+  businessEmail         String?
+  businessIndustry      String?
+  onboardingPlan        String?
+  onboardingCompleted   Boolean?             @default(false)
+  onboardingStep        Int?
+  completedSteps        String?
+  themeMode             ThemeModeEnum?
+  status                CompletionStatusEnum @default(Pending)
+  user                  Users                @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId                String               @unique
 }

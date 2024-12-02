@@ -10,7 +10,7 @@ import { customerAccountSideBarNavLinks } from '../navLinks';
 function CustomerAccountSideBar({ isMobileView }: { isMobileView?: boolean }) {
   return (
     <Card
-      className="rounded-2xl max-[655px]:w-[256px] max-[655px]:m-auto "
+      className="md:!block !hidden rounded-2xl max-[655px]:w-[256px] max-[655px]:m-auto "
       theme={{
         root: { children: 'flex h-full flex-col justify-center gap-4 pt-6' },
       }}
@@ -26,7 +26,7 @@ function CustomerAccountSideBar({ isMobileView }: { isMobileView?: boolean }) {
           </div>
         }
       />
-      <div className="h-64 rounded-b-2xl bg-white dark:bg-gray-800" />
+      <div className="h-80 rounded-b-2xl bg-white dark:bg-gray-800" />
     </Card>
   );
 }

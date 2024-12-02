@@ -12,6 +12,7 @@ This guide will help you set up your local development environment for the TIRA-
 - Run database migration: `$ pnpm prisma-migrate`
 - Generate Prisma Client: `$ pnpm prisma-generate`
 - Use Seeder to Seed Sample data: `$ pnpm seed-sample`
+- Build backend (Build logger and other dependencies): `$ nx build api`
 - Start the backend development server: `$ nx dev api`
 - Start the frontend development server: `$ nx dev web`
 - Access the application in your browser at `https://localhost`

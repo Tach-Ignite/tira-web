@@ -19,7 +19,6 @@ import { useRouter } from 'next/navigation';
 import { useGetUserProfile, useUpdateUserProfile } from '@queries';
 import { useCallback, useEffect, useState } from 'react';
 import { useAuthContext } from '@context/AuthContext';
-import { ArrowRightIcon } from '@src/icons';
 import { CompletionStatusEnum } from '@src/types/modules/statusEnum';
 import { CustomerRoutes } from '@src/routes';
 import { useToast } from '@context/ToastContext';
@@ -31,6 +30,7 @@ const defaultValues: UserProfileEntity = {
   emailAddress: '',
   city: '',
   state: '',
+  themeMode: '',
   genderIdentity: GenderIdentityEnum?.NotToSay,
   race: [],
   militaryVeteran: '',
@@ -135,6 +135,7 @@ function CustomerProfilePage() {
       if (activeWizardIndex === UserProfileWizard.PersonalInformation) {
         setAuthenticatedUser?.({
           ...authenticatedUser,
+          profileRoles: authenticatedUser?.profileRoles || [],
           userProfile: updatedUserProfile,
           userId: authenticatedUser?.userId || '',
         });
@@ -156,6 +157,7 @@ function CustomerProfilePage() {
       emailAddress = authenticatedUser?.email,
       city,
       state,
+      themeMode,
       genderIdentity,
       race,
       militaryVeteran,
@@ -166,9 +168,6 @@ function CustomerProfilePage() {
       stackOverflowURL,
       calendarLink,
     } = formValues;
-
-    console.log('handleOnSaveChanges authenticatedUser >>', authenticatedUser);
-    console.log('handleOnSaveChanges formvalues >>', formValues);
 
     const updateWizardIndex = () => {
       typeof wizardIndex === 'number'
@@ -184,6 +183,7 @@ function CustomerProfilePage() {
           emailAddress,
           city,
           state,
+          themeMode,
           completedSteps: isSaveButton
             ? completedSteps
             : completedSteps === '3'
@@ -256,7 +256,7 @@ function CustomerProfilePage() {
       <Spinner size="xl" />
     </div>
   ) : (
-    <div className="flex flex-col gap-5 w-full mt-2">
+    <div className="flex flex-col gap-5 w-full px-4 pt-4">
       <div className="w-full">
         <div className="dark:bg-text-gradient flex gap-2 items-center info-gradient relative py-2 pl-5 mb-1 w-full dark:bg-clip-text dark:text-white text-black dark:text-transparent font-medium text-[24px]">
           My Profile

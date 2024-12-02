@@ -1,6 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CompletionStatusEnum, GenderIdentity } from '@prisma/client';
-import { IsArray, IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
+import {
+  CompletionStatusEnum,
+  GenderIdentity,
+  ThemeModeEnum,
+  UseCaseTypes,
+  BusinessTypes,
+} from '@prisma/client';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class UpdateUserProfileDto {
   @ApiProperty({
@@ -11,10 +25,32 @@ export class UpdateUserProfileDto {
   @IsOptional()
   status?: CompletionStatusEnum;
 
+  @ApiProperty({
+    enum: UseCaseTypes,
+  })
+  @IsEnum(UseCaseTypes)
+  @IsOptional()
+  useCaseType?: UseCaseTypes;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  profileImageUrl?: string;
+
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   fullName?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  firstName?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  lastName?: string;
 
   @ApiProperty({ required: false })
   @IsString()
@@ -35,6 +71,16 @@ export class UpdateUserProfileDto {
   @IsString()
   @IsOptional()
   state?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  countryRegion?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  postalCode?: string;
 
   @ApiProperty({ required: false })
   @IsString()
@@ -90,6 +136,98 @@ export class UpdateUserProfileDto {
   @IsString()
   @IsOptional()
   completedSteps?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  themeMode?: ThemeModeEnum;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  tiraUsedFor?: string;
+
+  @ApiProperty({
+    enum: BusinessTypes,
+  })
+  @IsEnum(BusinessTypes)
+  @IsOptional()
+  businessType?: BusinessTypes;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  companyName?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessName?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessCity?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessState?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessCountryRegion?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessPostalCode?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  addressLine1?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  addressLine2?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessLinkedInURL?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessUrl?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessEmail?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  businessIndustry?: string;
+
+  @ApiProperty({ required: false })
+  @IsBoolean()
+  @IsOptional()
+  onboardingCompleted?: boolean;
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  onboardingStep?: number;
+
+  @ApiProperty({ required: false })
+  @IsBoolean()
+  @IsOptional()
+  isOnboarding?: boolean;
 
   constructor(partial: Partial<UpdateUserProfileDto>) {
     Object.assign(this, partial);

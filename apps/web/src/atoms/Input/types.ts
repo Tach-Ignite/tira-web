@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { ComponentProps, FC, SVGProps } from 'react';
+import { ComponentProps, FC, RefObject, SVGProps } from 'react';
 import { Control } from 'react-hook-form';
 
 export interface InputProps {
@@ -8,11 +8,37 @@ export interface InputProps {
   isRequired?: boolean;
   name: string;
   label?: string;
+  errorLabel?: string;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   rules?: Object;
+  ref?: RefObject<HTMLTextAreaElement>;
+  className?: string;
   disabled?: boolean;
   maxLength?: number;
   helperText?: string;
+  isArrayInput?: boolean;
+  placeholder?: string;
+  rows?: number;
+  errorMessage?: string;
+  startAdornment?: FC<ComponentProps<'svg'>>;
+  endAdornment?: React.ReactNode;
+  onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: 'text' | 'password' | 'email' | 'number' | 'tel';
+}
+
+export interface TextareaProps {
+  control: Control<any>;
+  isRequired?: boolean;
+  name: string;
+  label?: string;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  rules?: Object;
+  ref?: RefObject<HTMLTextAreaElement>;
+  className?: string;
+  disabled?: boolean;
+  maxLength?: number;
+  helperText?: string;
+  isArrayInput?: boolean;
   placeholder?: string;
   rows?: number;
   errorMessage?: string;

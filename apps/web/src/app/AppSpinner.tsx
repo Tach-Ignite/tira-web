@@ -8,6 +8,11 @@ import { useEffect, useState } from 'react';
 const queriesToOmit = [
   ApiKeysEnum.GetAllUnreadNotificationCount,
   ApiKeysEnum.GetCartItems,
+  ApiKeysEnum.GetChatConversations,
+  ApiKeysEnum.GetAllChats,
+  ApiKeysEnum.GetChatMarkAsRead,
+  ApiKeysEnum.GetChatMarkAsRead,
+  ApiKeysEnum.GetChatsTotalUnreadCount,
 ];
 
 function AppSpinner({ children }: { children: React.ReactNode }) {

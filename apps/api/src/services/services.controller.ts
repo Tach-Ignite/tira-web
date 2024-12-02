@@ -31,7 +31,7 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Post()
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: ServiceEntity, statusCode: 'CREATED' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createServiceDto: CreateServiceDto) {
@@ -63,7 +63,7 @@ export class ServicesController {
   }
 
   @Patch(':serviceId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: ServiceEntity })
   async update(
     @Param('serviceId') serviceId: string,
@@ -80,7 +80,7 @@ export class ServicesController {
   }
 
   @Delete(':serviceId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: ServiceEntity })
   async remove(@Param('serviceId') serviceId: string) {
     const service = await this.servicesService.remove(serviceId);

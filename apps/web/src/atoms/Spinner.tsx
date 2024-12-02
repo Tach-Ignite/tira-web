@@ -4,12 +4,12 @@
 
 import { Spinner as FlowBiteSpinner } from '@src/flowbite';
 
-function Spinner({ size }: { size?: string }) {
+function Spinner({ size, className }: { size?: string; className?: string }) {
   return (
     <FlowBiteSpinner
       size={size || 'md'}
       color="info"
-      theme={{ color: { info: 'fill-primary2 dark:fill-aqua' } }}
+      theme={{ color: { info: className || 'fill-primary2 dark:fill-aqua' } }}
     />
   );
 }

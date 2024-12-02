@@ -6,3 +6,5 @@ export { default as DashboardOrderInfoCard } from './DashboardOrderInfoCard';
 export { default as ImageUploadCard } from './ImageUploadCard';
 export { default as ArticleCard } from './ArticleCard';
 export { default as TimelineCard } from './TimelineCard';
+// export { default as OnboardingMultiSelectCard } from './OnboardingMultiSelectCard';
+export { default as ChoosePlanCard } from './ChoosePlanCard';

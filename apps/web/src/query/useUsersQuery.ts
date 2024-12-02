@@ -5,6 +5,11 @@ import {
   UsersService,
   ChangePasswordPayloadType,
   UserProfileEntity,
+  GetAllAdminConsoleUsersListsArgs,
+  AdminConsoleUserResponseType,
+  UpdateUserRoleDto,
+  UpdateAnyUserDetailsArgs,
+  UpdateUserProfileRoleArgs,
 } from '@services';
 import { Pagination, PaginationArgs } from '@src/types/modules/pagination';
 import { ApiKeysEnum } from './apiKeys';
@@ -27,6 +32,26 @@ export const useGetUser = (userId: string) => {
     return data;
   };
   return useBaseQuery<UserType>(keys, fetchFn, { staleTime: 0 });
+};
+
+export const useGetCurrentUser = () => {
+  const keys = [ApiKeysEnum.GetCurrentUserDetails];
+  const fetchFn = async () => {
+    const data = await UsersService.getCurrentUserDetails();
+    return data;
+  };
+  return useBaseQuery<UserType>(keys, fetchFn);
+};
+
+export const useUpdateUserProfileRole = (request: UseBaseMutationConfig) => {
+  const mutationFn = async (request: UpdateUserProfileRoleArgs) => {
+    const mutation = await UsersService.updateUserProfileRole(request);
+    return mutation;
+  };
+  return useBaseMutation(mutationFn, {
+    ...request,
+    invalidateQueries: [ApiKeysEnum.GetCurrentUserDetails],
+  });
 };
 
 export const useGetUserProfile = () => {
@@ -96,5 +121,69 @@ export const useChangePassword = (request: UseBaseMutationConfig) => {
   };
   return useBaseMutation(mutationFn, {
     ...request,
+  });
+};
+
+export const useGetAllAdminConsoleUsers = (
+  request: GetAllAdminConsoleUsersListsArgs,
+) => {
+  const keys = [ApiKeysEnum.GetAllAdminConsoleUsers, request?.page, request];
+  const fetchFn = async () => {
+    const data = await UsersService.getAllAdminConsoleUsers(request);
+    if (data.error) {
+      throw data.error;
+    }
+    return data;
+  };
+  return useBaseQuery<Pagination<AdminConsoleUserResponseType>>(keys, fetchFn);
+};
+
+export const useGetSingleUser = (userId: string, orgId?: string) => {
+  const keys = [ApiKeysEnum.GetSingleAdminConsoleUser, userId, orgId];
+  const fetchFn = async () => {
+    const data = await UsersService.getSingleUserRole(userId, orgId);
+    return data;
+  };
+  return useBaseQuery<UserType>(keys, fetchFn);
+};
+
+export const useUpdateUserRole = (request: UseBaseMutationConfig) => {
+  const mutationFn = async (request: UpdateUserRoleDto) => {
+    const mutation = await UsersService.updateUserRole(request);
+    return mutation;
+  };
+  return useBaseMutation(mutationFn, {
+    ...request,
+    invalidateQueries: [ApiKeysEnum.GetSingleAdminConsoleUser],
+  });
+};
+
+export const useUpdateAnyUserDetailsAsAdmin = (
+  request: UseBaseMutationConfig,
+) => {
+  const mutationFn = async (request: UpdateAnyUserDetailsArgs) => {
+    const mutation = await UsersService.updateAnyUserAsAdmin(
+      request?.userId,
+      request.data,
+    );
+    return mutation;
+  };
+  return useBaseMutation(mutationFn, {
+    ...request,
+    invalidateQueries: [
+      ApiKeysEnum.GetUser,
+      ApiKeysEnum.GetSingleAdminConsoleUser,
+    ],
+  });
+};
+
+export const useRemoveUser = (request: UseBaseMutationConfig) => {
+  const mutationFn = async (userId: string) => {
+    const mutation = await UsersService.removeUser(userId);
+    return mutation;
+  };
+  return useBaseMutation(mutationFn, {
+    ...request,
+    invalidateQueries: [ApiKeysEnum.GetAllAdminConsoleUsers],
   });
 };

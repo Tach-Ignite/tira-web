@@ -37,6 +37,13 @@ import { CorrelationIdMiddleware } from '@common/correlation/correlation.middlew
 import { ServicesModule } from './services/services.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { UserProfilesModule } from './user-profiles/user-profiles.module';
+import { ChatModule } from './chat/chat.module';
+import { OrganizationsModule } from './organizations/organizations.module';
+import { TeamsModule } from './teams/teams.module';
+import { TeamUsersModule } from './team-users/team-users.module';
+import { OrgUsersModule } from './org-users/org-users.module';
+import { InvitesModule } from './invites/invites.module';
+import { PrismaService } from '@prisma_/prisma.service';
 
 @Module({
   imports: [
@@ -78,6 +85,12 @@ import { UserProfilesModule } from './user-profiles/user-profiles.module';
     ServicesModule,
     BookingsModule,
     UserProfilesModule,
+    ChatModule,
+    OrganizationsModule,
+    TeamsModule,
+    TeamUsersModule,
+    OrgUsersModule,
+    InvitesModule,
   ],
   controllers: [AppController],
   providers: [
@@ -99,6 +112,7 @@ import { UserProfilesModule } from './user-profiles/user-profiles.module';
       useClass: RolesGuard,
     },
     EmailService,
+    PrismaService,
   ],
 })
 export class AppModule {

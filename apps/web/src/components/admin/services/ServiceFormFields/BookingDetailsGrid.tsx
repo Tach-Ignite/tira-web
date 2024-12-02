@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Card } from '@src/flowbite';
 import { LabelInput } from '@src/atoms';
 import { ServiceBookingsModal } from '@src/modals';
+import { positiveNumberPattern } from '@src/lib/constants/validation';
 import { ServiceDetailsGridProps } from './types';
 
 function BookingDetailsGrid(props: ServiceDetailsGridProps) {
@@ -39,16 +40,24 @@ function BookingDetailsGrid(props: ServiceDetailsGridProps) {
         <LabelInput
           name="duration"
           label="Duration of service"
-          placeholder="Input text"
+          placeholder="Duration of service in minutes"
           control={control}
           isRequired
+          rules={{
+            pattern: positiveNumberPattern,
+          }}
+          errorMessage="Entered value does not match Duration of service format, it should be a number"
         />
         <LabelInput
           name="limitOfBookingsPerDay"
           label="Limit of bookings per day"
-          placeholder="Input text"
+          placeholder="Limit of bookings per day"
           control={control}
           isRequired
+          rules={{
+            pattern: positiveNumberPattern,
+          }}
+          errorMessage="Entered value does not match Limit of bookings per day format, it should be a number"
         />
       </div>
       <div

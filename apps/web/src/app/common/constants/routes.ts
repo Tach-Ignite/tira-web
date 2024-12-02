@@ -14,11 +14,6 @@ export const unauthenticatedRoutes = [
     path: '/article',
   },
   {
-    title: 'Demo',
-    path: '/demo',
-    exactMatch: true,
-  },
-  {
     title: 'Home',
     path: '/',
     exactMatch: true,
@@ -26,7 +21,7 @@ export const unauthenticatedRoutes = [
   {
     title: 'Marketplace',
     path: '/marketplace',
-    exactMatch: true,
+    exactMatch: false,
   },
   {
     title: 'Announcement',
@@ -61,17 +56,27 @@ export const routes = [
     path: '/admin',
     exactMatch: false,
   },
+  {
+    title: 'Admin Console',
+    path: '/tach-color-shop/admin-console',
+    exactMatch: false,
+  },
 ];
 
 export const authenticatedRoutes = [
   {
     title: 'Admin',
-    path: '/admin',
+    path: '/tach-color-shop/admin-console',
     exactMatch: false,
   },
   {
     title: 'Account',
     path: '/account',
+    exactMatch: false,
+  },
+  {
+    title: 'Onboarding',
+    path: '/onboarding',
     exactMatch: false,
   },
   {
@@ -87,6 +92,16 @@ export const authenticatedRoutes = [
   {
     title: 'Profile',
     path: '/profile',
+    exactMatch: false,
+  },
+  {
+    title: 'User Console',
+    path: '/tach-color-shop/console',
+    exactMatch: false,
+  },
+  {
+    title: 'Account Settings',
+    path: '/tach-color-shop/account-settings',
     exactMatch: false,
   },
 ];

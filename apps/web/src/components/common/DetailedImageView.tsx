@@ -10,6 +10,7 @@ interface DetailedImageViewProps {
 function DetailedImageView({ imageUrls }: DetailedImageViewProps) {
   const [activeImage, setActiveImage] = useState<string>();
 
+  const fallbackSrc = '/assets/products-services-placeholder.svg';
   const activeImageUrl = useMemo(
     () => `${process.env.BUCKET_PREFIX}${activeImage}`,
     [activeImage],
@@ -36,6 +37,10 @@ function DetailedImageView({ imageUrls }: DetailedImageViewProps) {
         src={activeImage ? activeImageUrl : ProductImage.src}
         alt={activeFileName}
         className="w-[427px] rounded-[50%] flex items-center h-[427px] max-[450px]:h-[200px] max-[450px]:w-[200px] m-auto"
+        onError={(event) => {
+          const imgElement = event.target as HTMLImageElement;
+          imgElement.src = fallbackSrc;
+        }}
       />
       <div className="flex gap-4 mt-5 justify-center">
         {imageUrls?.length ? (
@@ -54,6 +59,10 @@ function DetailedImageView({ imageUrls }: DetailedImageViewProps) {
                   alt={fileName}
                   key={fileName}
                   className="h-[128px] w-[128px] cursor-pointer max-[450px]:h-[75px] max-[450px]:w-[75px] max-[1000px]:h-[100px] max-[1000px]:w-[100px] rounded-[50%]"
+                  onError={(event) => {
+                    const imgElement = event.target as HTMLImageElement;
+                    imgElement.src = fallbackSrc;
+                  }}
                 />
               </button>
             );
@@ -63,6 +72,10 @@ function DetailedImageView({ imageUrls }: DetailedImageViewProps) {
             src={ProductImage?.src}
             alt="View-product"
             className="h-[128px] w-[128px] cursor-pointer max-[450px]:h-[75px] max-[450px]:w-[75px] max-[700px]:h-[100px] max-[700px]:w-[100px] rounded-[50%]"
+            onError={(event) => {
+              const imgElement = event.target as HTMLImageElement;
+              imgElement.src = fallbackSrc;
+            }}
           />
         )}
       </div>

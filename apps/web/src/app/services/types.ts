@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+/* eslint-disable no-unused-vars */
 
 import { ServicesEntity } from '@services';
 import { UseFormReturn } from 'react-hook-form';

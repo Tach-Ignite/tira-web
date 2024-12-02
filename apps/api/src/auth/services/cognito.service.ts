@@ -32,6 +32,8 @@ import { AbstractApiResponse } from '../../utils/general-response';
 import { UpdateUserDto } from '../../users/dto/update-user.dto';
 import { UserEntity } from '../../users/entities/user.entity';
 import { ChangePassWordType } from '../change-password-type';
+import { InviteType, InviteStatus } from '@src/utils/invites.enum';
+import { differenceInDays } from 'date-fns';
 
 @Injectable()
 export class CognitoService {
@@ -79,17 +81,22 @@ export class CognitoService {
         });
       });
       const role = await this.prisma.userRoles.upsert({
-        where: { name: 'customer' },
-        create: { name: 'customer' },
-        update: { name: 'customer' },
+        where: { name: 'user' },
+        create: { name: 'user' },
+        update: { name: 'user' },
         select: { name: true, id: true },
       });
       const newUser = await this.usersService.createUser({
         userId: result.userSub,
         email,
+        userType: 'cognito',
         sub: result?.userSub,
         roleId: role.id,
       });
+
+      if (authRegisterUserDto?.inviteId && authRegisterUserDto?.inviteCode) {
+        await this.verifyOrgOrTeamInvite(authRegisterUserDto, newUser);
+      }
 
       return {
         success: true,
@@ -115,7 +122,7 @@ export class CognitoService {
     const resendCommand = new ForgotPasswordCommand({
       Username: userId,
       ClientMetadata: {
-        APP_URL: this.config.getOrThrow('APP_URL'),
+        APP_URL: this.config.getOrThrow('APP_URL') + '/tach-color-shop',
       },
       ClientId: this.config.getOrThrow('AWS_COGNITO_CLIENT_ID'),
     });
@@ -329,9 +336,72 @@ export class CognitoService {
         email: payload.email,
         sub: payload.sub,
       });
+      if (user.userStatus !== 'Active') {
+        throw new HttpException(
+          'User is not active status',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       return user;
     } catch (err) {
       throw new UnauthorizedException('Credentials are not valid.');
+    }
+  }
+
+  async verifyOrgOrTeamInvite(dto: SignUpDto, user: UserEntity) {
+    const { inviteId, inviteCode } = dto;
+    const invite = await this.prisma.invites.findUnique({
+      where: { id: inviteId },
+    });
+    const createdAt = invite.createdAt;
+    const currentDate = new Date();
+
+    const daysDifference = differenceInDays(currentDate, createdAt);
+    if (
+      invite?.id &&
+      invite?.status === InviteStatus.PENDING &&
+      daysDifference < 6 &&
+      inviteCode === invite?.inviteCode
+    ) {
+      if (invite?.inviteType === InviteType.ORGANIZATION && invite?.orgId) {
+        const orgUser = await this.prisma.orgUsers.findFirst({
+          where: {
+            orgId: invite.orgId,
+            userId: user.userId,
+          },
+        });
+        if (orgUser?.id) {
+          return;
+        } else {
+          await this.prisma.orgUsers.create({
+            data: {
+              orgId: invite.orgId,
+              userId: user.userId,
+              roleId: invite.roleId,
+              joinedAt: new Date(),
+            },
+          });
+        }
+      }
+      if (invite.inviteType === InviteType.TEAM && invite?.teamId) {
+        const teamUser = await this.prisma.teamUsers.findFirst({
+          where: {
+            teamId: invite.teamId,
+            userId: user.userId,
+          },
+        });
+        if (teamUser?.id) {
+          return;
+        } else {
+          await this.prisma.teamUsers.create({
+            data: {
+              teamId: invite.teamId,
+              userId: user.userId,
+              roleId: invite.roleId,
+            },
+          });
+        }
+      }
     }
   }
 }

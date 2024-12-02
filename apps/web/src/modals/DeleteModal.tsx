@@ -10,7 +10,7 @@ function DeleteModal(props: DeleteModalProps) {
     props || {};
 
   return (
-    <Card>
+    <Card className="hidden">
       <Modal
         show={showModal}
         size="md"

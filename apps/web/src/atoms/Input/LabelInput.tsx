@@ -21,6 +21,9 @@ function LabelInput(props: InputProps) {
     type,
     maxLength,
     onChange: customOnchange,
+    isArrayInput,
+    errorLabel,
+    className = '',
   } = props || {};
   return (
     <Controller
@@ -31,7 +34,11 @@ function LabelInput(props: InputProps) {
         required: isRequired,
         ...rules,
       }}
-      render={({ field: { onChange, name, value }, formState: { errors } }) => {
+      render={({
+        field: { onChange, name, value },
+        fieldState: { error },
+        formState: { errors },
+      }) => {
         const handleCustomOnchange = (
           event: React.ChangeEvent<HTMLInputElement>,
         ) => {
@@ -40,15 +47,21 @@ function LabelInput(props: InputProps) {
         };
 
         const errorInputName = errors[name];
+
         const message = getErrorMessage({
-          errorInputName,
+          errorInputName: isArrayInput ? error : errorInputName,
           errorMessage,
-          label,
+          label: errorLabel || label,
         });
 
         return (
-          <div className="w-full flex flex-col gap-1">
-            {label ? <Label>{label}</Label> : null}
+          <div className={`w-full flex flex-col gap-1 ${className}`}>
+            {label ? (
+              <Label>
+                {label}
+                {isRequired ? ' * ' : ''}
+              </Label>
+            ) : null}
             <TextInput
               name={name}
               disabled={disabled}

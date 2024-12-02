@@ -6,6 +6,7 @@
 import { usePathname } from 'next/navigation';
 import { Sidebar, SidebarItemGroup, SidebarItems } from '@src/flowbite';
 import Link from 'next/link';
+import { useGetTotalChatsUnreadCount } from '@queries/useChatQuery';
 import { SideBarContentProps } from '../type';
 
 const activeClass =
@@ -17,6 +18,8 @@ const hoverClass =
 function SideBarContent(props: SideBarContentProps) {
   const { isMobileView = true, navLinks, headerContent } = props;
   const currentPath = usePathname();
+
+  const { data: chatsTotalUnreadCount = 0 } = useGetTotalChatsUnreadCount();
 
   return (
     <>
@@ -59,6 +62,11 @@ function SideBarContent(props: SideBarContentProps) {
                 >
                   {Icon && <Icon className={iconClass || 'h-5 w-5'} />}
                   {name}
+                  {name === 'Chat' && chatsTotalUnreadCount > 0 && (
+                    <div className="w-6 h-6 rounded-[50px] bg-chat-light-gradient dark:bg-chat-dark-gradient ml-auto text-center place-content-center font-medium text-[14px] leading-[21px] text-gray-50">
+                      {chatsTotalUnreadCount}
+                    </div>
+                  )}
                 </Link>
               );
             })}

@@ -52,7 +52,7 @@ export class BookingsController {
   }
 
   @Get()
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiPaginatedResponse(BookingEntity)
   async findAll(@Query() query: SearchBookingPaginationDto) {
     const bookings = await this.bookingsService.findAll({ query });
@@ -69,7 +69,7 @@ export class BookingsController {
   }
 
   @Get(':bookingId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: BookingEntity })
   async findOne(@Param('bookingId') bookingId: string) {
     const booking = await this.bookingsService.findOne(bookingId);
@@ -87,7 +87,7 @@ export class BookingsController {
   }
 
   @Patch(':bookingId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: BookingEntity })
   async updateBooking(
     @Param('bookingId') bookingId: string,
@@ -101,7 +101,7 @@ export class BookingsController {
   }
 
   @Patch(':bookingId/cancel')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: BookingEntity })
   async cancelBooking(@Param('bookingId') bookingId: string) {
     const booking = await this.bookingsService.update(bookingId, {
@@ -111,7 +111,7 @@ export class BookingsController {
   }
 
   @Delete(':bookingId')
-  @RoleAccess([Roles.ADMIN])
+  @RoleAccess([Roles.ORG_ADMIN])
   @ApiAbstractResponse({ model: BookingEntity })
   remove(@Param('bookingId') bookingId: string) {
     const booking = this.bookingsService.remove(bookingId);

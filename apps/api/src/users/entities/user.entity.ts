@@ -1,8 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Users } from '@prisma/client';
+import { ActiveStatus, Users, ProfileRoles } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { AddressEntity } from '@src/addresses/entities/address.entity';
+import { IsOptional } from 'class-validator';
 
 export class UserEntity implements Partial<Users> {
   constructor(partial: Partial<UserEntity>) {
@@ -14,6 +15,9 @@ export class UserEntity implements Partial<Users> {
 
   @ApiPropertyOptional()
   firstName?: string;
+
+  @ApiProperty()
+  userStatus: ActiveStatus;
 
   @ApiPropertyOptional()
   lastName?: string;
@@ -56,4 +60,8 @@ export class UserEntity implements Partial<Users> {
 
   @ApiPropertyOptional({ type: [AddressEntity] })
   addresses?: AddressEntity[];
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  profileRoles?: ProfileRoles[];
 }
