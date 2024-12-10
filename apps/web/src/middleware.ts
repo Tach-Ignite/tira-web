@@ -32,9 +32,7 @@ export async function middleware(request: NextRequest) {
         CURRENT_ORG_COOKIE,
         CURRENT_USER_ROLE_COOKIE,
       ]);
-      return NextResponse.redirect(
-        new URL('/tach-color-shop/auth/login', request.url),
-      );
+      return NextResponse.redirect(new URL('/app/auth/login', request.url));
     }
 
     // const currentUser = request.cookies.get(CURRENT_USER_COOKIE);
@@ -60,7 +58,7 @@ export async function middleware(request: NextRequest) {
           CURRENT_USER_ROLE_COOKIE,
         ]);
         return NextResponse.redirect(
-          new URL('/tach-color-shop/auth/notfound', request.url),
+          new URL('/app/auth/notfound', request.url),
         );
       }
 
@@ -79,7 +77,7 @@ export async function middleware(request: NextRequest) {
           CURRENT_USER_ROLE_COOKIE,
         ]);
         return NextResponse.redirect(
-          new URL('/tach-color-shop/auth/notfound', request.url),
+          new URL('/app/auth/notfound', request.url),
         );
       }
       // request.cookies.delete([
@@ -87,7 +85,7 @@ export async function middleware(request: NextRequest) {
       //   AUTHENTICATION_COOKIE,
       //   CURRENT_USER_ROLE_COOKIE,
       // ]);
-      // return NextResponse.redirect(new URL('/tach-color-shop/auth/notfound', request.url));
+      // return NextResponse.redirect(new URL('/app/auth/notfound', request.url));
     }
   }
   return NextResponse.next();

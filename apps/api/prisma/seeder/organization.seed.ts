@@ -8,307 +8,307 @@ const prisma = new PrismaClient();
 export const organizations: {
   id: string;
   name: string;
-  website: string;
+  websiteURL: string;
 }[] = [
   {
     id: '9d4a4072-a1c7-43ba-b2d4-4cd1b39c059f',
     name: 'Tech Corp',
-    website: 'www.lhftge.com',
+    websiteURL: 'www.lhftge.com',
   },
   {
     id: 'ec514e30-bc93-42e4-8156-f3907cbe4658',
     name: 'Innovative Solutions',
-    website: 'www.omobet.com',
+    websiteURL: 'www.omobet.com',
   },
   {
     id: '3081075b-270e-4b0b-ba0c-4110664ce929',
     name: 'Health Solutions',
-    website: 'www.unplhl.com',
+    websiteURL: 'www.unplhl.com',
   },
   {
     id: 'c0a3d265-55c2-40d6-8af1-395bcd866a81',
     name: 'Eco Ventures',
-    website: 'www.ktvknw.com',
+    websiteURL: 'www.ktvknw.com',
   },
   {
     id: '87d813ec-2a40-41aa-bfc8-a7c62bfdfa54',
     name: 'Finance Co.',
-    website: 'www.lnadnu.com',
+    websiteURL: 'www.lnadnu.com',
   },
   {
     id: '5443ab99-ac28-4fa2-b288-e526868c2144',
     name: 'NextGen Technologies',
-    website: 'www.oxksuo.com',
+    websiteURL: 'www.oxksuo.com',
   },
   {
     id: 'ab255ca1-632c-4f4d-b702-ed7a908e134f',
     name: 'Future Innovations',
-    website: 'www.bycnld.com',
+    websiteURL: 'www.bycnld.com',
   },
   {
     id: '738acd46-b477-4ebb-8a24-7206b322b751',
     name: 'Green Earth',
-    website: 'www.sarjfl.com',
+    websiteURL: 'www.sarjfl.com',
   },
   {
     id: 'c911258a-9793-4b4a-96be-31947f936dee',
     name: 'Global Services',
-    website: 'www.tfwfiu.com',
+    websiteURL: 'www.tfwfiu.com',
   },
   {
     id: '6549ba2c-1e53-4375-a709-819269f8fde5',
     name: 'Smart Logistics',
-    website: 'www.lsfdpo.com',
+    websiteURL: 'www.lsfdpo.com',
   },
   {
     id: 'f1abce83-0188-4c81-aa54-848d9da59b5b',
     name: 'Digital Creatives',
-    website: 'www.rjpavs.com',
+    websiteURL: 'www.rjpavs.com',
   },
   {
     id: 'dfd41be4-ef90-4fbd-82a0-287c8a169a4d',
     name: 'Data Solutions',
-    website: 'www.hsrzey.com',
+    websiteURL: 'www.hsrzey.com',
   },
   {
     id: '0ab253ab-6d5c-4aa8-a49d-cf39221316c8',
     name: 'Creative Minds',
-    website: 'www.qvdwya.com',
+    websiteURL: 'www.qvdwya.com',
   },
   {
     id: '78f8b141-ddbb-4513-9a16-60bfe738d92a',
     name: 'Insight Analytics',
-    website: 'www.dslrsj.com',
+    websiteURL: 'www.dslrsj.com',
   },
   {
     id: '14f6a969-dfad-4eba-b6b5-04d6b026d0f5',
     name: 'Unity Healthcare',
-    website: 'www.rwgoba.com',
+    websiteURL: 'www.rwgoba.com',
   },
   {
     id: '2943f343-10ff-41f1-8aa8-cbdd15b2eb04',
     name: 'Prime Retail',
-    website: 'www.xxidny.com',
+    websiteURL: 'www.xxidny.com',
   },
   {
     id: 'b0ac0e26-b656-4109-a36f-dbb88a6db2f1',
     name: 'Clever Marketing',
-    website: 'www.ofbtdv.com',
+    websiteURL: 'www.ofbtdv.com',
   },
   {
     id: '4160ec68-8e54-4fc2-af44-c7c4400377fd',
     name: 'Advanced Robotics',
-    website: 'www.nexqpq.com',
+    websiteURL: 'www.nexqpq.com',
   },
   {
     id: 'c320ea6c-9361-49b3-b6f0-5c83e0854066',
     name: 'Tech Innovations',
-    website: 'www.hhgtdk.com',
+    websiteURL: 'www.hhgtdk.com',
   },
   {
     id: '5dd856f2-f4b1-474d-89e6-81a3a2459689',
     name: 'Visionary Solutions',
-    website: 'www.kaozbf.com',
+    websiteURL: 'www.kaozbf.com',
   },
   {
     id: '8eefbc71-f8d8-4d4c-9439-74a58a4c321e',
     name: 'Green Future',
-    website: '',
+    websiteURL: '',
   },
   {
     id: '744f4366-f5e9-4714-9c26-524bd69c8962',
     name: 'Digital Horizons',
-    website: 'www.kaozbf2.com',
+    websiteURL: 'www.kaozbf2.com',
   },
   {
     id: '6b25f211-edce-4fc2-bf70-e5a239f0b2df',
     name: 'Health Tech',
-    website: 'www.kaozbf3.com',
+    websiteURL: 'www.kaozbf3.com',
   },
   {
     id: '26794efa-ff96-4aeb-8cb9-af271962d54b',
     name: 'Smart Finance',
-    website: 'www.kaozbf4.com',
+    websiteURL: 'www.kaozbf4.com',
   },
   {
     id: '3f00847c-0b19-47c5-8131-f0e2a68245ad',
     name: 'Education Edge',
-    website: 'www.kaozbf5.com',
+    websiteURL: 'www.kaozbf5.com',
   },
   {
     id: '73b32577-ea92-46f3-9100-c6695c90b2c1',
     name: 'Bio Solutions',
-    website: 'www.kaozbf6.com',
+    websiteURL: 'www.kaozbf6.com',
   },
   {
     id: '51c8d682-1229-469d-8eaf-e81f06d72635',
     name: 'City Connect',
-    website: 'www.kaozbf7.com',
+    websiteURL: 'www.kaozbf7.com',
   },
   {
     id: 'd6028204-6cf8-4388-86e6-103ae0d228b1',
     name: 'AgriTech Innovations',
-    website: 'www.kaozbf8.com',
+    websiteURL: 'www.kaozbf8.com',
   },
   {
     id: '8f487bca-06ae-4b4c-8d4c-39b0792cf7e6',
     name: 'Urban Mobility',
-    website: 'www.kaozbf9.com',
+    websiteURL: 'www.kaozbf9.com',
   },
   {
     id: '7cce1235-9d51-4725-b830-0b7f92915764',
     name: 'NextWave AI',
-    website: 'www.kaozbf10.com',
+    websiteURL: 'www.kaozbf10.com',
   },
   {
     id: '1f3a4c97-1b7c-48d2-84b6-c6a1e19ea0db',
     name: 'Renewable Power',
-    website: 'www.kaozbf11.com',
+    websiteURL: 'www.kaozbf11.com',
   },
   {
     id: '136cea3b-4ce4-44b6-a07c-a515049336b2',
     name: 'TechLink',
-    website: 'www.kaozbf12.com',
+    websiteURL: 'www.kaozbf12.com',
   },
   {
     id: 'a6b01b37-584b-4afc-94d9-9220ddd276c8',
     name: 'AI Vision',
-    website: 'www.kaozbf13.com',
+    websiteURL: 'www.kaozbf13.com',
   },
   {
     id: 'f69346a5-1f5c-4a4a-8124-a427f1118545',
     name: 'AquaTech',
-    website: 'www.kaozbf14.com',
+    websiteURL: 'www.kaozbf14.com',
   },
   {
     id: 'f6304cd1-3cab-4de1-b1ce-53fcb9386e8a',
     name: 'Virtual Edu',
-    website: 'www.kaozbf15.com',
+    websiteURL: 'www.kaozbf15.com',
   },
   {
     id: '9be50376-6fe6-4bb3-8feb-68f18a6f9ee8',
     name: 'CleanTech',
-    website: 'www.kaozbf16.com',
+    websiteURL: 'www.kaozbf16.com',
   },
   {
     id: 'edcac424-856f-4505-8553-a02877cb81be',
     name: 'Secure IT',
-    website: 'www.kaozbf17.com',
+    websiteURL: 'www.kaozbf17.com',
   },
   {
     id: '971a9cda-ccb5-4a88-8f6b-3f00c454a1ec',
     name: 'Future Networks',
-    website: 'www.kaozbf18.com',
+    websiteURL: 'www.kaozbf18.com',
   },
   {
     id: '7bed524f-61ed-4980-af3d-2a89dfad5e15',
     name: 'Mindful Media',
-    website: 'www.kaozbf19.com',
+    websiteURL: 'www.kaozbf19.com',
   },
   {
     id: '3f9a07b3-a3db-49de-a296-448cb2723a33',
     name: 'Urban Agriculture',
-    website: 'www.kaozbf20.com',
+    websiteURL: 'www.kaozbf20.com',
   },
   {
     id: '9a872fe3-8635-46d7-a183-0c95d3197570',
     name: 'Agile Solutions',
-    website: 'www.kaozbf21.com',
+    websiteURL: 'www.kaozbf21.com',
   },
   {
     id: '8690cf99-fb53-4610-acfe-20f85ed2d5be',
     name: 'Creative Spark',
-    website: 'www.kaozbf22.com',
+    websiteURL: 'www.kaozbf22.com',
   },
   {
     id: '022f9472-1624-4718-8c6f-97c1d05aac4e',
     name: 'NextGen Security',
-    website: 'www.kaozbf23.com',
+    websiteURL: 'www.kaozbf23.com',
   },
   {
     id: 'c55b8f5e-e902-49b7-a91a-842083182a8d',
     name: 'Data Wise',
-    website: 'www.kaozbf22.com',
+    websiteURL: 'www.kaozbf22.com',
   },
   {
     id: 'dcd7aed6-cf05-47b5-92d0-98a50342b5cb',
     name: 'Insightful Marketing',
-    website: 'www.kaozbf24.com',
+    websiteURL: 'www.kaozbf24.com',
   },
   {
     id: '0215abd4-f05c-428a-94c4-f992dd49cabd',
     name: 'Pioneering Robotics',
-    website: 'www.kaozbf25.com',
+    websiteURL: 'www.kaozbf25.com',
   },
   {
     id: '152cd361-b11b-4660-87d8-0f314f0d1fcb',
     name: 'Cultural Insights',
-    website: 'www.kaozbf26.com',
+    websiteURL: 'www.kaozbf26.com',
   },
   {
     id: '32018ec9-b536-470b-b041-2e429c00f195',
     name: 'Connected Health',
-    website: 'www.kaozbf27.com',
+    websiteURL: 'www.kaozbf27.com',
   },
   {
     id: 'fba85257-aa70-43ce-b383-0fb86282e762',
     name: 'Dynamic Logistics',
-    website: 'www.kaozbf28.com',
+    websiteURL: 'www.kaozbf28.com',
   },
   {
     id: '1bb28a3b-1241-4b2e-add9-d1791ee7881c',
     name: 'Innovation Hub',
-    website: 'www.kaozbf29.com',
+    websiteURL: 'www.kaozbf29.com',
   },
   {
     id: 'ca38482f-e5d2-4159-a1e1-73c0dcbb3be7',
     name: 'Ethical Energy',
-    website: 'www.kaozbf30.com',
+    websiteURL: 'www.kaozbf30.com',
   },
   {
     id: '1bc271ce-b89e-46ad-8056-dbbeff4f6a23',
     name: 'Visionary Health',
-    website: 'www.kaozbf31.com',
+    websiteURL: 'www.kaozbf31.com',
   },
   {
     id: 'c02c0eb2-70ed-4441-8364-793a509fdb02',
     name: 'Future of Work',
-    website: 'www.kaozbf32.com',
+    websiteURL: 'www.kaozbf32.com',
   },
   {
     id: '0f6d589d-d1ec-41a3-aa58-091d21d5f4d6',
     name: 'Sustainable Brands',
-    website: 'www.kaozbf33.com',
+    websiteURL: 'www.kaozbf33.com',
   },
   {
     id: 'f531f05a-76d4-4093-a034-331dc4689660',
     name: 'Tech Empowerment',
-    website: 'www.kaozbf34.com',
+    websiteURL: 'www.kaozbf34.com',
   },
   {
     id: 'e98179f9-5e0d-4267-b7f6-015f0fb73021',
     name: 'Smart Analytics',
-    website: 'www.kaozbf35.com',
+    websiteURL: 'www.kaozbf35.com',
   },
   {
     id: '99d3a91e-034a-47e8-a0cd-096463104c63',
     name: 'Intuitive Design',
-    website: 'www.kaozbf36.com',
+    websiteURL: 'www.kaozbf36.com',
   },
   {
     id: 'cb98711a-3d9e-42a2-89d3-fc19a369f686',
     name: 'Pioneering Minds',
-    website: 'www.kaozbf37.com',
+    websiteURL: 'www.kaozbf37.com',
   },
   {
     id: '82bd7d31-9197-4fa6-b7e3-014a7dbdb9c6',
     name: 'Smart Housing',
-    website: 'www.kaozbf39.com',
+    websiteURL: 'www.kaozbf39.com',
   },
   {
     id: '34bd6d34-5678-5fa6-b7e3-013a7dbdb9c3',
     name: 'Global Innovations',
-    website: 'www.kaozbf40.com',
+    websiteURL: 'www.kaozbf40.com',
   },
 ];
 
@@ -542,6 +542,29 @@ const generateUniqueOrgFriendlyId = async (orgName: string) => {
   return orgFriendlyId;
 };
 
+export const generateUniqueTeamFriendlyId = async (teamName: string) => {
+  const slug = slugify(teamName, {
+    lower: true,
+    strict: true,
+    replacement: '-',
+  });
+  let teamFriendlyId: string;
+  let isUnique = false;
+
+  do {
+    const randomString = randomBytes(4).toString('hex'); // 8-character alphanumeric string
+    teamFriendlyId = `${slug}-${randomString}`;
+
+    // Check if this orgFriendlyId is already in use
+    const existingTeam = await prisma.teams.findUnique({
+      where: { teamFriendlyId },
+    });
+    isUnique = !existingTeam;
+  } while (!isUnique);
+
+  return teamFriendlyId;
+};
+
 const generateOrganizations = async () => {
   for (const organization of organizations) {
     const orgFriendlyId = await generateUniqueOrgFriendlyId(organization.name);
@@ -562,15 +585,18 @@ const generateOrganizations = async () => {
     });
   }
   for (const team of seedTeamsForTeachCorpOrg) {
+    const teamFriendlyId = await generateUniqueTeamFriendlyId(team.name);
     await prisma.teams.upsert({
       where: { id: team.id },
       create: {
         ...team,
+        teamFriendlyId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
       update: {
         ...team,
+        teamFriendlyId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },

@@ -65,6 +65,7 @@ export { BiLogIn as LoginIcon } from 'react-icons/bi';
 export { CgBrowser as ProductServiceBrowseIcon } from 'react-icons/cg';
 export { PiCheckCircleFill as CircleCheckIcon } from 'react-icons/pi';
 export { FaArrowLeft as BackArrowIcon } from 'react-icons/fa6';
+export { FaArrowRight as NextArrowIcon } from 'react-icons/fa6';
 export { GoDotFill as DotFillIcon } from 'react-icons/go';
 export { FaRegCircleCheck as OutlinedCircleCheckIcon } from 'react-icons/fa6';
 export { FaRegCircleUser as UserCircleIcon } from 'react-icons/fa6';

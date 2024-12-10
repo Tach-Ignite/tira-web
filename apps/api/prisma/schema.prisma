@@ -15,16 +15,12 @@ datasource db {
 
 model Users {
   userId                 String                  @id @default(uuid())
+  // userFriendlyId         String
   email                  String                  @unique
-  name                   String?
-  firstName              String?
-  lastName               String?
   hash                   String?
   sub                    String?
   userType               String                  @default("local")
   profileRoles           ProfileRoles[]          @default([])
-  phoneNumber            String?
-  profileImage           String?
   emailVerifiedAt        DateTime?
   createdAt              DateTime                @default(now())
   updatedAt              DateTime                @updatedAt
@@ -44,6 +40,8 @@ model Users {
   orgUsers               OrgUsers[]
   teamUsers              TeamUsers[]
   invitedUsers           Invites[]
+
+  // @@unique([userFriendlyId])
 }
 
 model Conversations {
@@ -145,15 +143,28 @@ model UserRoles {
 model Organizations {
   id            String     @id @default(uuid())
   name          String
-  website       String
-  orgFriendlyId String     @unique
+  orgFriendlyId String
+  logoUrl       String?
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  state         String?
+  country       String?
+  zipCode       String?
+  websiteURL    String?
+  linkedInURL   String?
+  companyEmail  String?
+  companyPhone  String?
+  contactName   String?
+  contactPhone  String?
+  contactEmail  String?
   teams         Teams[]
   orgUsers      OrgUsers[]
   invites       Invites[]
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
-  @@unique([name, website])
+  @@unique([orgFriendlyId])
 }
 
 model OrgUsers {
@@ -192,15 +203,17 @@ model Invites {
 }
 
 model Teams {
-  id           String        @id @default(uuid())
-  name         String
-  orgId        String
-  organization Organizations @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  teamUsers    TeamUsers[]
-  invites      Invites[]
+  id             String        @id @default(uuid())
+  teamFriendlyId String
+  name           String
+  orgId          String
+  organization   Organizations @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  teamUsers      TeamUsers[]
+  invites        Invites[]
 
+  @@unique([teamFriendlyId])
   @@unique([orgId, name])
 }
 

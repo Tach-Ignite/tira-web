@@ -71,16 +71,16 @@ export class AuthService {
     });
 
     const redirectUrl = userProfile?.onboardingCompleted
-      ? '/announcement'
+      ? '/console'
       : '/onboarding';
 
     const redirecturl =
       user?.role?.name === Roles.SUPER_ADMIN
-        ? '/tach-color-shop/admin-console'
+        ? '/app/admin-console'
         : redirectUrl;
 
     res.redirect(
-      `${baseUrl}/tach-color-shop/auth/oauth/callback?token=${token}&user=${JSON.stringify(user)}&redirect=${redirecturl}`,
+      `${baseUrl}/app/auth/oauth/callback?token=${token}&user=${JSON.stringify(user)}&redirect=${redirecturl}`,
     );
   }
 
@@ -249,7 +249,7 @@ export class AuthService {
         }
       }
       if (localUser.userType !== user.provider) {
-        res.redirect(`${baseUrl}/tach-color-shop/auth/login?error=forbidden`);
+        res.redirect(`${baseUrl}/app/auth/login?error=forbidden`);
         throw new ForbiddenException(
           'User Already Logged In Using different Auth method ',
         );
@@ -264,12 +264,9 @@ export class AuthService {
       });
       const newUser = await this.userService.createUser({
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
         userType: user.provider,
         roleId: role.id,
         sub: user.id,
-        name: user.firstName + user.lastName,
       });
       return await this.createOAuthSession(new UserEntity(newUser), res);
     }

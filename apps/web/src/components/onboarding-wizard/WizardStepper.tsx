@@ -7,8 +7,8 @@ import { Button } from '@src/atoms';
 import { BackArrowIcon } from '@src/icons';
 import { WizardStepperProps } from './types';
 
-const completedStepsClass = 'bg-primary h-4';
-const filledStepClass = 'bg-primary h-full';
+const completedStepsClass = 'bg-action h-4';
+const filledStepClass = 'bg-action h-full';
 const unfilledStepClass = 'bg-[#d9dbf0] dark:bg-white h-full';
 
 function WizardStepper(props: WizardStepperProps) {
@@ -31,22 +31,29 @@ function WizardStepper(props: WizardStepperProps) {
 
   return (
     <div
-      className={`grid grid-cols-1 md:!grid-cols-[1fr_20fr] ${isLastStep ? 'place-items-center' : 'place-items-start'} rounded-lg px-5 pt-1 pb-10 w-full h-[6px] relative`}
+      className={`grid grid-cols-1 lg:!grid-cols-[1fr_20fr] place-items-start ${isLastStep ? 'lg:!pl-16' : ''} rounded-lg pt-1 pb-10 w-full h-[6px] relative`}
     >
-      <div className="hidden md:!inline-flex !h-full w-[120px] rounded-lg items-center justify-end p-[1px] -ml-4">
+      <div className="hidden lg:!inline-flex !h-full w-[180px] rounded-lg items-center justify-end p-[1px] -ml-4">
         <Button
-          className="w-full h-full border-none inline-flex items-center justify-center !bg-transparent !ring-0 focus:!ring-0 focus-visible:!outline-none"
+          className="w-full h-full border-none inline-flex items-center justify-center !bg-transparent !ring-0 focus:!ring-0 focus-visible:!outline-none gap-1"
           onClick={onHandleBack}
           disabled={shouldDisableBackButton || !isBackButtonVisible}
         >
-          <span className="w-full h-full inline-flex justify-center items-center">
-            <BackArrowIcon className="w-[20px] h-full mx-1 text-black dark:!text-white" />
+          <span className={`"w-full h-full grid grid-cols-2 gap-2`}>
+            <BackArrowIcon
+              className={`w-[20px] h-full mx-1 ${shouldDisableBackButton || !isBackButtonVisible ? '!text-disabledText' : 'text-action'}`}
+            />
+            <span
+              className={`"w-full h-full inline-flex justify-center items-center font-[600] text-[16px] !leading-[24px] ${shouldDisableBackButton || !isBackButtonVisible ? '!text-disabledText' : 'text-action'}`}
+            >
+              Back
+            </span>
           </span>
         </Button>
       </div>
 
-      <div className="py-8 md:!py-0 !w-full h-full flex items-center justify-start">
-        <div className="flex items-center w-[350px] justify-center md:w-4/5 h-full rounded-lg">
+      <div className="py-8 lg:!py-0 lg:!px-24 lg:!ml-12 !w-full h-full flex items-center justify-center lg:!justify-start">
+        <div className="flex items-center w-[350px] justify-center lg:!w-3/4 h-full rounded-lg gap-0">
           {steps?.map(({ title }, index) => {
             const isStepsCompleted = currentStepIndex > index;
             const isCurrentStep = currentStepIndex === index;

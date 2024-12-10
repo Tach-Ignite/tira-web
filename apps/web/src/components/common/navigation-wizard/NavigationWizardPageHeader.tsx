@@ -3,10 +3,15 @@
 
 'use client';
 
-import { BackArrowIcon, ConsoleIcon, CrossIcon, MenuIcon } from '@src/icons';
-import { useRouter } from 'next/navigation';
-import { BreadcrumbWithActions } from '@components/common/breadcrumb';
-import { useState } from 'react';
+import {
+  ChevronRightIcon,
+  BackArrowIcon,
+  ConsoleIcon,
+  MenuIcon,
+} from '@src/icons';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuthContext } from '@context/AuthContext';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TachColorShopConsoleRoutes } from '@src/routes';
 import { NavigationWizardPageHeaderProps } from './types';
@@ -22,8 +27,12 @@ export default function NavigationWizardPageHeader(
     fullBreadcrumbs,
     onChangeWizardTab,
     onHandleBack,
-    showBreadcrumbDivider = false,
+    isFullPage = false,
   } = props || {};
+
+  const { singlePageName = '-' } = useAuthContext();
+
+  const pathname = usePathname();
 
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
@@ -37,14 +46,15 @@ export default function NavigationWizardPageHeader(
     typeof onHandleBack === 'function' ? onHandleBack() : router.back();
   };
 
+  useEffect(() => {
+    if (showMobileMenu) {
+      toggleMobileMenu();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
   return (
-    <div className="w-full lg:!grid lg:!grid-cols-[1fr_5fr] !space-y-5 lg:!place-content-center mb-5">
-      <div
-        className="ml-5 md:!hidden block w-fit rounded-md cursor-pointer p-2 !text-white dark:!text-black text-[20px] !bg-primary2 dark:!bg-primaryDark"
-        onClick={toggleMobileMenu}
-      >
-        {showMobileMenu ? <CrossIcon className="rotate-180" /> : <MenuIcon />}
-      </div>
+    <div className="w-full">
       {showMobileMenu ? (
         <MobileNavigationSideMenu
           show={showMobileMenu}
@@ -54,45 +64,57 @@ export default function NavigationWizardPageHeader(
           currentStepIndex={currentStepIndex}
         />
       ) : null}
-      <div className="space-y-5 gap-x-5 lg:!min-w-[300px] pl-5 md:pl-0 flex items-center lg:!justify-center w-full break-all sm:!flex-nowrap !flex-wrap">
-        <Link className="lg:!w-full" href={TachColorShopConsoleRoutes.Overview}>
-          <ConsoleIcon className="w-12 h-12  md:!mb-5 !mb-0 dark:!text-white" />
-        </Link>
-        <div className="lg:!hidden md:!w-max md:!ml-5 !flex gap-2 lg:!items-center relative">
-          {showGoBack ? (
-            <BackArrowIcon
-              onClick={goBack}
-              className="w-[20px] lg:!pb-5 lg!mt-0 -mt-1 h-full mx-1 text-black dark:!text-white cursor-pointer"
-            />
-          ) : null}
-          <div className="w-full lg!mt-0 -mt-3">
-            <BreadcrumbWithActions
-              breadcrumbs={fullBreadcrumbs || []}
-              className="!pb-0"
-            />
-            {showBreadcrumbDivider ? (
-              <div className="flex-1 h-px !mb-4 bg-black dark:bg-white" />
-            ) : null}
-          </div>
+      <div className="bg-gray-400 !bg-opacity-30 flex gap-x-5 items-center sm:!px-5 !px-3 py-3">
+        <div
+          className="md:!hidden block w-fit rounded-md cursor-pointer p-2 !text-black border border-black text-[20px]"
+          onClick={toggleMobileMenu}
+        >
+          <MenuIcon />
         </div>
-      </div>
-      <div className="!hidden w-full lg:!grid lg:!grid-cols-[1fr_49fr] md:!place-content-start md:!self-center">
-        <div className="md:!w-max ml-5 flex gap-2 items-center relative">
-          {showGoBack ? (
+        <Link
+          className={`${isFullPage ? 'md:!w-1/5 md:!h-12' : ''}`}
+          href={TachColorShopConsoleRoutes.Overview}
+        >
+          <ConsoleIcon className="w-12 h-12 dark:!text-white" />
+        </Link>
+
+        <div
+          className={`w-full flex gap-x-5 ${isFullPage ? 'md:!w-4/5 md:-ml-8' : ''}`}
+        >
+          {showGoBack || isFullPage ? (
             <BackArrowIcon
               onClick={goBack}
-              className="w-[20px] pb-5 h-full mx-1 text-black dark:!text-white cursor-pointer"
+              className="w-[28px] h-full mt-1 text-black dark:!text-white cursor-pointer"
             />
           ) : null}
-          <div className="w-full">
-            <BreadcrumbWithActions
-              breadcrumbs={fullBreadcrumbs || []}
-              className="pb-0"
-            />
-            {showBreadcrumbDivider ? (
-              <div className="flex-1 h-px !mb-4 bg-black dark:bg-white" />
-            ) : null}
-          </div>
+          {isFullPage ? (
+            <div className="flex items-center gap-x-2">
+              <p className="text-[24px] !font-semibold leading-[21px] !text-black dark:!text-gray-100">
+                {singlePageName}
+              </p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-x-2 mt-0.5">
+              {fullBreadcrumbs?.map(({ name, url = '' }, index) => {
+                const isActive = url === `${process.env.APP_URL}${pathname}`;
+
+                return (
+                  <div key={name} className="flex items-center gap-x-2">
+                    <Link
+                      key={name}
+                      href={url}
+                      className={`hover:bg-gray-50 dark:hover:!text-black hover:rounded-lg p-1.5 text-[16px] leading-[21px] !text-black dark:!text-gray-100 font-medium ${isActive ? 'text-[18px] !font-semibold' : ''}`}
+                    >
+                      {name}
+                    </Link>
+                    {fullBreadcrumbs?.length - 1 === index ? null : (
+                      <ChevronRightIcon className="h-full text-[24px] leading-[21px] text-black dark:!text-white" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>

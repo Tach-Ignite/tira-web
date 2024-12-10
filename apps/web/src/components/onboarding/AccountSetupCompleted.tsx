@@ -12,33 +12,23 @@ function AccountSetupCompleted({ onHandleNext }: { onHandleNext: () => void }) {
     }, 2000);
   }, []);
   return (
-    <div className="flex flex-col items-start justify-start gap-4 py-4 md:py-4 px-2 md:!px-20 rounded-lg w-full md:!mb-10">
-      <div className="flex gap-5 w-full md:!w-3/5 md:!flex-row flex-col">
-        <p className="font-[600] mt-10 text-[36px] leading-[43.57px] text-primary-900 dark:text-blue-400">
-          Your Account is Ready!
-        </p>
-      </div>
-      <div className="flex gap-5 w-full md:!w-3/5 md:!flex-row flex-col">
-        <p className="font-[300] mt-2 text-[20px] leading-[24.2px] text-primary-250 dark:text-gray-100">
-          Thank you for completing the onboarding process. We’re setting up your
-          personalized dashboard with everything you need to get started.
-        </p>
-      </div>
-      <div className="flex gap-5 w-full md:!w-3/5 md:!flex-row flex-col py-2 md:!py-10">
+    <div className="grid grid-cols-1 place-items-start gap-4 lg:!gap-2 px-8 xl:!pl-24 md:pl-0 lg:!ml-24 tab-!ml-0 pb-8 w-full lg:!w-4/5">
+      <div className="flex gap-5 w-full lg:!w-4/5 justify-start items-center py-16 2xl:!py-10 lg:!py-16">
         <div className="w-full h-full flex items-center justify-center">
           <Spinner
             size="lg"
-            className="fill-black dark:fill-blue-400 ml-8 my-10 h-[50px] w-[50px]"
+            variant="dotted"
+            className="fill-action dark:fill-action-dark lg:!ml-8 h-[50px] w-[50px]"
           />
         </div>
       </div>
-      <div className="flex gap-5 w-full md:!w-3/5 md:!flex-row flex-col">
-        <p className="font-[400] mt-2 text-[20px] leading-[24.2px] text-primary-250 dark:text-gray-100">
+      <div className="flex gap-5 w-full lg:!w-4/5 lg:!mt-8 justify-center items-center text-center">
+        <p className="font-600 mt-2 text-[16px] leading-[24px] tab:!text-[20px] tab:!leading-[24px] text-neutral dark:!text-textBody-dark">
           In just a moment, you’ll be redirected to your dashboard.
         </p>
       </div>
-      <div className="flex gap-5 w-full md:!w-3/5 md:!flex-row flex-col">
-        <p className="font-[300] mt-2 text-[20px] leading-[24.2px] text-primary-250 dark:text-gray-100">
+      <div className="flex gap-5 w-full lg:!w-4/5 justify-center items-center">
+        <p className="font-400 mt-2 text-[14px] leading-[20px] tab:!text-[16px] tab:!leading-[24px] text-neutral dark:!text-textBody-dark">
           Feel free to explore
         </p>
       </div>

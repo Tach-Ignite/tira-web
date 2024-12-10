@@ -4,7 +4,12 @@
 
 import { ReactElement, useMemo, useState, useEffect } from 'react';
 import { getCookie, setCookie } from 'cookies-next';
-import { OrganizationsEntity, UserRole, UserType } from '@services';
+import {
+  OrganizationsEntity,
+  CurrentTeamEntity,
+  UserRole,
+  UserType,
+} from '@services';
 import { AuthContext } from '@context/AuthContext';
 import { useThemeMode } from '@src/flowbite';
 import { ToastProvider } from '../context/ToastContext';
@@ -12,8 +17,10 @@ import ReactQueryProvider from './QueryProvider';
 import { Toast } from './common/components';
 import {
   CURRENT_ORG_COOKIE,
+  CURRENT_TEAM_COOKIE,
   CURRENT_USER_COOKIE,
   CURRENT_USER_ROLE_COOKIE,
+  CURRENT_SINGLE_PAGE_NAME,
 } from '../services/auth-cookie';
 
 interface ProviderProps {
@@ -36,6 +43,10 @@ export default function Providers({ children, authenticated }: ProviderProps) {
     JSON.parse(getCookie(CURRENT_ORG_COOKIE) || '{}'),
   );
 
+  const [currentTeam, setCurrentTeam] = useState<CurrentTeamEntity>(
+    JSON.parse(getCookie(CURRENT_TEAM_COOKIE) || '{}'),
+  );
+
   const [currentUserRole, setCurrentUserRole] = useState<UserRole>(
     JSON.parse(getCookie(CURRENT_USER_ROLE_COOKIE) || '{}'),
   );
@@ -55,6 +66,20 @@ export default function Providers({ children, authenticated }: ProviderProps) {
     setCurrentOrg(JSON.parse(getCookie(CURRENT_ORG_COOKIE) || '{}'));
   };
 
+  const onSetCurrentTeam = (team: CurrentTeamEntity) => {
+    setCookie(CURRENT_TEAM_COOKIE, JSON.stringify(team));
+    setCurrentTeam(JSON.parse(getCookie(CURRENT_TEAM_COOKIE) || '{}'));
+  };
+
+  const [singlePageName, setSinglePageName] = useState<string>(
+    getCookie(CURRENT_SINGLE_PAGE_NAME) || '-',
+  );
+
+  const onSetSinglePageName = (pageName: string) => {
+    setCookie(CURRENT_SINGLE_PAGE_NAME, pageName);
+    setSinglePageName(getCookie(CURRENT_SINGLE_PAGE_NAME) || '-');
+  };
+
   const CurrentUserContext = useMemo(
     () => ({
       authenticatedUser,
@@ -62,10 +87,21 @@ export default function Providers({ children, authenticated }: ProviderProps) {
       currentUserRole,
       currentOrg,
       setCurrentOrg: onSetCurrentOrg,
+      currentTeam,
+      setCurrentTeam: onSetCurrentTeam,
       setAuthenticatedUserRole: onSetAuthenticatedUserRole,
       isAuthenticated: authenticated,
+      singlePageName,
+      setSinglePageName: onSetSinglePageName,
     }),
-    [authenticatedUser, currentUserRole, currentOrg, authenticated],
+    [
+      authenticatedUser,
+      currentUserRole,
+      currentOrg,
+      currentTeam,
+      authenticated,
+      singlePageName,
+    ],
   );
 
   const { setMode } = useThemeMode();

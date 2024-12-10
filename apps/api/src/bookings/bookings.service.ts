@@ -87,8 +87,15 @@ export class BookingsService {
           adminNotes: userId ? false : true,
           user: {
             select: {
-              name: true,
               userId: true,
+            },
+            include: {
+              userProfile: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
             },
           },
         },

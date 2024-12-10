@@ -271,14 +271,14 @@ function OnboardingPage() {
       showAlways: true,
     },
     {
-      title: 'Describe Your Company Type',
+      title: 'Describe Your Color Shop Type',
       description: '',
       content: <ChooseBusinessType form={onboardingForm} />,
       showFooter: true,
       showAlways: false,
     },
     {
-      title: 'Describe Your Color Shop Type',
+      title: 'Tell us about your business',
       description: '',
       content: (
         <BusinessInformation
@@ -290,8 +290,9 @@ function OnboardingPage() {
       showAlways: false,
     },
     {
-      title: ``,
-      description: '',
+      title: `Your Account is Ready!`,
+      description: `Thank you for completing the onboarding process. We’re setting up your
+          personalized dashboard with everything you need to get started.`,
       content: <AccountSetupCompleted onHandleNext={onHandleNext} />,
       lastButtonText: '',
       showFooter: false,
@@ -390,7 +391,7 @@ function OnboardingPage() {
       />
     </div>
   ) : (
-    <div className="w-full h-full flex items-center justify-center px-1 md:!px-14">
+    <div className="w-full h-full flex items-center justify-center px-1 tab:!px-16 lg:!px-8 2xl:!px-16">
       <OnboardingWizard
         steps={
           totalSteps === 6 ? steps : steps?.filter((step) => step.showAlways)

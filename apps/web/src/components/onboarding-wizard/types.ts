@@ -22,6 +22,8 @@ export interface WizardFooterProps {
   onHandleNext?: () => void;
   lastButtonText?: string;
   onHandleLastButton?: () => void;
+  onHandleBack?: () => void;
+  shouldDisableBackButton?: boolean;
 }
 
 export interface OnboardingWizardStepType {

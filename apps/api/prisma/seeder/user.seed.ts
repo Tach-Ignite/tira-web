@@ -2,7 +2,10 @@
 import bcrypt from 'bcryptjs';
 import { PrismaClient, UseCaseTypes } from '@prisma/client';
 import inquirer from 'inquirer';
-import { organizations } from './organization.seed';
+import {
+  organizations,
+  generateUniqueTeamFriendlyId,
+} from './organization.seed';
 const prisma = new PrismaClient();
 
 const EmailRegex =
@@ -11,119 +14,142 @@ const EmailRegex =
 const PasswordRegex = /^(?=.*[a-zA-Z].*)(?=.*[0-9].*)(?=.*[!@#$%&?\s].*).{8,}$/;
 
 export const users: {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   hash?: string;
   roleId?: string;
   requireOnboarding?: boolean;
 }[] = [
   {
-    name: 'Demo User',
-    email: 'user@tachcolorstore.com',
+    firstName: 'Demo',
+    lastName: 'User',
+    email: 'user@example.com',
     hash: bcrypt.hashSync('user@Password1', 10),
   },
   {
-    name: 'Demo Admin',
-    email: 'admin@tachcolorstore.com',
+    firstName: 'Demo',
+    lastName: 'Admin',
+    email: 'admin@example.com',
   },
   {
-    name: 'John Doe',
-    email: 'john.doe@tachcolorstore.com',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
     hash: bcrypt.hashSync('John@Password1', 10),
   },
   {
-    name: 'Jane Smith',
-    email: 'jane.smith@tachcolorstore.com',
+    firstName: 'Jane',
+    lastName: 'Smith',
+    email: 'jane.smith@example.com',
     hash: bcrypt.hashSync('Jane@Password1', 10),
   },
   {
-    name: 'Robert Johnson',
-    email: 'robert.johnson@tachcolorstore.com',
+    firstName: 'Robert',
+    lastName: 'Johnson',
+    email: 'robert.johnson@example.com',
     hash: bcrypt.hashSync('Robert@Password1', 10),
   },
   {
-    name: 'Emily Davis',
-    email: 'emily.davis@tachcolorstore.com',
+    firstName: 'Emily',
+    lastName: 'Davis',
+    email: 'emily.davis@example.com',
     hash: bcrypt.hashSync('Emily@Password1', 10),
   },
   {
-    name: 'Michael Brown',
-    email: 'michael.brown@tachcolorstore.com',
+    firstName: 'Michael',
+    lastName: 'Brown',
+    email: 'michael.brown@example.com',
     hash: bcrypt.hashSync('Michael@Password1', 10),
   },
   {
-    name: 'Sarah Wilson',
-    email: 'sarah.wilson@tachcolorstore.com',
+    firstName: 'Sarah',
+    lastName: 'Wilson',
+    email: 'sarah.wilson@example.com',
     hash: bcrypt.hashSync('Sarah@Password1', 10),
   },
   {
-    name: 'David Lee',
-    email: 'david.lee@tachcolorstore.com',
+    firstName: 'David',
+    lastName: 'Lee',
+    email: 'david.lee@example.com',
     hash: bcrypt.hashSync('David@Password1', 10),
   },
   {
-    name: 'Laura Taylor',
-    email: 'laura.taylor@tachcolorstore.com',
+    firstName: 'Laura',
+    lastName: 'Taylor',
+    email: 'laura.taylor@example.com',
     hash: bcrypt.hashSync('Laura@Password1', 10),
   },
   {
-    name: 'Daniel Martinez',
-    email: 'daniel.martinez@tachcolorstore.com',
+    firstName: 'Daniel',
+    lastName: 'Martinez',
+    email: 'daniel.martinez@example.com',
     hash: bcrypt.hashSync('Daniel@Password1', 10),
   },
   {
-    name: 'Anna Thomas',
-    email: 'anna.thomas@tachcolorstore.com',
+    firstName: 'Anna',
+    lastName: 'Thomas',
+    email: 'anna.thomas@example.com',
     hash: bcrypt.hashSync('Anna@Password1', 10),
   },
   {
-    name: 'James Jackson',
-    email: 'james.jackson@tachcolorstore.com',
+    firstName: 'James',
+    lastName: 'Jackson',
+    email: 'james.jackson@example.com',
     hash: bcrypt.hashSync('James@Password1', 10),
   },
   {
-    name: 'Olivia White',
-    email: 'olivia.white@tachcolorstore.com',
+    firstName: 'Olivia',
+    lastName: 'White',
+    email: 'olivia.white@example.com',
     hash: bcrypt.hashSync('Olivia@Password1', 10),
   },
   {
-    name: 'Benjamin Harris',
-    email: 'benjamin.harris@tachcolorstore.com',
+    firstName: 'Benjamin',
+    lastName: 'Harris',
+    email: 'benjamin.harris@example.com',
     hash: bcrypt.hashSync('Benjamin@Password1', 10),
   },
   {
-    name: 'Sophia Clark',
-    email: 'sophia.clark@tachcolorstore.com',
+    firstName: 'Sophia',
+    lastName: 'Clark',
+    email: 'sophia.clark@example.com',
     hash: bcrypt.hashSync('Sophia@Password1', 10),
   },
   {
-    name: 'Christopher Lewis',
-    email: 'christopher.lewis@tachcolorstore.com',
+    firstName: 'Christopher',
+    lastName: 'Lewis',
+    email: 'christopher.lewis@example.com',
     hash: bcrypt.hashSync('Christopher@Password1', 10),
   },
   {
-    name: 'Amelia Walker',
-    email: 'amelia.walker@tachcolorstore.com',
+    firstName: 'Amelia',
+    lastName: 'Walker',
+    email: 'amelia.walker@example.com',
     hash: bcrypt.hashSync('Amelia@Password1', 10),
   },
   {
-    name: 'Joseph Young',
-    email: 'joseph.young@tachcolorstore.com',
+    firstName: 'Joseph',
+    lastName: 'Young',
+    email: 'joseph.young@example.com',
     hash: bcrypt.hashSync('Joseph@Password1', 10),
   },
   {
-    name: 'Mia Allen',
-    email: 'mia.allen@tachcolorstore.com',
+    firstName: 'Mia',
+    lastName: 'Allen',
+    email: 'mia.allen@example.com',
     hash: bcrypt.hashSync('Mia@Password1', 10),
   },
   {
-    name: 'Alexander Scott',
-    email: 'alexander.scott@tachcolorstore.com',
+    firstName: 'Alexander',
+    lastName: 'Scott',
+    email: 'alexander.scott@example.com',
     hash: bcrypt.hashSync('Alexander@Password1', 10),
   },
   {
-    name: 'Isabella King',
-    email: 'isabella.king@tachcolorstore.com',
+    firstName: 'Isabella',
+    lastName: 'King',
+    email: 'isabella.king@example.com',
     hash: bcrypt.hashSync('Isabella@Password1', 10),
   },
 ];
@@ -232,7 +258,7 @@ const generateUsers = async () => {
 
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
-    if (user.email === 'admin@tachcolorstore.com') {
+    if (user.email === 'admin@example.com') {
       user.roleId = systemAdminRole.id;
     }
     const userRes = await prisma.users.upsert({
@@ -250,17 +276,21 @@ const generateUsers = async () => {
         emailVerifiedAt: new Date().toISOString(),
       },
     });
-    if (user.email !== 'admin@tachcolorstore.com' && userRes?.userId) {
+    if (user.email !== 'admin@example.com' && userRes?.userId) {
       // Start By pass onboarding for some of the seed users
       await prisma.userProfiles.upsert({
         where: { userId: userRes.userId },
         create: {
           useCaseType: UseCaseTypes.Individual,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
           onboardingCompleted: user?.requireOnboarding ? false : true,
           userId: userRes.userId,
         },
         update: {
           useCaseType: UseCaseTypes.Individual,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
           onboardingCompleted: user?.requireOnboarding ? false : true,
         },
       });
@@ -282,6 +312,9 @@ const generateUsers = async () => {
         },
         update: {},
       });
+      const teamFriendlyId = await generateUniqueTeamFriendlyId(
+        `${organizations[i % 2].name} Team`,
+      );
       const team = await prisma.teams.upsert({
         where: {
           orgId_name: {
@@ -292,10 +325,12 @@ const generateUsers = async () => {
         create: {
           name: organizations[i % 2].name + ' Team',
           orgId: organizations[i % 2].id,
+          teamFriendlyId,
         },
         update: {
           name: organizations[i % 2].name + ' Team',
           orgId: organizations[i % 2].id,
+          teamFriendlyId,
         },
       });
 

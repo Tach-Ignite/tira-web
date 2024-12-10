@@ -24,6 +24,7 @@ function LabelInput(props: InputProps) {
     isArrayInput,
     errorLabel,
     className = '',
+    colorClass = '',
   } = props || {};
   return (
     <Controller
@@ -58,8 +59,10 @@ function LabelInput(props: InputProps) {
           <div className={`w-full flex flex-col gap-1 ${className}`}>
             {label ? (
               <Label>
+                <span className="!text-[#F05252]">
+                  {isRequired ? ' * ' : ''}
+                </span>
                 {label}
-                {isRequired ? ' * ' : ''}
               </Label>
             ) : null}
             <TextInput
@@ -70,7 +73,7 @@ function LabelInput(props: InputProps) {
               icon={StartAdornment}
               type={type}
               maxLength={maxLength}
-              value={value}
+              value={value || ''}
               color={message ? 'failure' : 'gray'}
               theme={{
                 field: {
@@ -80,7 +83,7 @@ function LabelInput(props: InputProps) {
                   input: {
                     base: 'block w-full border disabled:cursor-not-allowed disabled:opacity-50 h-[38px]',
                     colors: {
-                      gray: 'placeholder-text-gray-500 border-none	bg-indigo-50 text-gray-900 focus:border-none focus:ring-0 dark:border-solid dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-200 dark:focus:border-gray-600 dark:focus:ring-0',
+                      gray: `placeholder-text-inputPlaceholderText dark:placeholder-inputPlaceholderText-dark !border-[1px] !border-borderPrimary bg-white dark:!bg-black text-textBody dark:border-textBody-dark focus:ring-0 dark:text-textBody-dark focus:!border-action dark:focus:!border-action-dark dark:focus:ring-0 ${colorClass}`,
                       failure:
                         'border-none bg-red-50 text-gray-900 placeholder-gray-400 focus:border-none focus:ring-0 dark:border-solid dark:border-red-400  dark:bg-gray-700 dark:text-gray-400 dark:focus:border-red-500 dark:focus:ring-red-500',
                     },

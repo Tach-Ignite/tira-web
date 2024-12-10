@@ -4,6 +4,7 @@
 
 import { ImagePlaceholderIcon } from '@src/icons';
 import { OnboardingForm, BusinessTypeEnum } from './types';
+import SelectCard from './cards/SelectCard';
 
 const BusinessTypes = [
   BusinessTypeEnum.PaintSupplier,
@@ -15,22 +16,22 @@ const BusinessTypes = [
 const content = [
   {
     type: BusinessTypeEnum.PaintSupplier,
-    description:
+    description1:
       'A business creating and delivering paint products and color solutions for various applications',
   },
   {
     type: BusinessTypeEnum.BusinessPartner,
-    description:
+    description1:
       'An organization collaborating with color-related business to support their growth and expansion efforts',
   },
   {
     type: BusinessTypeEnum.ColorConsultant,
-    description:
+    description1:
       'A company or individual offering expertise and services to assist color shops in meeting their business needs',
   },
   {
     type: BusinessTypeEnum.Other,
-    description: '',
+    description1: '',
   },
 ];
 
@@ -65,33 +66,23 @@ function ChooseBusinessType({ form }: OnboardingForm) {
   };
 
   return (
-    <div className="w-full grid grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 gap-14 md:!gap-4 lg:!gap-10 mt-1 mb-10 md:!mt-2 md:!mb-0 py-10 md:!py-10 md:!pb-4 md:!px-10 place-items-center">
+    <div className="w-full 2xl:!w-2/3 grid grid-cols-1 tab:!grid-cols-1 !md:!grid-cols-1 lg:!grid-cols-2 xl:!grid-cols-2 gap-14 md:!gap-4 lg:!gap-8 mt-1 mb-10 xl:!my-16 py-10 xl:!py-10 md:!px-2 place-items-center">
       {BusinessTypes?.map((businessType) => {
         const isSelected = selectedBusinessType === businessType;
 
         const handleOnClick = () => {
           onSelectBusinessType(businessType);
         };
+        const businessLabel = businessTypeLabel(businessType);
 
         return (
-          <div
-            key={businessType}
-            onClick={handleOnClick}
-            className={`min-h-[160px] w-4/5 md:w-full grid grid-cols-1 md:!grid-cols-[1fr_4fr] gap-6 md:gap-[16px] rounded-3xl cursor-pointer no-select shadow-l dark:shadow-sm outline-4 outline outline-black dark:!outline-white py-8 px-4 md:!p-4 ${isSelected ? '!bg-indigo !bg-opacity-60 outline outline-secondary' : ''}`}
-          >
-            <div className="grid grid-cols-1 place-items-center">
-              <ImagePlaceholderIcon className="w-[80px] h-[80px] dark:text-white" />
-            </div>
-            <div className="grid grid-cols-1 gap-4 md:!gap-1">
-              <p className="flex items-end justify-start font-semibold leading-[30px] text-[18px] text-gray-900 dark:text-white">
-                {businessTypeLabel(businessType)}
-              </p>
-              <p className="w-full flex items-start justify-start leading-[18px] text-[12px] text-black dark:text-white">
-                {content?.find((c) => c.type === businessType)?.description ||
-                  ''}
-              </p>
-            </div>
-          </div>
+          <SelectCard
+            value={businessType}
+            label={businessLabel}
+            content={content}
+            isSelected={isSelected}
+            handleOnClick={handleOnClick}
+          />
         );
       })}
     </div>

@@ -54,20 +54,21 @@ export class ChatService {
         receiver: {
           select: {
             userId: true,
-            name: true,
-            firstName: true,
-            lastName: true,
-            profileImage: true,
             email: true,
+          },
+          include: {
+            userProfile: {
+              select: {
+                firstName: true,
+                lastName: true,
+                profileImageUrl: true,
+              },
+            },
           },
         },
         sender: {
           select: {
             userId: true,
-            name: true,
-            firstName: true,
-            lastName: true,
-            profileImage: true,
             email: true,
           },
         },

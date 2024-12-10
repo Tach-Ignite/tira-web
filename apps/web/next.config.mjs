@@ -20,6 +20,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.poc2production.com',
       },
+      {
+        protocol: 'http',
+        hostname: '192.168.18.3',
+      },
     ],
   },
   env: {

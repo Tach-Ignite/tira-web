@@ -17,11 +17,11 @@ const hoverClass =
 function RootMobileSideNav({
   setShow,
   show,
-  height,
+  heightClass,
 }: {
   show: boolean;
   setShow: () => void;
-  height?: number;
+  heightClass?: string;
 }) {
   const currentPath = usePathname() || '';
 
@@ -32,7 +32,7 @@ function RootMobileSideNav({
       position="right"
       open={show}
       onClose={setShow}
-      className={`!pt-[${height}px] bg-white dark:bg-gray-800`}
+      className={`bg-white h-full dark:bg-gray-800 ${heightClass}`}
     >
       <div className="flex flex-col space-y-8 dark:text-white">
         {customerNavLinks?.map(({ name, url = '' }) => {

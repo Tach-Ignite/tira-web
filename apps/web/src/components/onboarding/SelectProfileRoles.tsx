@@ -64,14 +64,10 @@ function SelectProfileRoles(props: OnboardingForm) {
   ];
 
   return (
-    <div className="py-4 md:py-10 px-2 md:!px-8 pb-8 md:!mb-0 text-center flex flex-col items-center justify-center">
-      <div>
-        <div className="grid grid-cols-1 xl:!grid-cols-3 gap-10 place-items-center">
-          {allRoles?.map((detail) => (
-            <RoleCard key={detail?.roleName} form={form} {...detail} />
-          ))}
-        </div>
-      </div>
+    <div className="w-full grid grid-cols-1 lg:!grid-cols-2 2xl:!grid-cols-3 gap-14 tab:!gap-8 lg:!gap-4 xl:!gap-8 place-items-center">
+      {allRoles?.map((detail) => (
+        <RoleCard key={detail?.roleName} form={form} {...detail} />
+      ))}
     </div>
   );
 }

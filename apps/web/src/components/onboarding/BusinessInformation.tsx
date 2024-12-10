@@ -10,8 +10,8 @@ function BusinessInformation(props: OnboardingInfoProps) {
   const { control } = form;
 
   return (
-    <div className="grid grid-cols-1 place-items-start gap-4 md:!gap-6 py-4 md:py-10 px-8 pb-8 rounded-lg w-full md:!mb-0">
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-2/5 md:!flex-row flex-col md:!mb-4">
+    <div className="grid grid-cols-1 place-items-start gap-4 lg:!gap-2 py-4 md:!py-10 px-8 xl:!pl-24 md:pl-0 lg:!ml-24 tab-!ml-0 pb-8 w-full lg:!w-4/5 lg:!mb-10">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
           className="gap-5"
@@ -21,8 +21,9 @@ function BusinessInformation(props: OnboardingInfoProps) {
           placeholder="Company Name"
           isRequired
         />
+        <div className="w-full hidden md:!flex" />
       </div>
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
           className="gap-5"
@@ -38,7 +39,7 @@ function BusinessInformation(props: OnboardingInfoProps) {
           placeholder="Address Line 2"
         />
       </div>
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
           className="gap-5"
@@ -54,7 +55,7 @@ function BusinessInformation(props: OnboardingInfoProps) {
           placeholder="State"
         />
       </div>
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
           className="gap-5"
@@ -70,7 +71,7 @@ function BusinessInformation(props: OnboardingInfoProps) {
           placeholder="Postal Code"
         />
       </div>
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
           className="gap-5"

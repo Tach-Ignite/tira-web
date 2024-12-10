@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { createPaginator } from 'prisma-pagination';
 import slugify from 'slugify';
 import { randomBytes } from 'crypto';
@@ -6,6 +11,8 @@ import { PrismaService } from '@prisma_/prisma.service';
 import { OrganizationEntity } from './entities/organization.entity';
 import { Prisma } from '@prisma/client';
 import { OrgSearchPagination } from './dto/orgSearchPagination.dto';
+import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { Roles } from '@src/utils/roles.enums';
 
 @Injectable()
 export class OrganizationsService {
@@ -26,6 +33,7 @@ export class OrganizationsService {
       this.prisma.organizations,
       {
         orderBy: { createdAt: 'desc' },
+        include: { orgUsers: { where: { userId }, include: { role: true } } },
         where: {
           AND: [
             {
@@ -41,7 +49,7 @@ export class OrganizationsService {
                   name: { contains: searchTerm, mode: 'insensitive' },
                 },
                 {
-                  website: { contains: searchTerm, mode: 'insensitive' },
+                  websiteURL: { contains: searchTerm, mode: 'insensitive' },
                 },
               ],
             },
@@ -66,9 +74,18 @@ export class OrganizationsService {
     return organization;
   }
 
-  async findOneByOrgFriendlyId(orgFriendlyId: string) {
+  async findOneByOrgFriendlyId(userId: string, orgFriendlyId: string) {
     const organization = await this.prisma.organizations.findUnique({
       where: { orgFriendlyId },
+      include: {
+        orgUsers: {
+          include: { role: true },
+          where: {
+            userId,
+            organizations: { orgFriendlyId },
+          },
+        },
+      },
     });
     if (!organization?.id) {
       throw new NotFoundException(
@@ -79,19 +96,36 @@ export class OrganizationsService {
     return organization;
   }
 
+  async updateOrganization(
+    orgFriendlyId: string,
+    updateOrganizationDto: UpdateOrganizationDto,
+  ) {
+    const organization = await this.prisma.organizations.findUnique({
+      where: { orgFriendlyId },
+    });
+
+    if (!organization?.id) {
+      throw new NotFoundException(
+        `Organization with ${orgFriendlyId} does not exist.`,
+      );
+    }
+
+    return this.prisma.organizations.update({
+      where: { orgFriendlyId },
+      data: { ...updateOrganizationDto },
+    });
+  }
+
   async createOrUpdate(name: string, website: string) {
     const orgFriendlyId = await this.generateUniqueOrgFriendlyId(name);
 
     return await this.prisma.organizations.upsert({
       where: {
-        name_website: {
-          name,
-          website: website || '',
-        },
+        orgFriendlyId,
       },
-      create: { name, website: website || '', orgFriendlyId },
-      update: { name, website: website || '' },
-      select: { name: true, id: true, website: true, orgFriendlyId: true },
+      create: { name, websiteURL: website || '', orgFriendlyId },
+      update: { name, websiteURL: website || '' },
+      select: { name: true, id: true, websiteURL: true, orgFriendlyId: true },
     });
 
     // Create the organization in the database
@@ -102,6 +136,73 @@ export class OrganizationsService {
     //     orgFriendlyId,
     //   },
     // });
+  }
+
+  async leaveOrganization(userId: string, orgFriendlyId: string) {
+    const organization = await this.prisma.organizations.findUnique({
+      where: { orgFriendlyId },
+      include: {
+        orgUsers: {
+          include: { role: true },
+        },
+      },
+    });
+
+    if (!organization?.id) {
+      throw new HttpException(
+        {
+          data: null,
+          message: `Organization with ${orgFriendlyId} does not exist.`,
+          status: HttpStatus.NOT_FOUND,
+          error: 'NOT_FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const user = organization.orgUsers.find((user) => user.userId === userId);
+
+    if (!user) {
+      throw new HttpException(
+        {
+          data: null,
+          message: 'User does not belong to this organization.',
+          status: HttpStatus.NOT_FOUND,
+          error: 'NOT_FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const isUserAdmin = user.role.name === Roles.ORG_ADMIN;
+
+    const adminCount = organization.orgUsers.filter(
+      (orgUser) => orgUser.role.name === Roles.ORG_ADMIN,
+    ).length;
+
+    if (isUserAdmin && adminCount === 1) {
+      throw new HttpException(
+        {
+          data: null,
+          message:
+            'You cannot leave the organization as you are the last admin. Please transfer admin rights or delete the organization first.',
+          status: HttpStatus.NOT_FOUND,
+          error: 'NOT_FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    await this.prisma.orgUsers.delete({
+      where: {
+        orgId_userId: {
+          userId,
+          orgId: organization.id,
+        },
+      },
+    });
+
+    return { message: `You have successfully left the organization.` };
   }
 
   private async generateUniqueOrgFriendlyId(orgName: string): Promise<string> {
@@ -125,5 +226,86 @@ export class OrganizationsService {
     } while (!isUnique);
 
     return orgFriendlyId;
+  }
+
+  async deleteOrganization(
+    userId: string,
+    orgFriendlyId: string,
+  ): Promise<{ message: string }> {
+    const organization = await this.prisma.organizations.findUnique({
+      where: { orgFriendlyId },
+      include: {
+        orgUsers: {
+          include: { role: true },
+        },
+        teams: true,
+      },
+    });
+
+    if (!organization) {
+      throw new HttpException(
+        {
+          data: null,
+          message: `Organization with ID ${orgFriendlyId} does not exist.`,
+          status: HttpStatus.NOT_FOUND,
+          error: 'NOT_FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const user = organization.orgUsers.find(
+      (orgUser) => orgUser.userId === userId,
+    );
+
+    if (!user || user.role.name !== Roles.ORG_ADMIN) {
+      throw new HttpException(
+        {
+          data: null,
+          message: 'Only an organization admin can delete the organization.',
+          status: HttpStatus.FORBIDDEN,
+          error: 'FORBIDDEN',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    try {
+      await this.prisma.$transaction(async (prisma) => {
+        await prisma.orgUsers.deleteMany({
+          where: { orgId: organization.id },
+        });
+
+        await prisma.teamUsers.deleteMany({
+          where: {
+            team: {
+              orgId: organization.id,
+            },
+          },
+        });
+
+        await prisma.teams.deleteMany({
+          where: { orgId: organization.id },
+        });
+
+        await prisma.organizations.delete({
+          where: { id: organization.id },
+        });
+      });
+
+      return {
+        message: `Organization ${organization.name} and all related data have been permanently deleted.`,
+      };
+    } catch (error) {
+      throw new HttpException(
+        {
+          data: null,
+          message: `An error occurred while deleting the organization: ${error.message}`,
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'INTERNAL_SERVER_ERROR',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

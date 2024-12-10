@@ -58,7 +58,7 @@ export const routes = [
   },
   {
     title: 'Admin Console',
-    path: '/tach-color-shop/admin-console',
+    path: '/app/admin-console',
     exactMatch: false,
   },
 ];
@@ -66,7 +66,7 @@ export const routes = [
 export const authenticatedRoutes = [
   {
     title: 'Admin',
-    path: '/tach-color-shop/admin-console',
+    path: '/app/admin-console',
     exactMatch: false,
   },
   {
@@ -96,12 +96,27 @@ export const authenticatedRoutes = [
   },
   {
     title: 'User Console',
-    path: '/tach-color-shop/console',
+    path: '/app/console',
     exactMatch: false,
   },
   {
     title: 'Account Settings',
-    path: '/tach-color-shop/account-settings',
+    path: '/app/account-settings',
+    exactMatch: false,
+  },
+  {
+    title: 'Organizations',
+    path: '/app/organizations',
+    exactMatch: false,
+  },
+  {
+    title: 'Organization',
+    path: '/app/org',
+    exactMatch: false,
+  },
+  {
+    title: 'Team',
+    path: '/app/orgs',
     exactMatch: false,
   },
 ];
