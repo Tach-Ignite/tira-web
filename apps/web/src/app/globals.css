@@ -50,6 +50,56 @@
     /* White and Black */
     --color-white: #ffffff;
     --color-black: #000000;
+
+    /* Surface Colors */
+    --color-action-light: #20b8cd;
+    --color-action: #20b8cd;
+    --color-action-dark: #20b8cd;
+
+    /* Surface Colors */
+    --color-surface-light: #f3f4f6;
+    --color-surface: #f3f4f6;
+    --color-surface-dark: #111928;
+
+    /* Border Primary Colors */
+    --color-borderPrimary-light: #9ca3af;
+    --color-borderPrimary: #9ca3af;
+    --color-borderPrimary-dark: #6b7280;
+
+    /* Text Body Colors */
+    --color-textBody-light: #1f2a37;
+    --color-textBody: #1f2a37;
+    --color-textBody-dark: #d1d5db;
+
+    /* Disabled Text Colors */
+    --color-textDisabled-light: #4b5563;
+    --color-textDisabled: #4b5563;
+    --color-textDisabled-dark: #9ca3af;
+
+    /* Link Text Colors */
+    --color-textLink-light: #1a56db;
+    --color-textLink: #1a56db;
+    --color-textLink-dark: #a4cafe;
+
+    /* Disabled Btn Colors */
+    --color-surfaceDisabled-light: #d1d5db;
+    --color-surfaceDisabled: #d1d5db;
+    --color-surfaceDisabled-dark: #374151;
+
+    /* Disabled Border Colors */
+    --color-disabledBorder-light: #e5e7eb;
+    --color-disabledBorder: #e5e7eb;
+    --color-disabledBorder-dark: #1f2a37;
+
+    /* Disabled Btn Text Colors */
+    --color-disabledBtnText-light: #4b5563;
+    --color-disabledBtnText: #4b5563;
+    --color-disabledBtnText-dark: #9ca3af;
+
+    /* Input Placeholder Text Colors */
+    --color-disabledBtnText-light: #9ca3af;
+    --color-disabledBtnText: #9ca3af;
+    --color-disabledBtnText-dark: #4b5563;
   }
 
   .dark {
@@ -95,6 +145,56 @@
     /* White and Black */
     --color-white: #f9fafb;
     --color-black: #ffffff;
+
+    /* Surface Colors */
+    --color-action-light: #20b8cd;
+    --color-action: #20b8cd;
+    --color-action-dark: #20b8cd;
+
+    /* Surface Colors */
+    --color-surface-light: #f3f4f6;
+    --color-surface: #f3f4f6;
+    --color-surface-dark: #111928;
+
+    /* Border Primary Colors */
+    --color-borderPrimary-light: #9ca3af;
+    --color-borderPrimary: #9ca3af;
+    --color-borderPrimary-dark: #6b7280;
+
+    /* Text Body Colors */
+    --color-textBody-light: #1f2a37;
+    --color-textBody: #1f2a37;
+    --color-textBody-dark: #d1d5db;
+
+    /* Disabled Text Colors */
+    --color-textDisabled-light: #4b5563;
+    --color-textDisabled: #4b5563;
+    --color-textDisabled-dark: #9ca3af;
+
+    /* Link Text Colors */
+    --color-textLink-light: #1a56db;
+    --color-textLink: #1a56db;
+    --color-textLink-dark: #a4cafe;
+
+    /* Disabled Btn Colors */
+    --color-surfaceDisabled-light: #d1d5db;
+    --color-surfaceDisabled: #d1d5db;
+    --color-surfaceDisabled-dark: #374151;
+
+    /* Disabled Border Colors */
+    --color-disabledBorder-light: #e5e7eb;
+    --color-disabledBorder: #e5e7eb;
+    --color-disabledBorder-dark: #1f2a37;
+
+    /* Disabled Btn Text Colors */
+    --color-disabledBtnText-light: #4b5563;
+    --color-disabledBtnText: #4b5563;
+    --color-disabledBtnText-dark: #9ca3af;
+
+    /* Input Placeholder Text Colors */
+    --color-inputPlaceholderText-light: #9ca3af;
+    --color-inputPlaceholderText: #9ca3af;
+    --color-inputPlaceholderText-dark: #4b5563;
   }
 }
 
@@ -262,4 +362,18 @@ select:-webkit-autofill {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 1.5s linear infinite;
 }

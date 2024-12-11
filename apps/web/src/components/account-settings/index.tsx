@@ -33,28 +33,24 @@ function AccountSettings({ pathname }: { pathname: string }) {
       component: <Overview form={accountSettingsForm} />,
       url: AccountSettingsRoutes.AccountSettings,
       type: AccountSettingsWizard.Overview,
-      isPageComponent: true,
     },
     {
       name: 'Profile settings',
       component: <ProfileSettings form={accountSettingsForm} />,
       url: AccountSettingsRoutes.AccountSettingsProfile,
       type: AccountSettingsWizard.ProfileSettings,
-      isPageComponent: true,
     },
     {
       name: 'Subscriptions',
       component: <Subscriptions form={accountSettingsForm} />,
       url: AccountSettingsRoutes.AccountSettingsSubscriptions,
       type: AccountSettingsWizard.Subscriptions,
-      isPageComponent: true,
     },
     {
       name: 'Billing',
       component: <Billing form={accountSettingsForm} />,
       url: AccountSettingsRoutes.AccountSettingsBilling,
       type: AccountSettingsWizard.Billing,
-      isPageComponent: true,
     },
   ];
 
@@ -206,6 +202,7 @@ function AccountSettings({ pathname }: { pathname: string }) {
           message:
             'There are unsaved changes, please save or discard changes to continue',
         });
+        return;
       }
       router.back();
     } else router.back();
@@ -216,7 +213,7 @@ function AccountSettings({ pathname }: { pathname: string }) {
       <Spinner size="xl" />
     </div>
   ) : (
-    <div className="w-full px-2 md:!px-8 md:!pt-[1rem]">
+    <div className="w-full ">
       <NavigationWizard
         steps={accountSettingSteps}
         onChangeWizardTab={onChangeWizardTab}

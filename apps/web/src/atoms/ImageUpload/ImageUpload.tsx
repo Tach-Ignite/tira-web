@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-nested-ternary */
+
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
@@ -39,6 +42,16 @@ function ImageUpload(props: EditPicturesGridProps) {
   const { setValue, watch } = form || {};
 
   const { files = [], [imageField]: imageUrls = [] } = watch();
+  const [imageSrc, setImageSrc] = useState('');
+
+  useEffect(() => {
+    if (isError && errorMessage?.length && !imageUrls?.length) {
+      setShowErrors(true);
+    } else {
+      setShowErrors(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError, errorMessage, watch]);
 
   useEffect(() => {
     if (isError && errorMessage?.length && !imageUrls?.length) {
@@ -122,25 +135,38 @@ function ImageUpload(props: EditPicturesGridProps) {
 
   const onRemoveFile = () => {
     fileUrl
-      ? setValue('profileImage', '', { shouldDirty: true })
+      ? setValue(imageField || 'profileImage', '', { shouldDirty: true })
       : setValue('files', undefined, { shouldDirty: true });
   };
 
-  const imageUrl = `${process.env.BUCKET_PREFIX}${fileUrl}`;
+  // const imageUrl = `${process.env.BUCKET_PREFIX}${fileUrl}`;
+  useEffect(() => {
+    const imageUrl = fileUrl
+      ? `${process.env.BUCKET_PREFIX}${fileUrl}`
+      : imageUrls && typeof imageUrls === 'string'
+        ? `${process.env.BUCKET_PREFIX}${imageUrls}`
+        : '';
+    setImageSrc(imageUrl);
+  }, [fileUrl, imageUrls]);
 
-  function renderImageUpload() {
-    return (isSingleImage && files?.[0]) || fileUrl ? (
+  const handleImageError = () => {
+    setImageSrc('/assets/placeholder_300x300.png');
+  };
+
+  function renderImageUpload(imagePath: string) {
+    return (isSingleImage && files?.[0]) || imagePath ? (
       <div className="relative inline-block">
         <Image
           className="h-80 max-w-[405px] w-full bg-gray-200 dark:bg-gray-700"
           alt={fileName}
-          width={10}
-          height={10}
+          width={300}
+          height={300}
           src={
             files?.[0]
               ? URL.createObjectURL(files?.[0] as unknown as MediaSource)
-              : imageUrl
+              : imageSrc
           }
+          onError={handleImageError}
         />
         <CloseCircleIcon
           className="h-[30px] w-[30px] absolute top-[-10px] right-[-10px] cursor-pointer text-indigo-600 dark:text-yellow-400"
@@ -183,7 +209,7 @@ function ImageUpload(props: EditPicturesGridProps) {
             })}
           </div>
         ) : (
-          renderImageUpload()
+          renderImageUpload(imageSrc)
         )}
 
         <Button

@@ -2,15 +2,17 @@
 
 'use client';
 
-// import Image from 'next/image';
-import { ProfileRoles } from '@services';
-import { ImagePlaceholderIcon } from '@src/icons';
+import Image from 'next/image';
+import PlaceholderImage from '@public/assets/select-card-placeholder.png';
+import { useOnboarding } from '@context/OnboardingContext';
 import { RoleCardProps } from './types';
 
 function RoleCard(props: RoleCardProps) {
-  const { description, form, roleName } = props || {};
+  const { onboardingForm } = useOnboarding() || {};
 
-  const { watch, setValue } = form;
+  const { description, roleName, roleLabel } = props || {};
+
+  const { watch, setValue } = onboardingForm;
 
   const selectedRoles = watch('profileRoles') || [];
 
@@ -27,41 +29,25 @@ function RoleCard(props: RoleCardProps) {
     }
   };
 
-  const getRoleName = (UserProfileRole: ProfileRoles) => {
-    if (UserProfileRole === ProfileRoles.MasterOfHues) {
-      return 'Master of Hues';
-    }
-    if (UserProfileRole === ProfileRoles.PigmentWizard) {
-      return 'Pigment Wizard';
-    }
-    if (UserProfileRole === ProfileRoles.ShadeGuru) {
-      return 'Shade Guru';
-    }
-    if (UserProfileRole === ProfileRoles.ContentCreator) {
-      return 'Content Creator';
-    }
-    if (UserProfileRole === ProfileRoles.ThreeDDesigner) {
-      return '3D Color Designer';
-    }
-    if (UserProfileRole === ProfileRoles.SpectrumExplorer) {
-      return 'Spectrum Explorer';
-    }
-    return UserProfileRole;
-  };
-
   return (
     <div
       onClick={onSelectRole}
-      className={`min-h-[160px] w-4/5 md:w-full grid grid-cols-1 md:!grid-cols-[1fr_4fr] gap-6 md:gap-[16px] rounded-3xl cursor-pointer no-select shadow-l dark:shadow-sm outline-4 outline outline-black dark:!outline-white py-8 px-4 md:!p-4 ${isRoleSelected ? '!bg-indigo !bg-opacity-60 outline outline-secondary' : ''}`}
+      className={`min-h-[160px] w-4/5 md:w-full grid grid-cols-1 md:!grid-cols-[2fr_4fr] gap-6 md:!gap-[4px] cursor-pointer no-select border-2 rounded-[2px] border-borderPrimary dark:border-borderPrimary-dark py-8 px-4 md:!p-[12px] lg:!p-[16px] !bg-surface dark:!bg-surface-dark ${isRoleSelected ? '!outline !outline-3 !outline-action !bg-opacity-20' : ''}`}
     >
       <div className="grid grid-cols-1 place-items-center">
-        <ImagePlaceholderIcon className="w-[80px] h-[80px] dark:text-white" />
+        <Image
+          src={PlaceholderImage}
+          alt="Select Card Placeholder"
+          width={0}
+          height={0}
+          className="!w-[80px] !h-[80px] md:!w-[117px] md:!h-[117px]"
+        />
       </div>
-      <div className="grid grid-cols-1 gap-4 md:!gap-1 text-start">
-        <p className="flex items-end justify-start font-semibold leading-[30px] text-[18px] text-gray-900 dark:text-white">
-          {getRoleName(roleName)}
+      <div className="grid grid-cols-1 gap-4 md:!gap-[2px] text-start">
+        <p className="flex pt-2 items-start justify-start font-[600] leading-[24px] text-[20px] text-textBody dark:text-textBody-dark">
+          {roleLabel || roleName}
         </p>
-        <p className="w-full flex items-start justify-start leading-[18px] text-[12px] text-black dark:text-white">
+        <p className="w-full flex items-start justify-start font-[400] leading-[24px] text-[16px] text-textBody dark:text-textBody-dark">
           {description}
         </p>
       </div>

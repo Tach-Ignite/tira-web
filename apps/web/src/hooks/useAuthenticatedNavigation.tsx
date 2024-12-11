@@ -22,7 +22,7 @@ function useAuthenticatedNavigation() {
         duration: 10000,
       });
       setValue(pathname);
-      router.push(`/tach-color-shop/auth/login`);
+      router.push(`/app/auth/login`);
     }
   };
   return onClickHandler;

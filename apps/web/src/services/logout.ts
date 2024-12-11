@@ -14,5 +14,5 @@ export default async function logout() {
   cookies().delete(CURRENT_USER_COOKIE);
   cookies().delete(CURRENT_USER_ROLE_COOKIE);
   cookies().delete(CURRENT_ORG_COOKIE);
-  redirect('/tach-color-shop/auth/login');
+  redirect('/app/auth/login');
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Patch, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Body,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { InvitesService } from './invites.service';
 import {
   ApiCookieAuth,
@@ -8,12 +16,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateInviteDto } from './dto/create-invite.dto';
-import { Roles } from '../utils/roles.enums';
-import { RoleAccess } from '@common/decorators/admin.decorator';
 import { Public } from '@common/decorators/public.decorators';
 import { AbstractApiResponse } from '@src/utils/general-response';
 import { GetCurrentUserId } from '@common/decorators';
 import { InvitesEntity } from './entities/invite.entity';
+import { isCurrentUserHasOrgDataAccess } from '@src/auth/current-user.decorator';
 
 @ApiTags('Invites')
 @Controller('invites')
@@ -28,11 +35,22 @@ export class InvitesController {
   // @ApiOkResponse({ type: InvitesEntity })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Patch()
-  @RoleAccess([Roles.SUPER_ADMIN, Roles.SYSTEM_ADMIN, Roles.ORG_ADMIN])
   async create(
     @Body() createInvite: CreateInviteDto,
     @GetCurrentUserId() userId: string,
+    @isCurrentUserHasOrgDataAccess('orgId') isOrgDataAccess: boolean,
   ) {
+    if (!isOrgDataAccess) {
+      throw new HttpException(
+        {
+          data: null,
+          message: 'No permission to access this organization resources',
+          status: HttpStatus.FORBIDDEN,
+          error: 'FORBIDDEN',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
     const invite = await this.invitesService.update(userId, createInvite);
     return AbstractApiResponse.success(
       invite,

@@ -19,6 +19,7 @@ const config: Config = {
       lg: '1024px',
       xl: '1280px',
       '2xl': '1536px',
+      '3xl': '1920px',
     },
     colors: {
       primary: {
@@ -67,6 +68,46 @@ const config: Config = {
       black: {
         DEFAULT: 'var(--color-black)',
         dark: 'var(--color-black-dark)',
+      },
+      action: {
+        DEFAULT: 'var(--color-action)',
+        dark: 'var(--color-action-dark)',
+      },
+      surface: {
+        DEFAULT: 'var(--color-surface)',
+        dark: 'var(--color-surface-dark)',
+      },
+      borderPrimary: {
+        DEFAULT: 'var(--color-borderPrimary)',
+        dark: 'var(--color-borderPrimary-dark)',
+      },
+      textBody: {
+        DEFAULT: 'var(--color-textBody)',
+        dark: 'var(--color-textBody-dark)',
+      },
+      disabledText: {
+        DEFAULT: 'var(--color-textDisabled)',
+        dark: 'var(--color-textDisabled-dark)',
+      },
+      textLink: {
+        DEFAULT: 'var(--color-textLink)',
+        dark: 'var(--color-textLink-dark)',
+      },
+      surfaceDisabled: {
+        DEFAULT: 'var(--color-surfaceDisabled)',
+        dark: 'var(--color-surfaceDisabled-dark)',
+      },
+      disabledBorder: {
+        DEFAULT: 'var(--color-disabledBorder)',
+        dark: 'var(--color-disabledBorder-dark)',
+      },
+      disabledBtnText: {
+        DEFAULT: 'var(--color-disabledBtnText)',
+        dark: 'var(--color-disabledBtnText-dark)',
+      },
+      inputPlaceholderText: {
+        DEFAULT: 'var(--color-inputPlaceholderText)',
+        dark: 'var(--color-inputPlaceholderText-dark)',
       },
     },
     extend: {
