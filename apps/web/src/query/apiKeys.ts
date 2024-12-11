@@ -49,4 +49,8 @@ export enum ApiKeysEnum {
   GetAllTeamsByOrganizationId = 'GetAllTeamsByOrganizationId',
   GetInviteAndVerify = 'GetInviteAndVerify',
   GetSingleAdminConsoleUser = 'GetSingleAdminConsoleUser',
+  GetSingleOrganizationByFriendlyId = 'GetSingleOrganizationByFriendlyId',
+  GetAllUsersByOrgId = 'GetAllUsersByOrgId',
+  GetOrgUserData = 'GetOrgUserData',
+  GetAllUsersByTeamId = 'GetAllUsersByTeamId',
 }

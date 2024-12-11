@@ -21,6 +21,7 @@ import { UserEntity } from '../../users/entities/user.entity';
 import { ChangePassWordType } from '../change-password-type';
 import { differenceInDays } from 'date-fns';
 import { InviteStatus, InviteType } from '@src/utils/invites.enum';
+import { Roles } from '@src/utils/roles.enums';
 
 @Injectable()
 export class PassportService {
@@ -51,7 +52,7 @@ export class PassportService {
       from: this.configService.getOrThrow('EMAIL_SOURCE'),
       to: email,
       subject: '[Action Required] Welcome to Tach Color Store!',
-      body: `Please verify your email address by clicking this link: <a href="${this.configService.getOrThrow('APP_URL')}/tach-color-shop/auth/signup?token=${confirmationToken}" target="_blank">Verify Email</a>`,
+      body: `Please verify your email address by clicking this link: <a href="${this.configService.getOrThrow('APP_URL')}/app/auth/signup?token=${confirmationToken}" target="_blank">Verify Email</a>`,
     });
   }
 
@@ -72,7 +73,7 @@ export class PassportService {
       from: this.configService.getOrThrow('EMAIL_SOURCE'),
       to: email,
       subject: 'Password Reset Request',
-      body: `Dear ${user?.email}, We received a request to reset your password. Click the link below to reset your password. If you did not request this, please contact support immediately. <a href="${this.configService.getOrThrow('APP_URL')}/tach-color-shop/auth/reset-password?token=${resetPasswordToken}&userId=${userId}" target="_blank">Verify Email</a>`,
+      body: `Dear ${user?.email}, We received a request to reset your password. Click the link below to reset your password. If you did not request this, please contact support immediately. <a href="${this.configService.getOrThrow('APP_URL')}/app/auth/reset-password?token=${resetPasswordToken}&userId=${userId}" target="_blank">Verify Email</a>`,
     });
   }
 
@@ -299,6 +300,16 @@ export class PassportService {
         }
       }
       if (invite.inviteType === InviteType.TEAM && invite?.teamId) {
+        const teamData = await this.prisma.teams.findUnique({
+          where: {
+            id: invite.teamId,
+          },
+        });
+        const orgMemberRole = await this.prisma.userRoles.findFirst({
+          where: {
+            name: Roles.ORG_MEMBER,
+          },
+        });
         const teamUser = await this.prisma.teamUsers.findFirst({
           where: {
             teamId: invite.teamId,
@@ -308,13 +319,23 @@ export class PassportService {
         if (teamUser?.id) {
           return;
         } else {
-          await this.prisma.teamUsers.create({
-            data: {
-              teamId: invite.teamId,
-              userId: user.userId,
-              roleId: invite.roleId,
-            },
-          });
+          if (teamData?.id && teamData?.orgId && orgMemberRole?.id) {
+            await this.prisma.orgUsers.create({
+              data: {
+                orgId: teamData?.orgId,
+                userId: user.userId,
+                roleId: orgMemberRole?.id,
+                joinedAt: new Date(),
+              },
+            });
+            await this.prisma.teamUsers.create({
+              data: {
+                teamId: invite.teamId,
+                userId: user.userId,
+                roleId: invite.roleId,
+              },
+            });
+          }
         }
       }
     }

@@ -23,3 +23,33 @@ export const RoleLabels = {
   'team-member': 'Team Member',
   user: 'User',
 };
+
+export const OrgUsersRoles = [
+  {
+    label: 'Org Admin',
+    value: 'org-admin',
+  },
+  {
+    label: 'Org Member',
+    value: 'org-member',
+  },
+  {
+    label: 'Remove',
+    value: 'remove',
+  },
+];
+
+export const TeamUsersRoles = [
+  {
+    label: 'Team Admin',
+    value: 'team-admin',
+  },
+  {
+    label: 'Team Member',
+    value: 'team-member',
+  },
+  {
+    label: 'Remove',
+    value: 'remove',
+  },
+];

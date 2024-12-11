@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-cycle */
 
@@ -101,6 +102,8 @@ export interface UserEntity {
   roleId: string;
   orgUsers?: OrgUsers[];
   teamUsers?: TeamUsers[];
+  totalTeams?: number;
+  userProfile?: UserProfileEntity;
 }
 
 export interface UserProfileEntity {

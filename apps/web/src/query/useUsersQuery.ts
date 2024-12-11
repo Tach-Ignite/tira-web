@@ -58,6 +58,9 @@ export const useGetUserProfile = () => {
   const keys = [ApiKeysEnum.GetCustomerUserProfile];
   const fetchFn = async () => {
     const data = await UsersService.getCustomerUserProfile();
+    if (data?.error) {
+      throw data;
+    }
     return data;
   };
   return useBaseQuery<{ data: UserProfileEntity }>(keys, fetchFn);

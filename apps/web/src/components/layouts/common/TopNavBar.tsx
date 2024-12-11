@@ -327,12 +327,12 @@ function TopNavBar({
                 )}
               </>
             ) : null}
-            <div className="">
+            <div className="lg:!hidden !block">
               {showMobileSideNav ? (
-                <div className="w-6 h-6 flex justify-center items-center cursor-pointer text-[24px] bg-neutral-light/10 dark:bg-neutral rounded-md p-1">
+                <div className="w-6 h-6 flex justify-center items-center cursor-pointer text-[24px] !bg-neutral-light !text-white dark:bg-neutral rounded-md p-1">
                   <CrossIcon
                     onClick={toggleMobileSideNav}
-                    className="rotate-180 text-black dark:text-neutral-800"
+                    className="rotate-180"
                   />
                 </div>
               ) : (
@@ -369,7 +369,9 @@ function TopNavBar({
       </div>
       {showMobileSideNav ? (
         <RootMobileSideNav
-          height={showCustomerSideNav ? 170 : 120}
+          heightClass={
+            showCustomerSideNav ? 'md:!pt-[105px] !pt-[170px]' : '!pt-[105px]'
+          }
           show={showMobileSideNav}
           setShow={toggleMobileSideNav}
         />

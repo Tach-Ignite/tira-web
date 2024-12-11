@@ -1,12 +1,25 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { RoleAccess } from '@common/decorators/admin.decorator';
-import { Roles } from '../utils/roles.enums';
 import { GetOrganizationDto } from './dto/get-organization.dto';
 import { OrgSearchPagination } from './dto/orgSearchPagination.dto';
 import { OrganizationsService } from './organizations.service';
-import { isSysAdmin } from '@src/auth/current-user.decorator';
-import { GetCurrentUserId } from '@common/decorators';
+import {
+  isCurrentUserHasOrgAccess,
+  isCurrentUserOrgAdmin,
+  isSysAdmin,
+} from '@src/auth/current-user.decorator';
+import { ApiAbstractResponse, GetCurrentUserId } from '@common/decorators';
+import { OrganizationEntity } from './entities/organization.entity';
+import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { AbstractApiResponse } from '@src/utils/general-response';
 
 @ApiTags('Organizations')
 @Controller('organizations')
@@ -27,10 +40,59 @@ export class OrganizationsController {
   }
 
   @Get(':orgFriendlyId')
-  @RoleAccess([Roles.SUPER_ADMIN, Roles.SYSTEM_ADMIN, Roles.ORG_ADMIN])
   @ApiOkResponse({ description: 'Get organization by ID' })
   @ApiNotFoundResponse({ description: 'Organization not found' })
-  async findOneByOrgFriendlyId(@Param('orgFriendlyId') orgFriendlyId: string) {
-    return this.organizationsService.findOneByOrgFriendlyId(orgFriendlyId);
+  async findOneByOrgFriendlyId(
+    @GetCurrentUserId() userId: string,
+    @Param('orgFriendlyId') orgFriendlyId: string,
+    @isCurrentUserHasOrgAccess('orgFriendlyId') orgPermission: boolean,
+  ) {
+    if (!orgPermission) return;
+    return this.organizationsService.findOneByOrgFriendlyId(
+      userId,
+      orgFriendlyId,
+    );
+  }
+
+  @Patch(':orgFriendlyId')
+  @ApiAbstractResponse({ model: OrganizationEntity })
+  async update(
+    @Param('orgFriendlyId') orgFriendlyId: string,
+    @Body() updateOrganizationDto: UpdateOrganizationDto,
+    @isCurrentUserOrgAdmin('orgFriendlyId') orgPermission: boolean,
+  ): Promise<AbstractApiResponse<OrganizationEntity>> {
+    if (!orgPermission) return;
+    const updatedOrganization =
+      await this.organizationsService.updateOrganization(
+        orgFriendlyId,
+        updateOrganizationDto,
+      );
+    return AbstractApiResponse.success(updatedOrganization);
+  }
+
+  @Delete('leave/:orgFriendlyId')
+  async removeOrgUser(
+    @GetCurrentUserId() userId: string,
+    @Param('orgFriendlyId') orgFriendlyId: string,
+    @isCurrentUserHasOrgAccess('orgFriendlyId') orgPermission: boolean,
+  ) {
+    if (!orgPermission) return;
+    return await this.organizationsService.leaveOrganization(
+      userId,
+      orgFriendlyId,
+    );
+  }
+
+  @Delete('delete/:orgFriendlyId')
+  async deleteOrganization(
+    @GetCurrentUserId() userId: string,
+    @Param('orgFriendlyId') orgFriendlyId: string,
+    @isCurrentUserOrgAdmin('orgFriendlyId') isOrgAdmin: boolean,
+  ) {
+    if (!isOrgAdmin) return;
+    return await this.organizationsService.deleteOrganization(
+      userId,
+      orgFriendlyId,
+    );
   }
 }

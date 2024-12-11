@@ -38,7 +38,7 @@ export default function ConsoleProgressCard({
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:!gap-1">
-        <p className="flex items-center justify-start font-semibold leading-[30px] text-[20px] text-gray-900 dark:text-white">
+        <p className="flex items-center !justify-center md:!justify-start font-semibold leading-[30px] text-[20px] text-gray-900 dark:text-white">
           {label}
         </p>
         {description ? (

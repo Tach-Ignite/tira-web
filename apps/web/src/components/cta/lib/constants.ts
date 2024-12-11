@@ -27,7 +27,7 @@ export const aboutData = [
 
 export const defaultData = [
   {
-    title: 'What is Tira ?',
+    title: 'What is TIRA ?',
     subTitle: '',
     description1: `Tach Ignite Reference Architecture (TIRA) is an open-source reference architecture used to build products for startups. TIRA is based on React + Next.js + TypeScript + Tailwind CSS. Its component-based structure, flexibility and adaptability make it quickly suitable to a number of industries and use cases. `,
     description2: ``,
@@ -227,18 +227,18 @@ export const CohortItems = [
     title: 'Tach Color Shop',
     subTitle: 'New Colors announced',
     buttonName: 'View Demo',
-    buttonLink: '/tach-color-shop',
+    buttonLink: '/app',
     image: PlaceholderCTAImage,
     links: [
       {
         id: 1,
         name: 'Glowing Sapphire',
-        path: '/tach-color-shop',
+        path: '/app',
       },
       {
         id: 2,
         name: 'Blazing Amber',
-        path: '/tach-color-shop',
+        path: '/app',
       },
     ],
   },
@@ -247,23 +247,23 @@ export const CohortItems = [
 export const FormLinksItems = [
   {
     id: 1,
-    primaryTitle: 'Checkout Tira Demos',
+    primaryTitle: 'Checkout TIRA Demos',
     secondaryTitle: '',
     links: [
       {
         id: 1,
         name: 'Demo Link 1',
-        path: '/tach-color-shop',
+        path: '/app',
       },
       {
         id: 2,
         name: 'Demo Link 2',
-        path: '/tach-color-shop',
+        path: '/app',
       },
       {
         id: 3,
         name: 'Demo Link 3',
-        path: '/tach-color-shop',
+        path: '/app',
       },
     ],
   },

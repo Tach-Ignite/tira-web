@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   AUTHENTICATION_COOKIE,
   CURRENT_ORG_COOKIE,
+  CURRENT_TEAM_COOKIE,
   CURRENT_USER_COOKIE,
   CURRENT_USER_ROLE_COOKIE,
 } from '@services/auth-cookie';
@@ -10,6 +11,7 @@ import {
   authenticatedRoutes,
   routes,
   unauthenticatedRoutes,
+  unauthenticatedAuthRoutes,
 } from './app/common/constants/routes';
 import { UserRoles } from './types/modules';
 
@@ -30,10 +32,11 @@ export async function middleware(request: NextRequest) {
         CURRENT_USER_COOKIE,
         AUTHENTICATION_COOKIE,
         CURRENT_ORG_COOKIE,
+        CURRENT_TEAM_COOKIE,
         CURRENT_USER_ROLE_COOKIE,
       ]);
       return NextResponse.redirect(
-        new URL('/tach-color-shop/auth/login', request.url),
+        new URL(`/app/auth/login?redirectPath=${pathName}`, request.url),
       );
     }
 
@@ -56,11 +59,12 @@ export async function middleware(request: NextRequest) {
         request.cookies.delete([
           CURRENT_USER_COOKIE,
           CURRENT_ORG_COOKIE,
+          CURRENT_TEAM_COOKIE,
           AUTHENTICATION_COOKIE,
           CURRENT_USER_ROLE_COOKIE,
         ]);
         return NextResponse.redirect(
-          new URL('/tach-color-shop/auth/notfound', request.url),
+          new URL('/app/auth/notfound', request.url),
         );
       }
 
@@ -76,10 +80,11 @@ export async function middleware(request: NextRequest) {
           CURRENT_USER_COOKIE,
           AUTHENTICATION_COOKIE,
           CURRENT_ORG_COOKIE,
+          CURRENT_TEAM_COOKIE,
           CURRENT_USER_ROLE_COOKIE,
         ]);
         return NextResponse.redirect(
-          new URL('/tach-color-shop/auth/notfound', request.url),
+          new URL('/app/auth/notfound', request.url),
         );
       }
       // request.cookies.delete([
@@ -87,9 +92,40 @@ export async function middleware(request: NextRequest) {
       //   AUTHENTICATION_COOKIE,
       //   CURRENT_USER_ROLE_COOKIE,
       // ]);
-      // return NextResponse.redirect(new URL('/tach-color-shop/auth/notfound', request.url));
+      // return NextResponse.redirect(new URL('/app/auth/notfound', request.url));
+    }
+  } else if (
+    unauthenticatedAuthRoutes.some((route) =>
+      route.exactMatch
+        ? pathName === route.path
+        : pathName.startsWith(route.path),
+    )
+  ) {
+    const isAuthenticated = await authenticated();
+    if (isAuthenticated) {
+      const currentUserRole = request.cookies.get(CURRENT_USER_ROLE_COOKIE);
+      if (currentUserRole) {
+        const { name: role } = JSON.parse(currentUserRole.value) || 'guest';
+        if (role === UserRoles.SuperAdmin || role === UserRoles.SystemAdmin) {
+          return NextResponse.redirect(
+            new URL('/app/admin-console', request.url),
+          );
+        }
+        if (role === UserRoles.User) {
+          return NextResponse.redirect(new URL('/app/console', request.url));
+        }
+        request.cookies.delete([
+          CURRENT_USER_COOKIE,
+          AUTHENTICATION_COOKIE,
+          CURRENT_ORG_COOKIE,
+          CURRENT_TEAM_COOKIE,
+          CURRENT_USER_ROLE_COOKIE,
+        ]);
+        return NextResponse.next();
+      }
     }
   }
+
   return NextResponse.next();
 }
 

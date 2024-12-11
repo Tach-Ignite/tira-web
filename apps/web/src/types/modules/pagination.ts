@@ -10,6 +10,11 @@ export interface PaginationMetaType {
 export interface Pagination<T> {
   data: T[];
   meta: PaginationMetaType;
+  currentUser?: {
+    readAccess: boolean;
+    writeAccess: boolean;
+    role: any;
+  };
 }
 
 export interface PaginationArgs {

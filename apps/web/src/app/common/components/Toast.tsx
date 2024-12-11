@@ -44,7 +44,7 @@ function Toast() {
           <FlowBiteToast
             theme={{
               root: {
-                base: 'flex w-full max-w-xs items-center rounded-lg border  border-green-300 bg-green-50 p-4 text-gray-500 shadow dark:border-green-600 dark:bg-green-900 dark:text-green-200',
+                base: 'flex w-full sm:!max-w-md !max-w-xs items-center rounded-lg border  border-green-300 bg-green-50 p-4 text-gray-500 shadow dark:border-green-600 dark:bg-green-900 dark:text-green-200',
               },
               toggle: {
                 base: '-m-1.5 ml-auto inline-flex h-8 w-8 rounded-lg bg-green-50 p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-gray-300 dark:bg-green-900 dark:text-green-900 dark:hover:bg-gray-700 dark:hover:text-white',

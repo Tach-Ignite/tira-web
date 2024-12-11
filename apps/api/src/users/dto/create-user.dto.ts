@@ -7,21 +7,6 @@ export class CreateUserDto {
   @ApiProperty()
   userId?: string;
 
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional()
-  firstName?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional()
-  lastName?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiPropertyOptional()
-  name?: string;
-
   @IsNotEmpty()
   @IsString()
   @ApiProperty()

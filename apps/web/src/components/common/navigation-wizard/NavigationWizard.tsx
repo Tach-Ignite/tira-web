@@ -1,3 +1,7 @@
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-plusplus */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -8,6 +12,47 @@ import NavigationWizardFooter from './NavigationWizardFooter';
 import { NavigationWizardProps } from './types';
 import NavigationWizardPageHeader from './NavigationWizardPageHeader';
 
+function generateLinks(
+  url: string,
+  splitSegment: string,
+  showCurrentPathBreadcrumb: boolean = true,
+) {
+  const parts = url.split(splitSegment);
+
+  const baseUrl = `${parts[0]}${splitSegment}`;
+  const remainingPath = parts[1].split('/').filter(Boolean);
+
+  let links = remainingPath.map((part, index) => ({
+    name: capitalizeWords(part),
+    url: `${baseUrl}/${remainingPath.slice(0, index + 1).join('/')}`,
+  }));
+
+  // Exclude the last breadcrumb if `showCurrentPathBreadcrumb` is false
+  if (!showCurrentPathBreadcrumb) {
+    links = links.slice(0, -1);
+  }
+
+  return links;
+}
+
+function replaceNumberNames(
+  links: { name: string; url: string }[],
+  replacements: string[],
+) {
+  let replacementIndex = 0;
+  return links.map((link) => {
+    if (/\d/.test(link.name) && replacementIndex < replacements.length) {
+      const replacement = replacements[replacementIndex];
+      replacementIndex++;
+      return {
+        ...link,
+        name: replacement,
+      };
+    }
+    return link;
+  });
+}
+
 function capitalizeWords(str: string) {
   return str
     .split(/[-\s]/)
@@ -17,6 +62,7 @@ function capitalizeWords(str: string) {
 
 function NavigationWizard(props: NavigationWizardProps) {
   const {
+    id,
     onHandleBack,
     showGoBack,
     fullBreadcrumbs,
@@ -26,6 +72,11 @@ function NavigationWizard(props: NavigationWizardProps) {
     additionalHeaders,
     showStepInfo = true,
     showBreadcrumbDivider = false,
+    breadcrumbReplacements = [],
+    showCurrentPathBreadcrumb = true,
+    steps,
+    splitSegment = '',
+    isNestedNavigationComponent = false,
     ...rest
   } = props || {};
 
@@ -34,55 +85,58 @@ function NavigationWizard(props: NavigationWizardProps) {
   const [pathBreadcrumbs, setPathBreadcrumbs] = useState<BreadcrumbType[]>();
 
   useEffect(() => {
-    const queryPaths = pathname?.split('/')?.slice(1);
-    const pathBreadcrumbs = queryPaths
-      ?.filter((path) => path !== 'tach-color-shop')
-      ?.map((path: string, index: number) => {
-        const urlPath =
-          index === 0
-            ? `${process.env.APP_URL}/${path}`
-            : `${process.env.APP_URL}/${queryPaths.slice(0, index + 1).join('/')}`;
-
-        const isCurrentPath =
-          queryPaths[Number(queryPaths?.length) - 1] === `${path}`;
-
-        const url = isCurrentPath ? undefined : urlPath;
-
-        return {
-          name: capitalizeWords(path),
-          url,
-          onClick:
-            isCurrentPath && typeof handleCurrentPathBreadcrumb === 'function'
-              ? handleCurrentPathBreadcrumb
-              : undefined,
-        };
-      });
+    const pathBreadcrumbs = generateLinks(
+      `${process.env.APP_URL}${pathname}`,
+      `${splitSegment?.length ? splitSegment : '/app'}`,
+      showCurrentPathBreadcrumb,
+    );
+    const updatedLinks = replaceNumberNames(
+      pathBreadcrumbs,
+      breadcrumbReplacements,
+    );
 
     if (initialBreadcrumbs?.length) {
-      setPathBreadcrumbs([...initialBreadcrumbs, ...pathBreadcrumbs]);
+      setPathBreadcrumbs([...initialBreadcrumbs, ...updatedLinks]);
     } else {
-      setPathBreadcrumbs(pathBreadcrumbs);
+      setPathBreadcrumbs(updatedLinks);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialBreadcrumbs?.length, pathname]);
+  }, [
+    initialBreadcrumbs?.length,
+    pathname,
+    breadcrumbReplacements,
+    showCurrentPathBreadcrumb,
+  ]);
 
   const filteredBreadcrumbs =
     typeof fullBreadcrumbs !== 'undefined' ? fullBreadcrumbs : pathBreadcrumbs;
 
+  const isFullPage = steps?.find((step) => step?.url === pathname)?.name
+    ? false
+    : true;
+
+  // console.log('id ::', id, steps);
+  // console.log('pathname ::', pathname);
+
   return (
-    <div className="py-2">
+    <div id={id || 'navigation-component'} className="">
       <NavigationWizardPageHeader
         showGoBack={showGoBack}
         fullBreadcrumbs={filteredBreadcrumbs}
         onHandleBack={onHandleBack}
         showBreadcrumbDivider={showBreadcrumbDivider}
+        steps={steps}
+        isFullPage={isFullPage}
         {...rest}
       />
-      <div className="my-1">
+      <div className="py-10">
         <NavigationWizardPage
           {...rest}
+          steps={steps}
           additionalHeaders={additionalHeaders}
           showStepInfo={showStepInfo}
+          isFullPage={isFullPage}
+          isNestedNavigationComponent={isNestedNavigationComponent}
         />
       </div>
       {actionButtons?.length && (

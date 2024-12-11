@@ -1,3 +1,5 @@
+/* eslint-disable no-unneeded-ternary */
+
 'use client';
 
 import { NavigationWizardPageProps } from './types';
@@ -11,16 +13,23 @@ function NavigationWizardPage(props: NavigationWizardPageProps) {
     onChangeWizardTab,
     additionalHeaders,
     showStepInfo = true,
+    pageComponent,
+    isFullPage = false,
+    isNestedNavigationComponent,
   } = props || {};
 
   const { component, description, title, name } = steps[currentStepIndex] || {};
 
   return (
-    <div className="w-full gap-x-5 grid grid-cols-1 !space-y-5 md:!grid-cols-[1fr_5fr] place-content-center">
-      <div className="px-3 md:!block !hidden !space-y-5 relative md:!w-full w-auto md:!min-w-[300px]">
-        {getSideBarContent(steps, currentStepIndex, onChangeWizardTab)}
-      </div>
-      <div className="space-y-5">
+    <div
+      className={`gap-x-5 grid grid-cols-1 !gap-y-5 ${isFullPage ? 'md:!grid-cols-1 place-items-center' : 'md:!grid-cols-[1fr_5fr]'} place-content-center`}
+    >
+      {isFullPage ? null : (
+        <div className="px-3 md:!block !hidden !space-y-5 relative md:!w-full w-auto md:!min-w-[250px] lg:!min-w-[300px]">
+          {getSideBarContent(steps, currentStepIndex, onChangeWizardTab)}
+        </div>
+      )}
+      <div className={`space-y-5 mx-5 ${isFullPage ? 'md:w-3/5' : ''}`}>
         {showStepInfo ? (
           <NavigationWizardInfo
             title={title || name}
@@ -28,7 +37,7 @@ function NavigationWizardPage(props: NavigationWizardPageProps) {
             additionalHeaders={additionalHeaders}
           />
         ) : null}
-        {component}
+        {pageComponent || component}
       </div>
     </div>
   );

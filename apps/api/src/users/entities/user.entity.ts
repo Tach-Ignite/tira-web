@@ -1,5 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ActiveStatus, Users, ProfileRoles } from '@prisma/client';
+import {
+  ActiveStatus,
+  Users,
+  ProfileRoles,
+  UserProfiles,
+} from '@prisma/client';
 import { Exclude } from 'class-transformer';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { AddressEntity } from '@src/addresses/entities/address.entity';
@@ -13,17 +18,8 @@ export class UserEntity implements Partial<Users> {
   @ApiProperty()
   userId: string;
 
-  @ApiPropertyOptional()
-  firstName?: string;
-
   @ApiProperty()
   userStatus: ActiveStatus;
-
-  @ApiPropertyOptional()
-  lastName?: string;
-
-  @ApiPropertyOptional()
-  name?: string;
 
   @ApiProperty()
   email: string;
@@ -43,9 +39,6 @@ export class UserEntity implements Partial<Users> {
   @ApiPropertyOptional()
   phoneNumber?: string;
 
-  @ApiPropertyOptional()
-  profileImage?: string;
-
   @ApiPropertyOptional({ type: UserRole })
   role?: UserRole;
 
@@ -64,4 +57,8 @@ export class UserEntity implements Partial<Users> {
   @ApiProperty({ required: false })
   @IsOptional()
   profileRoles?: ProfileRoles[];
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  userProfile?: UserProfiles;
 }

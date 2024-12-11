@@ -1,5 +1,9 @@
+'use client';
+
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable react/no-array-index-key */
 
 import Link from 'next/link';
 import { WizardStepType } from './types';
@@ -19,16 +23,31 @@ export const getSideBarContent = (
   onChangeWizardTab?: (index: number) => void,
   setShow?: () => void,
 ) =>
-  steps?.map(
-    ({ name, component, url = '', isPageComponent = false }, index) => {
-      const isActiveStep = currentStepIndex === index;
+  steps?.map(({ name, url = '', onClick }, index) => {
+    const isActiveStep = currentStepIndex === index;
 
-      const onChange = () => {
+    const onChange = () => {
+      if (typeof onClick === 'function') {
+        onClick();
+      } else {
         onChangeWizardTab?.(index);
         setShow?.();
-      };
+      }
+    };
 
-      return component && !isPageComponent ? (
+    const renderLinks = () => {
+      if (url) {
+        return (
+          <Link
+            key={name}
+            className={`${linkClass} ${hoverStepClass} ${isActiveStep ? activeStepClass : ''}`}
+            href={url}
+          >
+            {name}
+          </Link>
+        );
+      }
+      return (
         <div
           key={name}
           onClick={onChange}
@@ -36,14 +55,15 @@ export const getSideBarContent = (
         >
           {name}
         </div>
-      ) : (
-        <Link
-          key={name}
-          className={`${linkClass} ${hoverStepClass} ${isActiveStep ? activeStepClass : ''}`}
-          href={url}
-        >
-          {name}
-        </Link>
       );
-    },
-  );
+    };
+
+    return name ? (
+      renderLinks()
+    ) : (
+      <div
+        key={index}
+        className="h-[10px] border-b border-b-gray-200 dark:border-b-gray-700"
+      />
+    );
+  });

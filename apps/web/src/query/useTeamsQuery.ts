@@ -1,4 +1,10 @@
-import { GetAllOrganizationsArgs, TeamsEntity, TeamsService } from '@services';
+import {
+  GetAllOrganizationsArgs,
+  TeamsEntity,
+  TeamsService,
+  GetAllUsersByTeamIdListsArgs,
+  UserConsoleTeamUsersResponseType,
+} from '@services';
 import { Pagination } from '@src/types/modules/pagination';
 import { ApiKeysEnum } from './apiKeys';
 import useBaseQuery from './useBaseQuery';
@@ -31,10 +37,10 @@ export const useGetAllTeamsByOrganizationId = (
   return useBaseQuery<Pagination<TeamsEntity>>(keys, fetchFn);
 };
 
-export const useGetSingleTeam = (teamId: string) => {
-  const keys = [ApiKeysEnum.GetSingleTeam, teamId];
+export const useGetSingleTeam = (teamFriendlyId: string) => {
+  const keys = [ApiKeysEnum.GetSingleTeam, teamFriendlyId];
   const fetchFn = async () => {
-    const data = await TeamsService.getSingleTeam(teamId);
+    const data = await TeamsService.getSingleTeam(teamFriendlyId);
     return data;
   };
   return useBaseQuery<TeamsEntity>(keys, fetchFn);
@@ -55,4 +61,32 @@ export const useDeleteTeamUser = (request: UseBaseMutationConfig) => {
     ...request,
     invalidateQueries: [ApiKeysEnum.GetAllAdminConsoleUsers],
   });
+};
+
+export const useLeaveTeam = (request: UseBaseMutationConfig) => {
+  const mutationFn = async ({ teamId }: { teamId: string }) => {
+    const mutation = await TeamsService.leaveTeam(teamId);
+    return mutation;
+  };
+  return useBaseMutation(mutationFn, {
+    ...request,
+    invalidateQueries: [ApiKeysEnum.GetSingleTeam],
+  });
+};
+
+export const useGetAllUsersByTeamId = (
+  request: GetAllUsersByTeamIdListsArgs,
+) => {
+  const keys = [ApiKeysEnum.GetAllUsersByTeamId, request?.page, request];
+  const fetchFn = async () => {
+    const data = await TeamsService.getAllUsersByTeamId(request);
+    if (data.error) {
+      throw data.error;
+    }
+    return data;
+  };
+  return useBaseQuery<Pagination<UserConsoleTeamUsersResponseType>>(
+    keys,
+    fetchFn,
+  );
 };

@@ -2,19 +2,19 @@
 
 import { LabelInput } from '@src/atoms';
 import { urlPattern } from '@src/lib/constants/validation';
-import { OnboardingInfoProps } from './types';
+import { useOnboarding } from '@context/OnboardingContext';
 
-function PersonalInformation(props: OnboardingInfoProps) {
-  const { form } = props || {};
+function PersonalInformation() {
+  const { onboardingForm } = useOnboarding() || {};
 
-  const { control } = form;
+  const { control } = onboardingForm;
 
   return (
-    <div className="grid grid-cols-1 place-items-start gap-4 md:!gap-6 py-4 md:py-10 px-8 pb-8 rounded-lg w-full md:!mb-0">
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col md:!mb-4">
+    <div className="grid grid-cols-1 place-items-start gap-4 lg:!gap-2 py-4 xl:!py-10 px-8 xl:!pl-24 md:pl-0 lg:!ml-24 tab-!ml-0 pb-8 w-full lg:!w-4/5 lg:!mb-10">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="firstName"
           label="First Name"
           placeholder="First Name"
@@ -22,17 +22,17 @@ function PersonalInformation(props: OnboardingInfoProps) {
         />
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="lastName"
           label="Last Name"
           placeholder="Last Name"
           isRequired
         />
       </div>
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="phoneNumber"
           label="Phone Number"
           placeholder="+1 (XXX)-XXX-XXXX"
@@ -46,7 +46,7 @@ function PersonalInformation(props: OnboardingInfoProps) {
         />
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="linkedInURL"
           label="LinkedIn"
           placeholder="https://www.linkedin.com/..."
@@ -56,33 +56,33 @@ function PersonalInformation(props: OnboardingInfoProps) {
           errorMessage="Please enter a valid URL."
         />
       </div>
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col mb-2">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="countryRegion"
           label="Country/Region"
           placeholder="Country"
         />
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="postalCode"
           label="Zip/Postal Code"
           placeholder="Postal Code"
         />
       </div>
-      <div className="flex gap-5 md:!gap-20 w-full md:!w-4/5 md:!flex-row flex-col mb-2">
+      <div className="flex gap-5 lg:!gap-8 w-full lg:!w-4/5 md:!flex-row flex-col lg:!mb-4">
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="city"
           label="City"
           placeholder="City"
         />
         <LabelInput
           control={control}
-          className="gap-5"
+          className="gap-4"
           name="state"
           label="State/Province"
           placeholder="State"

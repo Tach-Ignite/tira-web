@@ -130,7 +130,14 @@ export class OrdersService {
           user: {
             select: {
               email: true,
-              name: true,
+            },
+            include: {
+              userProfile: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
             },
           },
           orderItems: {
@@ -170,7 +177,14 @@ export class OrdersService {
         user: {
           select: {
             email: true,
-            name: true,
+          },
+          include: {
+            userProfile: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
           },
         },
         orderItems: {
@@ -241,7 +255,16 @@ export class OrdersService {
         orderId: true,
         orderStatus: true,
         shippingNotes: true,
-        user: true,
+        user: {
+          include: {
+            userProfile: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
       },
     });
     if (dtoOrderStatus) {
@@ -263,9 +286,18 @@ export class OrdersService {
         orderId: true,
         orderStatus: true,
         shippingNotes: true,
-        user: true,
         createdAt: true,
         updatedAt: true,
+        user: {
+          include: {
+            userProfile: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
       },
     });
 

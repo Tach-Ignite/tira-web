@@ -17,7 +17,7 @@ function ExploreTIRAInAction() {
           Color Shop.
         </div>
         <div className="w-full flex justify-items-center">
-          <Link href="/tach-color-shop" className="m-auto" target="_blank">
+          <Link href="/app" className="m-auto" target="_blank">
             <Button className="w-[160px] !bg-primary hover:!opacity-80 dark:text-white mt-4">
               Try Demo <ArrowRightIcon size={20} className="ml-2" />
             </Button>

@@ -14,12 +14,15 @@ import { Roles } from '@src/utils/roles.enums';
 import { UpdateAnyUserDto } from './dto/update-any-user.dto';
 
 const profileReturnProperty = {
-  lastName: true,
-  firstName: true,
   email: true,
   userId: true,
   phoneNumber: true,
-  profileImage: true,
+};
+
+const userProfileReturnProperty = {
+  firstName: true,
+  lastName: true,
+  profileImageUrl: true,
 };
 
 @Injectable()
@@ -34,6 +37,7 @@ export class UsersService {
       data: { ...createUserDto, userProfile: { create: {} } },
       include: {
         role: true,
+        userProfile: true,
       },
     });
   }
@@ -48,11 +52,22 @@ export class UsersService {
       this.prisma.users,
       {
         orderBy: { createdAt: 'desc' },
-        include: { role: true },
+        include: { role: true, userProfile: true },
         where: {
           OR: [
             {
-              name: { contains: searchTerm, mode: 'insensitive' },
+              OR: [
+                {
+                  userProfile: {
+                    firstName: { contains: searchTerm, mode: 'insensitive' },
+                  },
+                },
+                {
+                  userProfile: {
+                    lastName: { contains: searchTerm, mode: 'insensitive' },
+                  },
+                },
+              ],
             },
             {
               email: { contains: searchTerm, mode: 'insensitive' },
@@ -72,7 +87,15 @@ export class UsersService {
     if (isProfile) {
       user = await this.prisma.users.findUnique({
         where: { userId },
-        select: { ...profileReturnProperty, role: true },
+        select: {
+          ...profileReturnProperty,
+          role: true,
+          userProfile: {
+            select: {
+              ...userProfileReturnProperty,
+            },
+          },
+        },
       });
     } else {
       user = await this.prisma.users.findUnique({
@@ -112,6 +135,7 @@ export class UsersService {
       where: filter,
       include: {
         role: true,
+        userProfile: true,
       },
     });
   }
@@ -251,7 +275,18 @@ export class UsersService {
           },
           OR: [
             {
-              name: { contains: searchTerm, mode: 'insensitive' },
+              OR: [
+                {
+                  userProfile: {
+                    firstName: { contains: searchTerm, mode: 'insensitive' },
+                  },
+                },
+                {
+                  userProfile: {
+                    lastName: { contains: searchTerm, mode: 'insensitive' },
+                  },
+                },
+              ],
             },
             {
               email: { contains: searchTerm, mode: 'insensitive' },
@@ -303,7 +338,18 @@ export class UsersService {
           },
           OR: [
             {
-              name: { contains: searchTerm, mode: 'insensitive' },
+              OR: [
+                {
+                  userProfile: {
+                    firstName: { contains: searchTerm, mode: 'insensitive' },
+                  },
+                },
+                {
+                  userProfile: {
+                    lastName: { contains: searchTerm, mode: 'insensitive' },
+                  },
+                },
+              ],
             },
             {
               email: { contains: searchTerm, mode: 'insensitive' },
@@ -319,11 +365,10 @@ export class UsersService {
   }
 
   async updateAnyUser(userId: string, data: UpdateAnyUserDto) {
-    const { userProfile, name } = data || {};
+    const { userProfile } = data || {};
     return await this.prisma.users.update({
       where: { userId },
       data: {
-        name,
         userStatus: data.userStatus,
         userProfile: {
           update: { data: userProfile },
@@ -331,7 +376,6 @@ export class UsersService {
       },
       select: {
         email: true,
-        name: true,
         role: true,
         userId: true,
         userType: true,

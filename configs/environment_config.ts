@@ -156,6 +156,15 @@ const promptQuestions = [
     },
   },
   {
+    name: 'EMAIL_SOURCE',
+    promptConfig: {
+      type: 'input',
+      message: 'Select the EMAIL_SOURCE for sending emails',
+      name: 'EMAIL_SOURCE',
+      default: 'no-reply@example.com',
+    },
+  },
+  {
     name: 'AUTH_PROVIDER',
     promptConfig: {
       type: 'list',

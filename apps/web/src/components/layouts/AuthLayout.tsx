@@ -14,11 +14,11 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className={`!bg-white dark:!bg-black ${isOnboardingPage ? 'h-full md:!pt-[-1rem]' : 'min-h-calc-content'}`}
+      className={`!bg-white dark:!bg-black ${isOnboardingPage ? 'h-full' : 'min-h-calc-content'}`}
     >
       <OnBoardingHeader />
       <div
-        className={`w-full min-h-comp-calc-content ${isOnboardingPage ? '' : 'mt-[100px] pb-9'}`}
+        className={`!bg-white dark:!bg-black w-full ${isOnboardingPage ? '!min-h-comp-calc-content tab:!h-full' : 'mt-[100px] pb-9 min-h-comp-calc-content'}`}
       >
         {children}
       </div>

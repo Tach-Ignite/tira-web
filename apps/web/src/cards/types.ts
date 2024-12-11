@@ -1,14 +1,12 @@
 /* eslint-disable no-unused-vars */
 
 import { UseFormReturn } from 'react-hook-form';
-import { StaticImageData } from 'next/image';
 import {
   CartItemsEntity,
   ProductEntity,
   ServicesEntity,
   ProfileRoles,
 } from '@services';
-import { OnboardingForm } from '@components/onboarding/types';
 
 export interface CartCardProps {
   data: CartItemsEntity;
@@ -79,10 +77,9 @@ export interface RoleSelectProps {
   form: UseFormReturn<RoleSelectFormType>;
 }
 
-export interface RoleCardProps extends RoleSelectProps {
+export interface RoleCardProps {
   roleName: ProfileRoles;
-  // icon: StaticImageData;
-  // selectedIcon: StaticImageData;
+  roleLabel?: string;
   description: string;
 }
 
@@ -96,11 +93,3 @@ export interface ChoosePlanCardType {
 export interface ChoosePlanCardProps extends ChoosePlanCardType {
   selectedPlan?: string;
 }
-
-// export interface OnboardingMultiSelectCardProps extends OnboardingForm {
-//   label: string;
-//   value: string;
-//   name: 'personalizedContent' | 'personalizedServices';
-//   description: string;
-//   className?: string;
-// }

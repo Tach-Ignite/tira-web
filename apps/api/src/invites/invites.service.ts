@@ -40,12 +40,12 @@ export class InvitesService {
   ) {
     const redirectPath = !isNewUser
       ? `invites/${inviteId}?code=${inviteCode}`
-      : `tach-color-shop/auth/signup?inviteId=${inviteId}&&code=${inviteCode}`;
+      : `app/auth/signup?inviteId=${inviteId}&&code=${inviteCode}`;
     await this.emailService.sendEmail({
       from: this.configService.getOrThrow('EMAIL_SOURCE'),
       to: email,
       subject: `Invite to join ${inviteType === InviteType.ORGANIZATION ? 'Organization' : 'Team'}`,
-      body: `Dear ${email},<br/>You have been invited to join ${inviteType === InviteType.ORGANIZATION ? 'Organization' : 'Team'} <strong>${orgOrTeamData?.name}</strong> as ${roleName} by user ${user?.name || ''}.<br/><br/>Click the link below to accept the invite.<br/> <a href="${this.configService.getOrThrow('APP_URL')}/${redirectPath}" target="_blank">Accept Invite</a><br/><br/>Cheers,<br/>Tach Ignite Team`,
+      body: `Dear ${email},<br/>You have been invited to join ${inviteType === InviteType.ORGANIZATION ? 'Organization' : 'Team'} <strong>${orgOrTeamData?.name}</strong> as ${roleName} by ${user?.role?.name === Roles.SUPER_ADMIN || user?.role?.name === Roles.SYSTEM_ADMIN ? user?.email : `${user?.userProfile?.firstName || ''} ${user?.userProfile?.lastName || ''}`}.<br/><br/>Click the link below to accept the invite.<br/> <a href="${this.configService.getOrThrow('APP_URL')}/${redirectPath}" target="_blank">Accept Invite</a><br/><br/>Cheers,<br/>Tach Color Shop Team`,
     });
   }
 
@@ -158,6 +158,10 @@ export class InvitesService {
     });
     const user = await this.prisma.users.findUnique({
       where: { userId },
+      include: {
+        userProfile: true,
+        role: true,
+      },
     });
 
     const roleName = teamId
@@ -240,6 +244,16 @@ export class InvitesService {
       }
     }
     if (invite.inviteType === InviteType.TEAM && invite?.teamId) {
+      const teamData = await this.prisma.teams.findUnique({
+        where: {
+          id: invite.teamId,
+        },
+      });
+      const orgMemberRole = await this.prisma.userRoles.findFirst({
+        where: {
+          name: Roles.ORG_MEMBER,
+        },
+      });
       const teamUser = await this.prisma.teamUsers.findFirst({
         where: {
           teamId: invite.teamId,
@@ -249,13 +263,27 @@ export class InvitesService {
       if (teamUser?.id) {
         throw new BadRequestException(`User already added in this team`);
       } else {
-        await this.prisma.teamUsers.create({
-          data: {
-            teamId: invite.teamId,
-            userId: user.userId,
-            roleId: invite.roleId,
-          },
-        });
+        if (teamData?.id && teamData?.orgId && orgMemberRole?.id) {
+          await this.prisma.orgUsers.create({
+            data: {
+              orgId: teamData?.orgId,
+              userId: user.userId,
+              roleId: orgMemberRole?.id,
+              joinedAt: new Date(),
+            },
+          });
+          await this.prisma.teamUsers.create({
+            data: {
+              teamId: invite.teamId,
+              userId: user.userId,
+              roleId: invite.roleId,
+            },
+          });
+        } else {
+          throw new BadRequestException(
+            `Something went wrong. please try again later.`,
+          );
+        }
       }
     }
     const result = await this.prisma.invites.update({

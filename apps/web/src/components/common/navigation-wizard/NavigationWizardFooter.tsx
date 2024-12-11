@@ -9,7 +9,7 @@ function NavigationWizardFooter(props: NavigationWizardFooterProps) {
   const { actionButtons } = props;
 
   return (
-    <div className="flex gap-5 lm:flex-nowrap flex-wrap justify-center md:!justify-end pt-4">
+    <div className="flex sm:!mx-10 !mx-5 gap-5 lm:flex-nowrap flex-wrap justify-center md:!justify-end pt-4">
       {actionButtons?.map(
         ({
           label,
@@ -23,8 +23,9 @@ function NavigationWizardFooter(props: NavigationWizardFooterProps) {
 
           const renderButton = () => (
             <Button
-              className={`py-3 !bg-transparent dark:text-aqua text-indigo20 border border-indigo20 dark:border-aqua hover:!bg-opacity-80 ${className}`}
+              className={`py-3 !bg-transparent dark:text-primary text-primary border border-primary dark:border-primary hover:!bg-opacity-80 ${className}`}
               size="sm"
+              key={label}
               onClick={onClick}
               disabled={shouldDisable}
               theme={{

@@ -3,7 +3,7 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { TopNavBar } from '@components/layouts/common';
 import Footer from 'src/components/tira-landing/components/Footer';
 import {
@@ -27,6 +27,7 @@ function TachColorShopLayout({
   const { isAuthenticated } = useAuthContext();
 
   const pathName = usePathname();
+  const { orgFriendlyId } = useParams() || {};
 
   const isAuthPage = authRoutes.some((route) => pathName.includes(route));
 
@@ -45,7 +46,7 @@ function TachColorShopLayout({
         className={`bg-white ${isConsoleRoute ? 'dark:!bg-black' : 'dark:bg-neutral'} ${isAuthenticated && !isAuthPage ? 'min-h-comp-calc-content' : 'min-h-auth-calc-content'}`}
       >
         <div
-          className={`w-full ${isConsoleRoute || isAuthWithoutSidebar ? '' : 'pt-20'} pb-14 ${className}`}
+          className={`w-full ${isConsoleRoute || isAuthWithoutSidebar || Boolean(orgFriendlyId) ? '' : 'pt-20'} pb-14 ${className}`}
         >
           {children}
         </div>

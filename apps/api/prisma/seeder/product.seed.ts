@@ -68,7 +68,7 @@ const getProductImageURL = async (color: string) => {
   return res.data ? res.data : null;
 };
 
-const ProductCatagories = [
+const ProductCategories = [
   {
     name: 'Finish',
   },
@@ -109,6 +109,7 @@ const generateRandomProducts = async () => {
       type: 'input',
       name: 'count',
       message: 'Enter the number of sample product you want to create',
+      default: 25,
     },
   ]);
 
@@ -120,8 +121,8 @@ const generateRandomProducts = async () => {
         ...product,
         categories: {
           connectOrCreate: {
-            where: { name: ProductCatagories[randomNumber].name },
-            create: ProductCatagories[randomNumber],
+            where: { name: ProductCategories[randomNumber].name },
+            create: ProductCategories[randomNumber],
           },
         },
       },

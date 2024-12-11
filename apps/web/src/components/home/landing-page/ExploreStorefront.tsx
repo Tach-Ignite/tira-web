@@ -34,7 +34,7 @@ const StoreFrontPortalData = {
 };
 
 function ExploreStorefront() {
-  const buttonLink = `${process.env.APP_URL}/tach-color-shop/marketplace/products`;
+  const buttonLink = `${process.env.APP_URL}/app/marketplace/products`;
 
   return (
     <CtaSection

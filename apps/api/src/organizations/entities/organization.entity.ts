@@ -1,26 +1,104 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Organizations } from '@prisma/client';
+import { IsOptional, IsString } from 'class-validator';
 
 export class OrganizationEntity implements Partial<Organizations> {
   constructor(partial: Partial<OrganizationEntity>) {
     Object.assign(this, partial);
   }
 
-  @ApiProperty()
-  id: string;
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  id?: string;
 
+  @IsOptional()
+  @IsString()
   @ApiProperty()
-  name?: string;
+  name: string;
 
-  @ApiProperty()
-  website: string;
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  orgFriendlyId?: string;
 
-  @ApiProperty()
-  orgFriendlyId: string;
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  logoUrl?: string;
 
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  addressLine1?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  addressLine2?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  state?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  zipCode?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  websiteURL?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  linkedInURL?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  companyEmail?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  companyPhone?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  contactName: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  contactPhone?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional()
+  contactEmail?: string;
+
+  @IsOptional()
+  @IsString()
   @ApiPropertyOptional()
   createdAt?: Date;
 
+  @IsOptional()
+  @IsString()
   @ApiPropertyOptional()
   updatedAt?: Date;
 }

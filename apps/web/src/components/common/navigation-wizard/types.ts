@@ -4,12 +4,12 @@ import { BreadcrumbType } from '@components/common/breadcrumb/types';
 import React from 'react';
 
 export interface WizardStepType {
-  name: string;
+  name?: string;
   url?: string;
   title?: string;
   description?: string;
   component?: React.ReactNode;
-  isPageComponent?: boolean;
+  onClick?: () => void;
   pageDescription?: string;
   additionalInfo?: string;
 }
@@ -27,6 +27,7 @@ export interface NavigationWizardPageHeaderProps {
   onChangeWizardTab?: (index: number) => void;
   onHandleBack?: () => void;
   showBreadcrumbDivider?: boolean;
+  isFullPage?: boolean;
 }
 
 export interface MobileNavigationSideMenuProps {
@@ -59,15 +60,24 @@ export interface NavigationWizardPageProps {
   onChangeWizardTab?: (index: number) => void;
   additionalHeaders?: AdditionalHeaderElementType;
   showStepInfo?: boolean;
+  pageComponent?: React.ReactNode;
+  isFullPage?: boolean;
+  isNestedNavigationComponent?: boolean;
 }
 
 export interface NavigationWizardProps
   extends NavigationWizardPageHeaderProps,
     NavigationWizardFooterProps {
+  id?: string;
   handleCurrentPathBreadcrumb?: () => void;
   initialBreadcrumbs?: BreadcrumbType[];
   additionalHeaders?: AdditionalHeaderElementType;
   showStepInfo?: boolean;
+  pageComponent?: React.ReactNode;
+  breadcrumbReplacements?: string[];
+  showCurrentPathBreadcrumb?: boolean;
+  splitSegment?: string;
+  isNestedNavigationComponent?: boolean;
 }
 
 export interface NavigationWizardInfoProps {

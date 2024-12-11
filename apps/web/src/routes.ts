@@ -16,29 +16,29 @@ export enum AdminRoutes {
 }
 
 export enum AdminConsoleRoutes {
-  Overview = '/tach-color-shop/admin-console',
-  Organizations = '/tach-color-shop/admin-console/organizations',
-  Settings = '/tach-color-shop/admin-console/settings',
-  Users = '/tach-color-shop/admin-console/users',
+  Overview = '/app/admin-console',
+  Organizations = '/app/admin-console/organizations',
+  Settings = '/app/admin-console/settings',
+  Users = '/app/admin-console/users',
 }
 
 export enum UnAuthenticatedRoutes {
   Root = '/',
   About = 'https://www.tachignite.com/about',
-  TachColorShop = '/tach-color-shop',
+  TachColorShop = '/app',
   TermsAndConditions = '/terms-and-conditions',
   PrivacyPolicy = '/privacy-policy',
 }
 
 export enum TachColorAuthPages {
-  Login = '/tach-color-shop/auth/login',
-  SignUp = '/tach-color-shop/auth/signup',
-  ForgotPassword = '/tach-color-shop/auth/forgot-password',
-  ResetPassword = '/tach-color-shop/auth/reset-password',
+  Login = '/app/auth/login',
+  SignUp = '/app/auth/signup',
+  ForgotPassword = '/app/auth/forgot-password',
+  ResetPassword = '/app/auth/reset-password',
 }
 
 export enum CustomerRoutes {
-  MarketPlace = '/tach-color-shop/marketplace/products',
+  MarketPlace = '/app/marketplace/products',
   Announcement = '/announcement',
   Contact = '/contact',
   MyAccount = '/account',
@@ -52,15 +52,30 @@ export enum CustomerRoutes {
 }
 
 export enum TachColorShopRoutes {
-  Home = '/tach-color-shop',
-  Products = '/tach-color-shop/marketplace/products',
-  Service = '/tach-color-shop/marketplace/services',
+  Home = '/app',
+  Products = '/app/marketplace/products',
+  Service = '/app/marketplace/services',
 }
 
 export enum TachColorShopConsoleRoutes {
-  Overview = '/tach-color-shop/console',
-  Organizations = '/tach-color-shop/organizations',
-  Settings = '/tach-color-shop/account-settings',
+  Overview = '/app/console',
+  Organizations = '/app/organizations',
+  Settings = '/app/account-settings',
+}
+
+export enum OrgConsoleRoutes {
+  Overview = '/app/org/:orgFriendlyId',
+  OrganizationProfile = '/app/org/:orgFriendlyId/profile',
+  OrganizationTeams = '/app/org/:orgFriendlyId/teams',
+  OrganizationUsers = '/app/org/:orgFriendlyId/users',
+  OrganizationSingleUser = '/app/org/:orgFriendlyId/users/:userId',
+  OrganizationSettings = '/app/org/:orgFriendlyId/settings',
+}
+
+export enum TeamConsoleRoutes {
+  Overview = '/app/org/:orgFriendlyId/teams/:teamFriendlyId',
+  TeamMembers = '/app/org/:orgFriendlyId/teams/:teamFriendlyId/users',
+  TeamSettings = '/app/org/:orgFriendlyId/teams/:teamFriendlyId/settings',
 }
 
 export const AuthConsoleRoutesEnum = {
@@ -68,10 +83,10 @@ export const AuthConsoleRoutesEnum = {
 } as const;
 
 export enum AccountSettingsRoutes {
-  AccountSettings = '/tach-color-shop/account-settings',
-  AccountSettingsProfile = '/tach-color-shop/account-settings/profile-settings',
-  AccountSettingsSubscriptions = '/tach-color-shop/account-settings/subscriptions',
-  AccountSettingsBilling = '/tach-color-shop/account-settings/billing',
+  AccountSettings = '/app/account-settings',
+  AccountSettingsProfile = '/app/account-settings/profile-settings',
+  AccountSettingsSubscriptions = '/app/account-settings/subscriptions',
+  AccountSettingsBilling = '/app/account-settings/billing',
 }
 
 export const AuthWithoutSidebarRoutesEnum = {

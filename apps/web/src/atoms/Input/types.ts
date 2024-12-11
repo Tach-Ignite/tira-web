@@ -19,6 +19,7 @@ export interface InputProps {
   isArrayInput?: boolean;
   placeholder?: string;
   rows?: number;
+  colorClass?: string;
   errorMessage?: string;
   startAdornment?: FC<ComponentProps<'svg'>>;
   endAdornment?: React.ReactNode;

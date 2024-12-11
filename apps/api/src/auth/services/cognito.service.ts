@@ -33,6 +33,7 @@ import { UpdateUserDto } from '../../users/dto/update-user.dto';
 import { UserEntity } from '../../users/entities/user.entity';
 import { ChangePassWordType } from '../change-password-type';
 import { InviteType, InviteStatus } from '@src/utils/invites.enum';
+import { Roles } from '@src/utils/roles.enums';
 import { differenceInDays } from 'date-fns';
 
 @Injectable()
@@ -122,7 +123,7 @@ export class CognitoService {
     const resendCommand = new ForgotPasswordCommand({
       Username: userId,
       ClientMetadata: {
-        APP_URL: this.config.getOrThrow('APP_URL') + '/tach-color-shop',
+        APP_URL: this.config.getOrThrow('APP_URL') + '/app',
       },
       ClientId: this.config.getOrThrow('AWS_COGNITO_CLIENT_ID'),
     });
@@ -252,7 +253,7 @@ export class CognitoService {
     });
 
     try {
-      if (user.name !== updateUserDto.email) {
+      if (updateUserDto.email) {
         const params = {
           UserPoolId: this.config.getOrThrow('AWS_COGNITO_USER_POOL_ID'),
           Username: user.sub,
@@ -384,6 +385,16 @@ export class CognitoService {
         }
       }
       if (invite.inviteType === InviteType.TEAM && invite?.teamId) {
+        const teamData = await this.prisma.teams.findUnique({
+          where: {
+            id: invite.teamId,
+          },
+        });
+        const orgMemberRole = await this.prisma.userRoles.findFirst({
+          where: {
+            name: Roles.ORG_MEMBER,
+          },
+        });
         const teamUser = await this.prisma.teamUsers.findFirst({
           where: {
             teamId: invite.teamId,
@@ -393,13 +404,23 @@ export class CognitoService {
         if (teamUser?.id) {
           return;
         } else {
-          await this.prisma.teamUsers.create({
-            data: {
-              teamId: invite.teamId,
-              userId: user.userId,
-              roleId: invite.roleId,
-            },
-          });
+          if (teamData?.id && teamData?.orgId && orgMemberRole?.id) {
+            await this.prisma.orgUsers.create({
+              data: {
+                orgId: teamData?.orgId,
+                userId: user.userId,
+                roleId: orgMemberRole?.id,
+                joinedAt: new Date(),
+              },
+            });
+            await this.prisma.teamUsers.create({
+              data: {
+                teamId: invite.teamId,
+                userId: user.userId,
+                roleId: invite.roleId,
+              },
+            });
+          }
         }
       }
     }

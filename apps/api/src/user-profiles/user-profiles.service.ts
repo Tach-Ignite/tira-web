@@ -23,6 +23,24 @@ export class UserProfilesService {
   async update(userId: string, data: Partial<UpdateUserProfileDto>) {
     const { isOnboarding = false } = data;
     if (isOnboarding) {
+      const result = await this.prisma.userProfiles.findFirst({
+        where: { userId },
+        include: { user: true },
+      });
+      if (!result) {
+        await this.prisma.userProfiles.upsert({
+          where: { userId },
+          create: { userId },
+          update: {},
+          include: {
+            user: {
+              include: {
+                role: true,
+              },
+            },
+          },
+        });
+      }
       const finalData = excludeKeys(data);
       return await this.prisma.onBoardingUserProfiles.upsert({
         where: { userId },

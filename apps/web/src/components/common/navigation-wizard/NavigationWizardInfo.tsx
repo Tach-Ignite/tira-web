@@ -5,7 +5,7 @@ import { NavigationWizardInfoProps } from './types';
 function NavigationWizardInfo(props: NavigationWizardInfoProps) {
   const { title, description, additionalHeaders } = props;
 
-  const { className, component } = additionalHeaders || {};
+  const { className = '', component } = additionalHeaders || {};
 
   return (
     <div className={`flex gap-10 justify-between ${className}`}>
