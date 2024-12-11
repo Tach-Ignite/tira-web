@@ -1,8 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-import { WizardFooterProps } from '@src/components/onboarding-wizard/types';
-import { UseFormReturn } from 'react-hook-form';
-
 export enum UseCaseTypeEnum {
   Individual = 'Individual',
   Business = 'Business',
@@ -15,26 +12,6 @@ export enum BusinessTypeEnum {
   BusinessPartner = 'BusinessPartner',
   ColorConsultant = 'ColorConsultant',
   Other = 'Other',
-}
-
-export interface OnboardingEntity {
-  firstName?: string;
-  lastName?: string;
-  phoneNumber?: string;
-  linkedInURL?: string;
-  countryRegion?: string;
-  postalCode?: string;
-  state?: string;
-  profileRoles?: [];
-  useCaseType?: UseCaseTypeEnum;
-  onboarding_completed?: string;
-  onboarding_step?: string;
-  id?: string;
-}
-
-export interface GetOnboardingDetailsType {
-  message?: string;
-  userProfile?: OnboardingEntity;
 }
 
 export interface OnboardingFormType {
@@ -63,10 +40,28 @@ export interface OnboardingFormType {
   onboardingStep?: number;
 }
 
-export interface OnboardingForm {
-  form: UseFormReturn<OnboardingFormType>;
-}
+export const getDefinedValues = (values: {}) =>
+  Object.fromEntries(
+    Object.entries(values).filter(
+      ([key, value]) =>
+        value !== null &&
+        value !== undefined &&
+        !(Array.isArray(value) && value.length === 0),
+    ),
+  );
 
-export interface OnboardingInfoProps
-  extends OnboardingForm,
-    WizardFooterProps {}
+const stepValidationRules: Array<(data: OnboardingFormType) => boolean> = [
+  (data) => !!data.useCaseType && data.useCaseType !== UseCaseTypeEnum.None,
+  (data) => (data.profileRoles?.length || 0) > 0,
+  (data) => !!data.firstName && !!data.lastName,
+  (data) => !!data.businessType,
+  (data) => !!data.companyName,
+];
+
+export const getNextButtonDisableStatus = (
+  stepIndex: number,
+  formData: OnboardingFormType,
+): boolean => {
+  const validateStep = stepValidationRules[stepIndex];
+  return validateStep ? !validateStep(formData) : true;
+};

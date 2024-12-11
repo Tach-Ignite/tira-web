@@ -29,7 +29,10 @@ function TachColorLoginPage() {
 
   const { mutateAsync: loginAsync } = useSignIn({
     onSuccessCallback: async (response: any) => {
-      if (redirectUrl) {
+      const redirectPrevPath = params.get('redirectPath');
+      if (redirectPrevPath) {
+        router.push(redirectPrevPath);
+      } else if (redirectUrl) {
         router.push(redirectUrl);
       } else if (response?.data?.role?.name === UserRoles.SuperAdmin) {
         router.push(AdminConsoleRoutes.Overview);
@@ -51,6 +54,16 @@ function TachColorLoginPage() {
         message: 'User Already Logged In Using different Auth method!',
       });
       removeQueryParam('error');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const redirectPrevPath = params.get('redirectPath');
+    if (redirectPrevPath) {
+      showErrorToast({
+        message: 'Your session has expired, please sign in again.',
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

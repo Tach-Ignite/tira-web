@@ -2,12 +2,12 @@
 
 import { LabelInput } from '@src/atoms';
 import { urlPattern } from '@src/lib/constants/validation';
-import { OnboardingInfoProps } from './types';
+import { useOnboarding } from '@context/OnboardingContext';
 
-function PersonalInformation(props: OnboardingInfoProps) {
-  const { form } = props || {};
+function PersonalInformation() {
+  const { onboardingForm } = useOnboarding() || {};
 
-  const { control } = form;
+  const { control } = onboardingForm;
 
   return (
     <div className="grid grid-cols-1 place-items-start gap-4 lg:!gap-2 py-4 xl:!py-10 px-8 xl:!pl-24 md:pl-0 lg:!ml-24 tab-!ml-0 pb-8 w-full lg:!w-4/5 lg:!mb-10">

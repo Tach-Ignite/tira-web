@@ -120,3 +120,11 @@ export const authenticatedRoutes = [
     exactMatch: false,
   },
 ];
+
+export const unauthenticatedAuthRoutes = [
+  {
+    title: 'Auth',
+    path: '/app/auth',
+    exactMatch: false,
+  },
+];

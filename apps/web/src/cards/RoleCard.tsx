@@ -2,16 +2,17 @@
 
 'use client';
 
-// import Image from 'next/image';
-import { ProfileRoles } from '@services';
 import Image from 'next/image';
+import PlaceholderImage from '@public/assets/select-card-placeholder.png';
+import { useOnboarding } from '@context/OnboardingContext';
 import { RoleCardProps } from './types';
-import PlaceholderImage from '../../public/assets/select-card-placeholder.png';
 
 function RoleCard(props: RoleCardProps) {
-  const { description, form, roleName } = props || {};
+  const { onboardingForm } = useOnboarding() || {};
 
-  const { watch, setValue } = form;
+  const { description, roleName, roleLabel } = props || {};
+
+  const { watch, setValue } = onboardingForm;
 
   const selectedRoles = watch('profileRoles') || [];
 
@@ -28,28 +29,6 @@ function RoleCard(props: RoleCardProps) {
     }
   };
 
-  const getRoleName = (UserProfileRole: ProfileRoles) => {
-    if (UserProfileRole === ProfileRoles.MasterOfHues) {
-      return 'Master of Hues';
-    }
-    if (UserProfileRole === ProfileRoles.PigmentWizard) {
-      return 'Pigment Wizard';
-    }
-    if (UserProfileRole === ProfileRoles.ShadeGuru) {
-      return 'Shade Guru';
-    }
-    if (UserProfileRole === ProfileRoles.ContentCreator) {
-      return 'Content Creator';
-    }
-    if (UserProfileRole === ProfileRoles.ThreeDDesigner) {
-      return '3D Color Designer';
-    }
-    if (UserProfileRole === ProfileRoles.SpectrumExplorer) {
-      return 'Spectrum Explorer';
-    }
-    return UserProfileRole;
-  };
-
   return (
     <div
       onClick={onSelectRole}
@@ -61,13 +40,12 @@ function RoleCard(props: RoleCardProps) {
           alt="Select Card Placeholder"
           width={0}
           height={0}
-          // quality={70}
           className="!w-[80px] !h-[80px] md:!w-[117px] md:!h-[117px]"
         />
       </div>
       <div className="grid grid-cols-1 gap-4 md:!gap-[2px] text-start">
         <p className="flex pt-2 items-start justify-start font-[600] leading-[24px] text-[20px] text-textBody dark:text-textBody-dark">
-          {getRoleName(roleName)}
+          {roleLabel || roleName}
         </p>
         <p className="w-full flex items-start justify-start font-[400] leading-[24px] text-[16px] text-textBody dark:text-textBody-dark">
           {description}

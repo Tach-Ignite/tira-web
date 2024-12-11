@@ -4,13 +4,28 @@
 
 import { useEffect } from 'react';
 import { Spinner } from '@src/atoms';
+import { useOnboarding } from '@context/OnboardingContext';
+import { useRouter } from 'next/navigation';
+import { TachColorShopConsoleRoutes } from '@src/routes';
 
-function AccountSetupCompleted({ onHandleNext }: { onHandleNext: () => void }) {
+function AccountSetupCompleted() {
+  const { onHandleNext, onboardingForm } = useOnboarding();
+
+  const { watch } = onboardingForm;
+
+  const { onboardingCompleted } = watch();
+
+  const router = useRouter();
+
   useEffect(() => {
-    setTimeout(() => {
-      onHandleNext();
+    setTimeout(async () => {
+      await onHandleNext();
+      if (onboardingCompleted) {
+        router?.push(TachColorShopConsoleRoutes.Overview);
+      }
     }, 2000);
-  }, []);
+  }, [onboardingCompleted]);
+
   return (
     <div className="grid grid-cols-1 place-items-start gap-4 lg:!gap-2 px-8 xl:!pl-24 md:pl-0 lg:!ml-24 tab-!ml-0 pb-8 w-full lg:!w-4/5">
       <div className="flex gap-5 w-full lg:!w-4/5 justify-start items-center py-16 2xl:!py-10 lg:!py-16">

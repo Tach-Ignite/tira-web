@@ -3,40 +3,15 @@
 
 'use client';
 
-// import { ImagePlaceholderIcon } from '@src/icons';
-import { OnboardingForm, UseCaseTypeEnum } from './types';
+import { useOnboarding } from '@context/OnboardingContext';
+import { UseCaseTypeEnum } from './types';
 import SelectCard from './cards/SelectCard';
+import { userTypes } from './onboardingConstants';
 
-const useCaseTypes = [
-  UseCaseTypeEnum.Individual,
-  UseCaseTypeEnum.Business,
-  UseCaseTypeEnum.Both,
-];
+function ChooseUseCaseType() {
+  const { onboardingForm } = useOnboarding();
 
-const content = [
-  {
-    type: UseCaseTypeEnum.Individual,
-    description1: 'I’m here to explore colors, and contribute personally.',
-    description2:
-      'Suitable for visual artists or any users not representing a business.',
-  },
-  {
-    type: UseCaseTypeEnum.Business,
-    description1: 'I’m representing my company or organization.',
-    description2:
-      'Ideal for corporate or service providers representing a company.',
-  },
-  {
-    type: UseCaseTypeEnum.Both,
-    description1:
-      'I’ll be using Color Shop both personally and on behalf of a business.',
-    description2:
-      'Suitable for individuals who have dual roles, like painters who also owns a color shop.',
-  },
-];
-
-function ChooseUseCaseType({ form }: OnboardingForm) {
-  const { watch, setValue } = form;
+  const { watch, setValue } = onboardingForm;
 
   const { useCaseType: selectedUseCaseType } = watch();
 
@@ -50,20 +25,21 @@ function ChooseUseCaseType({ form }: OnboardingForm) {
 
   return (
     <div className="w-full grid grid-cols-1 lg:!grid-cols-2 2xl:!grid-cols-3 gap-14 tab:!gap-8 lg:!gap-4 xl:!gap-8 place-items-center">
-      {useCaseTypes?.map((useCaseType) => {
-        const isSelected = selectedUseCaseType === useCaseType;
+      {userTypes?.map((userTypeOption) => {
+        const { type } = userTypeOption || {};
+        const isSelected = selectedUseCaseType === type;
 
         const handleOnClick = () => {
-          onSelectBusinessType(useCaseType);
+          onSelectBusinessType(type);
         };
 
         return (
           <SelectCard
-            value={useCaseType}
-            label={useCaseType}
-            content={content}
+            key={type}
+            label={type}
             isSelected={isSelected}
             handleOnClick={handleOnClick}
+            {...userTypeOption}
           />
         );
       })}

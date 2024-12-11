@@ -1,60 +1,49 @@
 /* eslint-disable no-unused-vars */
+
+import { OnboardingFormType } from '@components/onboarding/types';
+import { UseFormReturn } from 'react-hook-form';
+
 export interface WizardHeaderProps {
   title: string;
   description: string;
 }
 
-export interface WizardContentProps {
-  children: React.ReactNode;
+export enum OnboardingWizard {
+  SelectUserType,
+  SelectRole,
+  PersonalInformation,
+  BusinessType,
+  BusinessInformation,
+  ToolsInformation,
+  CompleteBasics,
 }
 
-export interface WizardButtonType {
-  name: string;
-  shouldDisabled?: boolean;
-  onClick?: () => void;
-  color?: string;
-  isOutlined?: boolean;
+export interface OnboardingContextProps {
+  activeStep: number;
+  onHandleSkip: () => void;
+  shouldDisableNextButton: boolean;
+  onHandleNext: () => void;
+  onHandleBack: () => void;
+  totalSteps: number;
+  setTotalSteps: (totalSteps: number) => void;
+  onboardingForm: UseFormReturn<OnboardingFormType>;
 }
 
 export interface WizardFooterProps {
-  shouldDisableNextButton?: boolean;
-  shouldDisableLastButton?: boolean;
-  onHandleNext?: () => void;
-  lastButtonText?: string;
-  onHandleLastButton?: () => void;
-  onHandleBack?: () => void;
-  shouldDisableBackButton?: boolean;
+  showSkipButton?: boolean;
 }
 
 export interface OnboardingWizardStepType {
   title: string;
   description: string;
   content: React.ReactNode;
-  showFooter?: boolean;
-  lastButtonText?: string;
+  showSkipButton?: boolean;
 }
 
 export interface WizardStepperProps {
   steps: OnboardingWizardStepType[];
-  totalSteps: number;
-  currentStepIndex?: number;
-  onHandleBack?: () => void;
-  shouldDisableBackButton?: boolean;
 }
 
-export interface OnboardingWizardProps extends WizardFooterProps {
-  steps: OnboardingWizardStepType[];
-  totalSteps: number;
-  activeStepIndex: number;
-  onHandleBack?: () => void;
-  shouldDisableBackButton?: boolean;
-}
-
-export enum OnboardingWizards {
-  useCaseType,
-  RoleSelect,
-  PersonalInformation,
-  ChooseBusinessType,
-  BusinessInformation,
-  AccountSetupCompleted,
-}
+export interface OnboardingWizardProps
+  extends WizardFooterProps,
+    WizardStepperProps {}

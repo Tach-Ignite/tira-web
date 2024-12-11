@@ -2,53 +2,39 @@
 
 'use client';
 
+import { useOnboarding } from '@context/OnboardingContext';
 import WizardFooter from './WizardFooter';
 import WizardHeader from './WizardHeader';
 import WizardStepper from './WizardStepper';
-import { OnboardingWizardProps, OnboardingWizards } from './types';
+import { OnboardingWizardProps } from './types';
 
 function OnboardingWizard(props: OnboardingWizardProps) {
-  const {
-    steps,
-    totalSteps,
-    activeStepIndex = OnboardingWizards.useCaseType,
-    onHandleBack,
-    shouldDisableBackButton,
-    ...footerProps
-  } = props || {};
+  const { steps } = props || {};
 
-  const activeStep = steps[activeStepIndex];
+  const { activeStep, totalSteps } = useOnboarding();
+
+  const activeStepDetails = steps[activeStep];
 
   const {
     description,
     title,
     content,
-    lastButtonText,
-    showFooter = true,
-  } = activeStep || {};
+    showSkipButton = false,
+  } = activeStepDetails || {};
+
+  const isLastStep = activeStep === totalSteps - 1;
 
   return (
     <div className="py-2 flex flex-col w-full h-full items-center justify-center mb-0">
-      <WizardStepper
-        steps={steps}
-        totalSteps={totalSteps}
-        currentStepIndex={activeStepIndex}
-        onHandleBack={onHandleBack}
-        shouldDisableBackButton={shouldDisableBackButton}
-      />
+      <WizardStepper steps={steps} />
       <WizardHeader description={description} title={title} />
       <div className="flex flex-col w-full h-full items-center justify-start mt-2 lg:mt-8 pb-10">
         {content}
-        {showFooter ? (
-          <div className="w-full lg:!h-full pb-8 px-10 lg:!pt-4 lg:!pb-0">
-            <WizardFooter
-              {...footerProps}
-              lastButtonText={lastButtonText}
-              onHandleBack={onHandleBack}
-              shouldDisableBackButton={shouldDisableBackButton}
-            />
+        {isLastStep ? null : (
+          <div className="w-full lg:!h-full pb-8 xs:!px-10 !px-2 lg:!pt-4 lg:!pb-0">
+            <WizardFooter showSkipButton={showSkipButton} />
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );
